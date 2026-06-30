@@ -175,7 +175,7 @@ describe("trinit-auth", () => {
 			const originalEnv = process.env.ZOO_CODE_BASE_URL
 			delete process.env.ZOO_CODE_BASE_URL
 
-			expect(getZooCodeBaseUrl()).toBe("https://www.zoocode.dev")
+			expect(getZooCodeBaseUrl()).toBe("https://www.trinit.dev")
 
 			if (originalEnv) {
 				process.env.ZOO_CODE_BASE_URL = originalEnv
@@ -184,9 +184,9 @@ describe("trinit-auth", () => {
 
 		it("respects ZOO_CODE_BASE_URL", () => {
 			const originalEnv = process.env.ZOO_CODE_BASE_URL
-			process.env.ZOO_CODE_BASE_URL = "https://staging.zoocode.dev"
+			process.env.ZOO_CODE_BASE_URL = "https://staging.trinit.dev"
 
-			expect(getZooCodeBaseUrl()).toBe("https://staging.zoocode.dev")
+			expect(getZooCodeBaseUrl()).toBe("https://staging.trinit.dev")
 
 			if (originalEnv) {
 				process.env.ZOO_CODE_BASE_URL = originalEnv

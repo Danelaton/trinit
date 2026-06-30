@@ -658,7 +658,7 @@
 		"zooGateway": {
 			"account": "Trinit 帳戶",
 			"signInButton": "登入 Trinit",
-			"signInDescription": "登入以使用您的帳戶存取 Zoo Gateway",
+			"signInDescription": "登入以使用您的帳戶存取 Trinit Gateway",
 			"authenticated": "已認證",
 			"authenticatedAs": "已認證為 {{name}}"
 		}
@@ -1016,7 +1016,7 @@
 		"modelNotAllowed": "模型 '{{model}}' 不允許用於供應商 '{{provider}}'，此設定已被組織禁止",
 		"profileInvalid": "此設定檔包含您的組織不允許的供應商或模型",
 		"qwenCodeOauthPath": "您必須提供有效的 OAuth 憑證路徑",
-		"zooGatewaySignIn": "請登入 Trinit 以使用 Zoo Gateway。"
+		"zooGatewaySignIn": "請登入 Trinit 以使用 Trinit Gateway。"
 	},
 	"placeholders": {
 		"apiKey": "請輸入 API 金鑰...",

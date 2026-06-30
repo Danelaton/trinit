@@ -12,7 +12,7 @@ export function getRequestyAuthUrl(uriScheme?: string) {
 	return `https://app.requesty.ai/oauth/authorize?callback_url=${getCallbackUrl("requesty", uriScheme)}`
 }
 
-const ZOO_CODE_DEFAULT_BASE_URL = "https://www.zoocode.dev"
+const ZOO_CODE_DEFAULT_BASE_URL = "https://www.trinit.dev"
 
 export function getZooCodeAuthUrl(uriScheme?: string, baseUrl?: string, deviceName?: string) {
 	const resolvedBaseUrl = baseUrl || ZOO_CODE_DEFAULT_BASE_URL

@@ -76,7 +76,7 @@ const mockSessionCleared = vitest.hoisted(() => ({ value: false }))
 
 vitest.mock("../../../services/trinit-auth", () => ({
 	getZooCodeBaseUrl: vitest.fn(function () {
-		return "https://www.zoocode.dev"
+		return "https://www.trinit.dev"
 	}),
 	getCachedZooCodeToken: () => mockGetCachedZooCodeToken() ?? "",
 	resolveZooGatewaySessionToken: (profileToken?: string) => {
@@ -176,12 +176,12 @@ describe("ZooGatewayHandler", () => {
 		it("initializes OpenAI with Zoo enrichment headers and session token", () => {
 			const handler = new ZooGatewayHandler({
 				...mockOptions,
-				zooGatewayBaseUrl: "https://staging.zoocode.dev/api/gateway/v1",
+				zooGatewayBaseUrl: "https://staging.trinit.dev/api/gateway/v1",
 			})
 
 			expect(handler).toBeInstanceOf(ZooGatewayHandler)
 			expect(OpenAI).toHaveBeenCalledWith({
-				baseURL: "https://staging.zoocode.dev/api/gateway/v1",
+				baseURL: "https://staging.trinit.dev/api/gateway/v1",
 				apiKey: mockOptions.zooSessionToken,
 				defaultHeaders: expect.objectContaining({
 					"HTTP-Referer": "https://github.com/Zoo-Code-Org/Zoo-Code",
@@ -198,7 +198,7 @@ describe("ZooGatewayHandler", () => {
 
 			expect(OpenAI).toHaveBeenCalledWith(
 				expect.objectContaining({
-					baseURL: "https://www.zoocode.dev/api/gateway/v1",
+					baseURL: "https://www.trinit.dev/api/gateway/v1",
 				}),
 			)
 		})

@@ -631,7 +631,7 @@
 		"zooGateway": {
 			"account": "Учетная запись Trinit",
 			"signInButton": "Войти в Trinit",
-			"signInDescription": "Войдите, чтобы использовать Zoo Gateway с вашей учетной записью",
+			"signInDescription": "Войдите, чтобы использовать Trinit Gateway с вашей учетной записью",
 			"authenticated": "Аутентифицирован",
 			"authenticatedAs": "Аутентифицирован как {{name}}"
 		}
@@ -989,7 +989,7 @@
 		"modelNotAllowed": "Модель '{{model}}' не разрешена для провайдера '{{provider}}' вашей организацией",
 		"profileInvalid": "Этот профиль содержит провайдера или модель, которые не разрешены вашей организацией",
 		"qwenCodeOauthPath": "Вы должны указать допустимый путь к учетным данным OAuth",
-		"zooGatewaySignIn": "Войдите в Trinit, чтобы использовать Zoo Gateway."
+		"zooGatewaySignIn": "Войдите в Trinit, чтобы использовать Trinit Gateway."
 	},
 	"placeholders": {
 		"apiKey": "Введите API-ключ...",

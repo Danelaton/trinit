@@ -631,7 +631,7 @@
 		"zooGateway": {
 			"account": "Trinit खाता",
 			"signInButton": "Trinit में साइन इन करें",
-			"signInDescription": "अपने खाते के साथ Zoo Gateway का उपयोग करने के लिए साइन इन करें",
+			"signInDescription": "अपने खाते के साथ Trinit Gateway का उपयोग करने के लिए साइन इन करें",
 			"authenticated": "प्रमाणित",
 			"authenticatedAs": "{{name}} के रूप में प्रमाणित"
 		}
@@ -989,7 +989,7 @@
 		"modelNotAllowed": "मॉडल '{{model}}' प्रदाता '{{provider}}' के लिए आपके संगठन द्वारा अनुमत नहीं है",
 		"profileInvalid": "इस प्रोफ़ाइल में एक प्रदाता या मॉडल शामिल है जो आपके संगठन द्वारा अनुमत नहीं है",
 		"qwenCodeOauthPath": "आपको एक वैध OAuth क्रेडेंशियल पथ प्रदान करना होगा",
-		"zooGatewaySignIn": "Zoo Gateway का उपयोग करने के लिए Trinit में साइन इन करें।"
+		"zooGatewaySignIn": "Trinit Gateway का उपयोग करने के लिए Trinit में साइन इन करें।"
 	},
 	"placeholders": {
 		"apiKey": "API कुंजी दर्ज करें...",

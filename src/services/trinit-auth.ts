@@ -157,7 +157,7 @@ export async function clearZooCodeToken(): Promise<void> {
 }
 
 export function getZooCodeBaseUrl(): string {
-	return process.env.ZOO_CODE_BASE_URL || "https://www.zoocode.dev"
+	return process.env.ZOO_CODE_BASE_URL || "https://www.trinit.dev"
 }
 
 export async function handleAuthCallback(token: string): Promise<boolean> {

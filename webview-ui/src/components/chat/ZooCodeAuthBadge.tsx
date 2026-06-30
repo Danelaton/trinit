@@ -145,7 +145,7 @@ export const ZooCodeAuthBadge: React.FC<ZooCodeAuthBadgeProps> = ({ className })
 								</div>
 							)}
 							<a
-								href={`${zooCodeBaseUrl || "https://www.zoocode.dev"}/dashboard`}
+								href={`${zooCodeBaseUrl || "https://www.trinit.dev"}/dashboard`}
 								onClick={() => setIsOpen(false)}
 								className={menuItemClasses}>
 								Go to Dashboard

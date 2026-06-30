@@ -631,7 +631,7 @@
 		"zooGateway": {
 			"account": "Trinit アカウント",
 			"signInButton": "Trinit にサインイン",
-			"signInDescription": "Zoo Gateway をアカウントで使用するにはサインインしてください",
+			"signInDescription": "Trinit Gateway をアカウントで使用するにはサインインしてください",
 			"authenticated": "認証済み",
 			"authenticatedAs": "{{name}} として認証済み"
 		}
@@ -989,7 +989,7 @@
 		"modelNotAllowed": "モデル「{{model}}」はプロバイダー「{{provider}}」に対して組織によって許可されていません",
 		"profileInvalid": "このプロファイルには、組織によって許可されていないプロバイダーまたはモデルが含まれています",
 		"qwenCodeOauthPath": "有効なOAuth認証情報のパスを提供する必要があります",
-		"zooGatewaySignIn": "Zoo Gatewayを使用するにはTrinitにサインインしてください。"
+		"zooGatewaySignIn": "Trinit Gatewayを使用するにはTrinitにサインインしてください。"
 	},
 	"placeholders": {
 		"apiKey": "API キーを入力...",

@@ -2336,7 +2336,7 @@ export class ClineProvider
 			zooCodeUserName: undefined,
 			zooCodeUserEmail: undefined,
 			zooCodeUserImage: undefined,
-			zooCodeBaseUrl: "https://www.zoocode.dev",
+			zooCodeBaseUrl: "https://www.trinit.dev",
 			deviceName: os.hostname(),
 		}
 

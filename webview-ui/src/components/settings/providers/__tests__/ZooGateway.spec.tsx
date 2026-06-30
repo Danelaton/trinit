@@ -14,7 +14,7 @@ const extensionStateMock = {
 	zooCodeIsAuthenticated: true,
 	zooCodeUserEmail: "user@example.com",
 	zooCodeUserName: "User",
-	zooCodeBaseUrl: "https://www.zoocode.dev",
+	zooCodeBaseUrl: "https://www.trinit.dev",
 	uriScheme: "vscode",
 	deviceName: "Test Device",
 }
@@ -24,7 +24,7 @@ vi.mock("@src/context/ExtensionStateContext", () => ({
 }))
 
 vi.mock("@src/oauth/urls", () => ({
-	getZooCodeAuthUrl: () => "https://www.zoocode.dev/dashboard/connect",
+	getZooCodeAuthUrl: () => "https://www.trinit.dev/dashboard/connect",
 }))
 
 vi.mock("../../ModelPicker", () => ({

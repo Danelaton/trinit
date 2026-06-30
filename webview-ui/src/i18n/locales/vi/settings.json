@@ -631,7 +631,7 @@
 		"zooGateway": {
 			"account": "Tài khoản Trinit",
 			"signInButton": "Đăng nhập vào Trinit",
-			"signInDescription": "Đăng nhập để sử dụng Zoo Gateway với tài khoản của bạn",
+			"signInDescription": "Đăng nhập để sử dụng Trinit Gateway với tài khoản của bạn",
 			"authenticated": "Đã xác thực",
 			"authenticatedAs": "Đã xác thực với tên {{name}}"
 		}
@@ -989,7 +989,7 @@
 		"modelNotAllowed": "Mô hình '{{model}}' không được phép cho nhà cung cấp '{{provider}}' bởi tổ chức của bạn",
 		"profileInvalid": "Hồ sơ này chứa một nhà cung cấp hoặc mô hình không được phép bởi tổ chức của bạn",
 		"qwenCodeOauthPath": "Bạn phải cung cấp đường dẫn thông tin xác thực OAuth hợp lệ",
-		"zooGatewaySignIn": "Đăng nhập vào Trinit để sử dụng Zoo Gateway."
+		"zooGatewaySignIn": "Đăng nhập vào Trinit để sử dụng Trinit Gateway."
 	},
 	"placeholders": {
 		"apiKey": "Nhập khóa API...",
