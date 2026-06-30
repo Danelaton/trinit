@@ -50,7 +50,6 @@ qdrant_storage/
 .rooignore
 .roomodes
 .changeset/
-.github/
 .husky/
 AGENTS.md
 CHANGELOG.md
@@ -70,6 +69,10 @@ codecov.yml
 releases/
 locales/
 schemas/
+
+# Upstream GitHub (keep only our CI)
+.github/*
+!.github/workflows/
 
 # Upstream apps (CLI, e2e, nightly — not part of extension core)
 apps/
