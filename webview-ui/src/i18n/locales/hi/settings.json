@@ -292,7 +292,7 @@
 			"description": "जब सक्षम होता है, तो Zoo आपके अनुमोदित बटन पर क्लिक किए बिना स्वचालित रूप से निर्देशिका सामग्री देखेगा और फाइलें पढ़ेगा।",
 			"outsideWorkspace": {
 				"label": "वर्कस्पेस के बाहर की फाइलें शामिल करें",
-				"description": "Zoo को अनुमोदन की आवश्यकता के बिना वर्तमान वर्कस्पेस के बाहर की फाइलें पढ़ने की अनुमति दें।"
+				"description": "Trinit को अनुमोदन की आवश्यकता के बिना वर्तमान वर्कस्पेस के बाहर की फाइलें पढ़ने की अनुमति दें।"
 			}
 		},
 		"write": {
@@ -301,11 +301,11 @@
 			"delayLabel": "लिखने के बाद विलंब ताकि डायग्नोस्टिक संभावित समस्याओं का पता लगा सकें",
 			"outsideWorkspace": {
 				"label": "वर्कस्पेस के बाहर की फाइलें शामिल करें",
-				"description": "Zoo को अनुमोदन की आवश्यकता के बिना वर्तमान वर्कस्पेस के बाहर फाइलें बनाने और संपादित करने की अनुमति दें।"
+				"description": "Trinit को अनुमोदन की आवश्यकता के बिना वर्तमान वर्कस्पेस के बाहर फाइलें बनाने और संपादित करने की अनुमति दें।"
 			},
 			"protected": {
 				"label": "संरक्षित फाइलें शामिल करें",
-				"description": "Zoo को अनुमोदन की आवश्यकता के बिना संरक्षित फाइलें (.rooignore और .roo/ कॉन्फ़िगरेशन फाइलें जैसी) बनाने और संपादित करने की अनुमति दें।"
+				"description": "Trinit को अनुमोदन की आवश्यकता के बिना संरक्षित फाइलें (.rooignore और .roo/ कॉन्फ़िगरेशन फाइलें जैसी) बनाने और संपादित करने की अनुमति दें।"
 			}
 		},
 		"mcp": {
@@ -1058,7 +1058,7 @@
 			"reset": "VS Code डिफ़ॉल्ट का उपयोग करें"
 		},
 		"autoCloseZooOpenedFiles": {
-			"label": "Zoo dvara kholi gayi files ko svachalit band karo",
+			"label": "Trinit dvara kholi gayi files ko svachalit band karo",
 			"description": "Saksham hone par, Zoo dvara diff ke liye aasthayi roop se kholi gayi editor tabs ko parivartan svikaar ya asviikaar hone ke baad svachalit roop se band kar diya jaata hai. Sampadak ke pehle se hi khule tabs ko kabhi svachalit roop se band nahin kiya jaata."
 		},
 		"autoCloseZooOpenedFilesAfterUserEdited": {

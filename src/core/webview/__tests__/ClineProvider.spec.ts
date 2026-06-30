@@ -2695,7 +2695,7 @@ describe("ClineProvider - Router Models", () => {
 				requesty: mockModels,
 				unbound: mockModels,
 				"vercel-ai-gateway": mockModels,
-				"zoo-gateway": mockModels,
+				"trinit-gateway": mockModels,
 				litellm: mockModels,
 				ollama: {},
 				lmstudio: {},
@@ -2745,7 +2745,7 @@ describe("ClineProvider - Router Models", () => {
 				requesty: {},
 				unbound: mockModels,
 				"vercel-ai-gateway": mockModels,
-				"zoo-gateway": mockModels,
+				"trinit-gateway": mockModels,
 				ollama: {},
 				lmstudio: {},
 				litellm: {},
@@ -2842,7 +2842,7 @@ describe("ClineProvider - Router Models", () => {
 				requesty: mockModels,
 				unbound: mockModels,
 				"vercel-ai-gateway": mockModels,
-				"zoo-gateway": mockModels,
+				"trinit-gateway": mockModels,
 				litellm: {},
 				ollama: {},
 				lmstudio: {},
@@ -3906,7 +3906,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 		})
 
 		describe("handleZooCodeCallback", () => {
-			it("creates a Zoo Gateway profile when none exists", async () => {
+			it("creates a Trinit Gateway profile when none exists", async () => {
 				vi.spyOn(provider, "getState").mockResolvedValue({
 					apiConfiguration: { zooGatewayModelId: "anthropic/claude-sonnet-4" },
 				} as any)
@@ -3927,9 +3927,9 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 
 				expect(postMessageSpy).toHaveBeenCalledWith({ type: "zooGatewayCredentialsReady" })
 				expect(upsertSpy).toHaveBeenCalledWith(
-					"Zoo Gateway",
+					"Trinit Gateway",
 					expect.objectContaining({
-						apiProvider: "zoo-gateway",
+						apiProvider: "trinit-gateway",
 						zooSessionToken: "zoo_ext_token",
 						zooGatewayBaseUrl: "https://www.trinit.dev/api/gateway/v1",
 					}),
@@ -3942,28 +3942,28 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 					apiConfiguration: { zooGatewayModelId: "anthropic/claude-sonnet-4" },
 				} as any)
 				vi.spyOn(provider.contextProxy, "getProviderSettings").mockReturnValue({
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 				} as any)
 				vi.spyOn(provider.contextProxy, "getValues").mockReturnValue({
-					currentApiConfigName: "Zoo Gateway",
+					currentApiConfigName: "Trinit Gateway",
 				} as any)
 				const upsertSpy = vi.spyOn(provider, "upsertProviderProfile").mockResolvedValue("profile-id")
 				const saveConfig = vi.fn().mockResolvedValue(undefined)
 				vi.spyOn(provider, "postStateToWebview").mockResolvedValue(undefined)
 				;(provider as any).providerSettingsManager = {
 					listConfig: vi.fn().mockResolvedValue([
-						{ name: "Zoo Gateway", apiProvider: "zoo-gateway" },
-						{ name: "Backup Zoo", apiProvider: "zoo-gateway" },
+						{ name: "Trinit Gateway", apiProvider: "trinit-gateway" },
+						{ name: "Backup Zoo", apiProvider: "trinit-gateway" },
 					]),
 					getProfile: vi
 						.fn()
 						.mockResolvedValueOnce({
-							apiProvider: "zoo-gateway",
+							apiProvider: "trinit-gateway",
 							zooSessionToken: "old-token",
 							zooGatewayBaseUrl: "https://old.example/api/gateway/v1",
 						})
 						.mockResolvedValueOnce({
-							apiProvider: "zoo-gateway",
+							apiProvider: "trinit-gateway",
 							zooSessionToken: "old-token",
 						}),
 					saveConfig,
@@ -3972,7 +3972,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 				await provider.handleZooCodeCallback("new-token")
 
 				expect(upsertSpy).toHaveBeenCalledWith(
-					"Zoo Gateway",
+					"Trinit Gateway",
 					expect.objectContaining({
 						zooSessionToken: "new-token",
 						zooGatewayBaseUrl: "https://www.trinit.dev/api/gateway/v1",
@@ -4025,7 +4025,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 				const postMessageSpy = vi.spyOn(provider, "postMessageToWebview").mockResolvedValue(undefined)
 
 				;(provider as any).providerSettingsManager = {
-					listConfig: vi.fn().mockResolvedValue([{ name: "Zoo Gateway", apiProvider: "zoo-gateway" }]),
+					listConfig: vi.fn().mockResolvedValue([{ name: "Trinit Gateway", apiProvider: "trinit-gateway" }]),
 					getProfile: vi.fn().mockResolvedValue({
 						zooSessionToken: "current-token",
 						zooGatewayBaseUrl: "https://www.trinit.dev/api/gateway/v1",
@@ -4044,7 +4044,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 				const handleSpy = vi.spyOn(provider, "handleZooCodeCallback").mockResolvedValue(undefined)
 
 				;(provider as any).providerSettingsManager = {
-					listConfig: vi.fn().mockResolvedValue([{ name: "Zoo Gateway", apiProvider: "zoo-gateway" }]),
+					listConfig: vi.fn().mockResolvedValue([{ name: "Trinit Gateway", apiProvider: "trinit-gateway" }]),
 					getProfile: vi.fn().mockResolvedValue({
 						zooSessionToken: "stale-token",
 						zooGatewayBaseUrl: "https://www.trinit.dev/api/gateway/v1",
@@ -4062,7 +4062,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 				const handleSpy = vi.spyOn(provider, "handleZooCodeCallback").mockResolvedValue(undefined)
 
 				;(provider as any).providerSettingsManager = {
-					listConfig: vi.fn().mockResolvedValue([{ name: "Zoo Gateway", apiProvider: "zoo-gateway" }]),
+					listConfig: vi.fn().mockResolvedValue([{ name: "Trinit Gateway", apiProvider: "trinit-gateway" }]),
 					getProfile: vi.fn().mockResolvedValue({
 						zooSessionToken: "current-token",
 						zooGatewayBaseUrl: "https://staging.trinit.dev/api/gateway/v1",

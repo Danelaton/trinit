@@ -256,10 +256,10 @@ const ApiOptions = ({
 			return
 		}
 
-		// Zoo Gateway renders its own auth-state error inline (sign-in card in
+		// Trinit Gateway renders its own auth-state error inline (sign-in card in
 		// ZooGateway.tsx) so it can react to zooCodeIsAuthenticated changes
 		// without re-running this effect or threading auth state through validation.
-		if (apiConfiguration.apiProvider === "zoo-gateway") {
+		if (apiConfiguration.apiProvider === "trinit-gateway") {
 			setErrorMessage(undefined)
 			return
 		}
@@ -645,7 +645,7 @@ const ApiOptions = ({
 						/>
 					)}
 
-					{selectedProvider === "zoo-gateway" && (
+					{selectedProvider === "trinit-gateway" && (
 						<ZooGateway
 							apiConfiguration={apiConfiguration}
 							setApiConfigurationField={setApiConfigurationField}

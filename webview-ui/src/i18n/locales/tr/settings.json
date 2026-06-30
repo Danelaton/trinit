@@ -1058,7 +1058,7 @@
 			"reset": "VS Code varsayılanını kullan"
 		},
 		"autoCloseZooOpenedFiles": {
-			"label": "Zoo tarafindan acilan dosyalari otomatik kapat",
+			"label": "Trinit tarafindan acilan dosyalari otomatik kapat",
 			"description": "Etkinlestirildiginde, Zoo'nun bir diff icin gecici olarak actigi duzenleyici sekmeleri, degisiklik kabul edildikten veya reddedildikten sonra otomatik olarak kapatilir. Kullanicinin duzenleme oncesinde zaten acik oldugu sekmeler hicbir zaman otomatik olarak kapatilmaz."
 		},
 		"autoCloseZooOpenedFilesAfterUserEdited": {

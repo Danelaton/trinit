@@ -73,7 +73,7 @@ export function getCachedZooCodeToken(): string {
 }
 
 /**
- * Resolves the Zoo Gateway session token for API calls.
+ * Resolves the Trinit Gateway session token for API calls.
  * Secret-storage cache wins over profile-persisted tokens; after an explicit sign-out
  * or 401 clear, profile tokens are ignored so stale credentials cannot be reused.
  */

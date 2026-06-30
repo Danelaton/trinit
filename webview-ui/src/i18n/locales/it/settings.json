@@ -694,7 +694,7 @@
 		},
 		"maxReadFile": {
 			"label": "Soglia di auto-troncamento lettura file",
-			"description": "Zoo legge questo numero di righe quando il modello omette i valori di inizio/fine. Se questo numero è inferiore al totale del file, Zoo genera un indice dei numeri di riga delle definizioni di codice. Casi speciali: -1 indica a Zoo di leggere l'intero file (senza indicizzazione), e 0 indica di non leggere righe e fornire solo indici di riga per un contesto minimo. Valori più bassi minimizzano l'utilizzo iniziale del contesto, permettendo successive letture precise di intervalli di righe. Le richieste con inizio/fine espliciti non sono limitate da questa impostazione.",
+			"description": "Trinit legge questo numero di righe quando il modello omette i valori di inizio/fine. Se questo numero è inferiore al totale del file, Zoo genera un indice dei numeri di riga delle definizioni di codice. Casi speciali: -1 indica a Zoo di leggere l'intero file (senza indicizzazione), e 0 indica di non leggere righe e fornire solo indici di riga per un contesto minimo. Valori più bassi minimizzano l'utilizzo iniziale del contesto, permettendo successive letture precise di intervalli di righe. Le richieste con inizio/fine espliciti non sono limitate da questa impostazione.",
 			"lines": "righe",
 			"always_full_read": "Leggi sempre l'intero file"
 		},

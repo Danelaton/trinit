@@ -145,7 +145,7 @@
 	"diffError": {
 		"title": "Modifica non riuscita"
 	},
-	"troubleMessage": "Zoo sta avendo problemi...",
+	"troubleMessage": "Trinit sta avendo problemi...",
 	"apiRequest": {
 		"title": "Richiesta API",
 		"failed": "Richiesta API fallita",
@@ -188,40 +188,40 @@
 		"current": "Corrente"
 	},
 	"fileOperations": {
-		"wantsToRead": "Zoo vuole leggere questo file",
-		"wantsToReadOutsideWorkspace": "Zoo vuole leggere questo file al di fuori dell'area di lavoro",
-		"didRead": "Zoo ha letto questo file",
-		"wantsToEdit": "Zoo vuole modificare questo file",
-		"wantsToEditOutsideWorkspace": "Zoo vuole modificare questo file al di fuori dell'area di lavoro",
-		"wantsToEditProtected": "Zoo vuole modificare un file di configurazione protetto",
-		"wantsToCreate": "Zoo vuole creare un nuovo file",
+		"wantsToRead": "Trinit vuole leggere questo file",
+		"wantsToReadOutsideWorkspace": "Trinit vuole leggere questo file al di fuori dell'area di lavoro",
+		"didRead": "Trinit ha letto questo file",
+		"wantsToEdit": "Trinit vuole modificare questo file",
+		"wantsToEditOutsideWorkspace": "Trinit vuole modificare questo file al di fuori dell'area di lavoro",
+		"wantsToEditProtected": "Trinit vuole modificare un file di configurazione protetto",
+		"wantsToCreate": "Trinit vuole creare un nuovo file",
 		"wantsToSearchReplace": "Roo vuole eseguire ricerca e sostituzione in questo file",
 		"didSearchReplace": "Roo ha eseguito ricerca e sostituzione in questo file",
-		"wantsToInsert": "Zoo vuole inserire contenuto in questo file",
-		"wantsToInsertWithLineNumber": "Zoo vuole inserire contenuto in questo file alla riga {{lineNumber}}",
-		"wantsToInsertAtEnd": "Zoo vuole aggiungere contenuto alla fine di questo file",
-		"wantsToReadAndXMore": "Zoo vuole leggere questo file e altri {{count}}",
-		"wantsToReadMultiple": "Zoo vuole leggere più file",
-		"wantsToApplyBatchChanges": "Zoo vuole applicare modifiche a più file",
-		"wantsToGenerateImage": "Zoo vuole generare un'immagine",
-		"wantsToGenerateImageOutsideWorkspace": "Zoo vuole generare un'immagine fuori dall'area di lavoro",
-		"wantsToGenerateImageProtected": "Zoo vuole generare un'immagine in una posizione protetta",
-		"didGenerateImage": "Zoo ha generato un'immagine"
+		"wantsToInsert": "Trinit vuole inserire contenuto in questo file",
+		"wantsToInsertWithLineNumber": "Trinit vuole inserire contenuto in questo file alla riga {{lineNumber}}",
+		"wantsToInsertAtEnd": "Trinit vuole aggiungere contenuto alla fine di questo file",
+		"wantsToReadAndXMore": "Trinit vuole leggere questo file e altri {{count}}",
+		"wantsToReadMultiple": "Trinit vuole leggere più file",
+		"wantsToApplyBatchChanges": "Trinit vuole applicare modifiche a più file",
+		"wantsToGenerateImage": "Trinit vuole generare un'immagine",
+		"wantsToGenerateImageOutsideWorkspace": "Trinit vuole generare un'immagine fuori dall'area di lavoro",
+		"wantsToGenerateImageProtected": "Trinit vuole generare un'immagine in una posizione protetta",
+		"didGenerateImage": "Trinit ha generato un'immagine"
 	},
 	"directoryOperations": {
-		"wantsToViewTopLevel": "Zoo vuole visualizzare i file di primo livello in questa directory",
-		"didViewTopLevel": "Zoo ha visualizzato i file di primo livello in questa directory",
-		"wantsToViewRecursive": "Zoo vuole visualizzare ricorsivamente tutti i file in questa directory",
-		"didViewRecursive": "Zoo ha visualizzato ricorsivamente tutti i file in questa directory",
-		"wantsToSearch": "Zoo vuole cercare in questa directory <code>{{regex}}</code>",
-		"didSearch": "Zoo ha cercato in questa directory <code>{{regex}}</code>",
-		"wantsToSearchOutsideWorkspace": "Zoo vuole cercare in questa directory (fuori dall'area di lavoro) <code>{{regex}}</code>",
-		"didSearchOutsideWorkspace": "Zoo ha cercato in questa directory (fuori dall'area di lavoro) <code>{{regex}}</code>",
-		"wantsToViewTopLevelOutsideWorkspace": "Zoo vuole visualizzare i file di primo livello in questa directory (fuori dall'area di lavoro)",
-		"didViewTopLevelOutsideWorkspace": "Zoo ha visualizzato i file di primo livello in questa directory (fuori dall'area di lavoro)",
-		"wantsToViewRecursiveOutsideWorkspace": "Zoo vuole visualizzare ricorsivamente tutti i file in questa directory (fuori dall'area di lavoro)",
-		"didViewRecursiveOutsideWorkspace": "Zoo ha visualizzato ricorsivamente tutti i file in questa directory (fuori dall'area di lavoro)",
-		"wantsToViewMultipleDirectories": "Zoo vuole visualizzare più directory"
+		"wantsToViewTopLevel": "Trinit vuole visualizzare i file di primo livello in questa directory",
+		"didViewTopLevel": "Trinit ha visualizzato i file di primo livello in questa directory",
+		"wantsToViewRecursive": "Trinit vuole visualizzare ricorsivamente tutti i file in questa directory",
+		"didViewRecursive": "Trinit ha visualizzato ricorsivamente tutti i file in questa directory",
+		"wantsToSearch": "Trinit vuole cercare in questa directory <code>{{regex}}</code>",
+		"didSearch": "Trinit ha cercato in questa directory <code>{{regex}}</code>",
+		"wantsToSearchOutsideWorkspace": "Trinit vuole cercare in questa directory (fuori dall'area di lavoro) <code>{{regex}}</code>",
+		"didSearchOutsideWorkspace": "Trinit ha cercato in questa directory (fuori dall'area di lavoro) <code>{{regex}}</code>",
+		"wantsToViewTopLevelOutsideWorkspace": "Trinit vuole visualizzare i file di primo livello in questa directory (fuori dall'area di lavoro)",
+		"didViewTopLevelOutsideWorkspace": "Trinit ha visualizzato i file di primo livello in questa directory (fuori dall'area di lavoro)",
+		"wantsToViewRecursiveOutsideWorkspace": "Trinit vuole visualizzare ricorsivamente tutti i file in questa directory (fuori dall'area di lavoro)",
+		"didViewRecursiveOutsideWorkspace": "Trinit ha visualizzato ricorsivamente tutti i file in questa directory (fuori dall'area di lavoro)",
+		"wantsToViewMultipleDirectories": "Trinit vuole visualizzare più directory"
 	},
 	"commandOutput": "Output del Comando",
 	"commandExecution": {
@@ -244,24 +244,24 @@
 	"response": "Risposta",
 	"arguments": "Argomenti",
 	"text": {
-		"rooSaid": "Zoo ha detto"
+		"rooSaid": "Trinit ha detto"
 	},
 	"feedback": {
 		"youSaid": "Hai detto"
 	},
 	"mcp": {
-		"wantsToUseTool": "Zoo vuole utilizzare uno strumento sul server MCP {{serverName}}",
-		"wantsToAccessResource": "Zoo vuole accedere a una risorsa sul server MCP {{serverName}}"
+		"wantsToUseTool": "Trinit vuole utilizzare uno strumento sul server MCP {{serverName}}",
+		"wantsToAccessResource": "Trinit vuole accedere a una risorsa sul server MCP {{serverName}}"
 	},
 	"modes": {
-		"wantsToSwitch": "Zoo vuole passare alla modalità <code>{{mode}}</code>",
-		"wantsToSwitchWithReason": "Zoo vuole passare alla modalità <code>{{mode}}</code> perché: {{reason}}",
-		"didSwitch": "Zoo è passato alla modalità <code>{{mode}}</code>",
-		"didSwitchWithReason": "Zoo è passato alla modalità <code>{{mode}}</code> perché: {{reason}}"
+		"wantsToSwitch": "Trinit vuole passare alla modalità <code>{{mode}}</code>",
+		"wantsToSwitchWithReason": "Trinit vuole passare alla modalità <code>{{mode}}</code> perché: {{reason}}",
+		"didSwitch": "Trinit è passato alla modalità <code>{{mode}}</code>",
+		"didSwitchWithReason": "Trinit è passato alla modalità <code>{{mode}}</code> perché: {{reason}}"
 	},
 	"subtasks": {
-		"wantsToCreate": "Zoo vuole creare una nuova sottoattività in modalità <code>{{mode}}</code>",
-		"wantsToFinish": "Zoo vuole completare questa sottoattività",
+		"wantsToCreate": "Trinit vuole creare una nuova sottoattività in modalità <code>{{mode}}</code>",
+		"wantsToFinish": "Trinit vuole completare questa sottoattività",
 		"newTaskContent": "Istruzioni sottoattività",
 		"completionContent": "Sottoattività completata",
 		"resultContent": "Risultati sottoattività",
@@ -270,7 +270,7 @@
 		"goToSubtask": "Visualizza attività"
 	},
 	"questions": {
-		"hasQuestion": "Zoo ha una domanda"
+		"hasQuestion": "Trinit ha una domanda"
 	},
 	"taskCompleted": "Attività completata",
 	"modelResponseIncomplete": "Risposta del modello incompleta",
@@ -329,8 +329,8 @@
 		}
 	},
 	"skill": {
-		"wantsToLoad": "Zoo vuole caricare una competenza",
-		"didLoad": "Zoo ha caricato una competenza"
+		"wantsToLoad": "Trinit vuole caricare una competenza",
+		"didLoad": "Trinit ha caricato una competenza"
 	},
 	"followUpSuggest": {
 		"copyToInput": "Copia nell'input (o Shift + clic)",
@@ -373,18 +373,18 @@
 	"ask": {
 		"autoApprovedRequestLimitReached": {
 			"title": "Limite di Richieste Auto-approvate Raggiunto",
-			"description": "Zoo ha raggiunto il limite auto-approvato di {{count}} richiesta/e API. Vuoi reimpostare il contatore e procedere con l'attività?",
+			"description": "Trinit ha raggiunto il limite auto-approvato di {{count}} richiesta/e API. Vuoi reimpostare il contatore e procedere con l'attività?",
 			"button": "Reimposta e Continua"
 		},
 		"autoApprovedCostLimitReached": {
 			"title": "Limite di costo auto-approvato raggiunto",
 			"button": "Reimposta e Continua",
-			"description": "Zoo ha raggiunto il limite di costo approvato automaticamente di ${{count}}. Vuoi reimpostare il costo e procedere con l'attività?"
+			"description": "Trinit ha raggiunto il limite di costo approvato automaticamente di ${{count}}. Vuoi reimpostare il costo e procedere con l'attività?"
 		}
 	},
 	"codebaseSearch": {
-		"wantsToSearch": "Zoo vuole cercare nella base di codice <code>{{query}}</code>",
-		"wantsToSearchWithPath": "Zoo vuole cercare nella base di codice <code>{{query}}</code> in <code>{{path}}</code>",
+		"wantsToSearch": "Trinit vuole cercare nella base di codice <code>{{query}}</code>",
+		"wantsToSearchWithPath": "Trinit vuole cercare nella base di codice <code>{{query}}</code> in <code>{{path}}</code>",
 		"didSearch_one": "Trovato 1 risultato",
 		"didSearch_other": "Trovati {{count}} risultati",
 		"resultTooltip": "Punteggio di somiglianza: {{score}} (clicca per aprire il file)"
@@ -466,8 +466,8 @@
 		"clickToEdit": "Clicca per modificare il messaggio"
 	},
 	"slashCommand": {
-		"wantsToRun": "Zoo vuole eseguire un comando slash",
-		"didRun": "Zoo ha eseguito un comando slash"
+		"wantsToRun": "Trinit vuole eseguire un comando slash",
+		"didRun": "Trinit ha eseguito un comando slash"
 	},
 	"todo": {
 		"partial": "{{completed}} di {{total}} cose da fare completate",
@@ -486,7 +486,7 @@
 		"openMcpSettings": "Apri impostazioni MCP"
 	},
 	"readCommandOutput": {
-		"title": "Zoo read command output"
+		"title": "Trinit read command output"
 	},
 	"retiredProvider": {
 		"title": "Provider non più supportato",

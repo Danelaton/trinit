@@ -44,7 +44,7 @@ const baseInfo: ModelInfo = {
 
 function buildRouterModels(modelIds: string[]): RouterModels {
 	const models = Object.fromEntries(modelIds.map((id) => [id, baseInfo]))
-	return { "zoo-gateway": models } as unknown as RouterModels
+	return { "trinit-gateway": models } as unknown as RouterModels
 }
 
 describe("pickZooGatewayDefaultModelId", () => {
@@ -94,7 +94,7 @@ describe("ZooGateway component", () => {
 		const setApiConfigurationField = vi.fn()
 		render(
 			<ZooGateway
-				apiConfiguration={{ apiProvider: "zoo-gateway" } as ProviderSettings}
+				apiConfiguration={{ apiProvider: "trinit-gateway" } as ProviderSettings}
 				setApiConfigurationField={setApiConfigurationField}
 				routerModels={buildRouterModels(["anthropic/claude-sonnet-4", "anthropic/claude-sonnet-4.5"])}
 				organizationAllowList={baseProps.organizationAllowList}
@@ -112,7 +112,7 @@ describe("ZooGateway component", () => {
 			<ZooGateway
 				apiConfiguration={
 					{
-						apiProvider: "zoo-gateway",
+						apiProvider: "trinit-gateway",
 						zooGatewayModelId: "anthropic/claude-sonnet-4",
 					} as ProviderSettings
 				}
@@ -139,7 +139,7 @@ describe("ZooGateway component", () => {
 			<ZooGateway
 				apiConfiguration={
 					{
-						apiProvider: "zoo-gateway",
+						apiProvider: "trinit-gateway",
 						zooGatewayModelId: "anthropic/claude-sonnet-4.5",
 					} as ProviderSettings
 				}
@@ -158,7 +158,7 @@ describe("ZooGateway component", () => {
 		const setApiConfigurationField = vi.fn()
 		render(
 			<ZooGateway
-				apiConfiguration={{ apiProvider: "zoo-gateway" } as ProviderSettings}
+				apiConfiguration={{ apiProvider: "trinit-gateway" } as ProviderSettings}
 				setApiConfigurationField={setApiConfigurationField}
 				routerModels={undefined}
 				organizationAllowList={baseProps.organizationAllowList}
@@ -174,7 +174,7 @@ describe("ZooGateway component", () => {
 		try {
 			render(
 				<ZooGateway
-					apiConfiguration={{ apiProvider: "zoo-gateway" } as ProviderSettings}
+					apiConfiguration={{ apiProvider: "trinit-gateway" } as ProviderSettings}
 					setApiConfigurationField={vi.fn()}
 					routerModels={buildRouterModels(["anthropic/claude-sonnet-4"])}
 					organizationAllowList={baseProps.organizationAllowList}

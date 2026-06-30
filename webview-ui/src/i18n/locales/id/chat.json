@@ -225,51 +225,51 @@
 		}
 	},
 	"skill": {
-		"wantsToLoad": "Zoo ingin memuat keterampilan",
-		"didLoad": "Zoo telah memuat keterampilan"
+		"wantsToLoad": "Trinit ingin memuat keterampilan",
+		"didLoad": "Trinit telah memuat keterampilan"
 	},
 	"instructions": {
 		"wantsToFetch": "Roo ingin mengambil instruksi detail untuk membantu tugas saat ini"
 	},
 	"fileOperations": {
-		"wantsToRead": "Zoo ingin membaca file ini",
-		"wantsToReadMultiple": "Zoo ingin membaca beberapa file",
-		"wantsToReadAndXMore": "Zoo ingin membaca file ini dan {{count}} lainnya",
-		"wantsToReadOutsideWorkspace": "Zoo ingin membaca file ini di luar workspace",
-		"didRead": "Zoo membaca file ini",
-		"wantsToEdit": "Zoo ingin mengedit file ini",
-		"wantsToEditOutsideWorkspace": "Zoo ingin mengedit file ini di luar workspace",
-		"wantsToEditProtected": "Zoo ingin mengedit file konfigurasi yang dilindungi",
-		"wantsToApplyBatchChanges": "Zoo ingin menerapkan perubahan ke beberapa file",
-		"wantsToGenerateImage": "Zoo ingin menghasilkan gambar",
-		"wantsToGenerateImageOutsideWorkspace": "Zoo ingin menghasilkan gambar di luar workspace",
-		"wantsToGenerateImageProtected": "Zoo ingin menghasilkan gambar di lokasi yang dilindungi",
-		"didGenerateImage": "Zoo telah menghasilkan gambar",
-		"wantsToCreate": "Zoo ingin membuat file baru",
+		"wantsToRead": "Trinit ingin membaca file ini",
+		"wantsToReadMultiple": "Trinit ingin membaca beberapa file",
+		"wantsToReadAndXMore": "Trinit ingin membaca file ini dan {{count}} lainnya",
+		"wantsToReadOutsideWorkspace": "Trinit ingin membaca file ini di luar workspace",
+		"didRead": "Trinit membaca file ini",
+		"wantsToEdit": "Trinit ingin mengedit file ini",
+		"wantsToEditOutsideWorkspace": "Trinit ingin mengedit file ini di luar workspace",
+		"wantsToEditProtected": "Trinit ingin mengedit file konfigurasi yang dilindungi",
+		"wantsToApplyBatchChanges": "Trinit ingin menerapkan perubahan ke beberapa file",
+		"wantsToGenerateImage": "Trinit ingin menghasilkan gambar",
+		"wantsToGenerateImageOutsideWorkspace": "Trinit ingin menghasilkan gambar di luar workspace",
+		"wantsToGenerateImageProtected": "Trinit ingin menghasilkan gambar di lokasi yang dilindungi",
+		"didGenerateImage": "Trinit telah menghasilkan gambar",
+		"wantsToCreate": "Trinit ingin membuat file baru",
 		"wantsToSearchReplace": "Roo ingin mencari dan mengganti di file ini",
 		"didSearchReplace": "Roo melakukan pencarian dan penggantian pada file ini",
-		"wantsToInsert": "Zoo ingin menyisipkan konten ke file ini",
-		"wantsToInsertWithLineNumber": "Zoo ingin menyisipkan konten ke file ini di baris {{lineNumber}}",
-		"wantsToInsertAtEnd": "Zoo ingin menambahkan konten ke akhir file ini"
+		"wantsToInsert": "Trinit ingin menyisipkan konten ke file ini",
+		"wantsToInsertWithLineNumber": "Trinit ingin menyisipkan konten ke file ini di baris {{lineNumber}}",
+		"wantsToInsertAtEnd": "Trinit ingin menambahkan konten ke akhir file ini"
 	},
 	"directoryOperations": {
-		"wantsToViewTopLevel": "Zoo ingin melihat file tingkat atas di direktori ini",
-		"didViewTopLevel": "Zoo melihat file tingkat atas di direktori ini",
-		"wantsToViewRecursive": "Zoo ingin melihat semua file secara rekursif di direktori ini",
-		"didViewRecursive": "Zoo melihat semua file secara rekursif di direktori ini",
-		"wantsToSearch": "Zoo ingin mencari direktori ini untuk <code>{{regex}}</code>",
-		"didSearch": "Zoo mencari direktori ini untuk <code>{{regex}}</code>",
-		"wantsToSearchOutsideWorkspace": "Zoo ingin mencari direktori ini (di luar workspace) untuk <code>{{regex}}</code>",
-		"didSearchOutsideWorkspace": "Zoo mencari direktori ini (di luar workspace) untuk <code>{{regex}}</code>",
-		"wantsToViewTopLevelOutsideWorkspace": "Zoo ingin melihat file tingkat atas di direktori ini (di luar workspace)",
-		"didViewTopLevelOutsideWorkspace": "Zoo melihat file tingkat atas di direktori ini (di luar workspace)",
-		"wantsToViewRecursiveOutsideWorkspace": "Zoo ingin melihat semua file secara rekursif di direktori ini (di luar workspace)",
-		"didViewRecursiveOutsideWorkspace": "Zoo melihat semua file secara rekursif di direktori ini (di luar workspace)",
-		"wantsToViewMultipleDirectories": "Zoo ingin melihat beberapa direktori"
+		"wantsToViewTopLevel": "Trinit ingin melihat file tingkat atas di direktori ini",
+		"didViewTopLevel": "Trinit melihat file tingkat atas di direktori ini",
+		"wantsToViewRecursive": "Trinit ingin melihat semua file secara rekursif di direktori ini",
+		"didViewRecursive": "Trinit melihat semua file secara rekursif di direktori ini",
+		"wantsToSearch": "Trinit ingin mencari direktori ini untuk <code>{{regex}}</code>",
+		"didSearch": "Trinit mencari direktori ini untuk <code>{{regex}}</code>",
+		"wantsToSearchOutsideWorkspace": "Trinit ingin mencari direktori ini (di luar workspace) untuk <code>{{regex}}</code>",
+		"didSearchOutsideWorkspace": "Trinit mencari direktori ini (di luar workspace) untuk <code>{{regex}}</code>",
+		"wantsToViewTopLevelOutsideWorkspace": "Trinit ingin melihat file tingkat atas di direktori ini (di luar workspace)",
+		"didViewTopLevelOutsideWorkspace": "Trinit melihat file tingkat atas di direktori ini (di luar workspace)",
+		"wantsToViewRecursiveOutsideWorkspace": "Trinit ingin melihat semua file secara rekursif di direktori ini (di luar workspace)",
+		"didViewRecursiveOutsideWorkspace": "Trinit melihat semua file secara rekursif di direktori ini (di luar workspace)",
+		"wantsToViewMultipleDirectories": "Trinit ingin melihat beberapa direktori"
 	},
 	"codebaseSearch": {
-		"wantsToSearch": "Zoo ingin mencari codebase untuk <code>{{query}}</code>",
-		"wantsToSearchWithPath": "Zoo ingin mencari codebase untuk <code>{{query}}</code> di <code>{{path}}</code>",
+		"wantsToSearch": "Trinit ingin mencari codebase untuk <code>{{query}}</code>",
+		"wantsToSearchWithPath": "Trinit ingin mencari codebase untuk <code>{{query}}</code> di <code>{{path}}</code>",
 		"didSearch_one": "Ditemukan 1 hasil",
 		"didSearch_other": "Ditemukan {{count}} hasil",
 		"resultTooltip": "Skor kemiripan: {{score}} (klik untuk membuka file)"
@@ -295,24 +295,24 @@
 	"response": "Respons",
 	"arguments": "Argumen",
 	"text": {
-		"rooSaid": "Zoo berkata"
+		"rooSaid": "Trinit berkata"
 	},
 	"feedback": {
 		"youSaid": "Anda bilang"
 	},
 	"mcp": {
-		"wantsToUseTool": "Zoo ingin menggunakan tool di server MCP {{serverName}}",
-		"wantsToAccessResource": "Zoo ingin mengakses resource di server MCP {{serverName}}"
+		"wantsToUseTool": "Trinit ingin menggunakan tool di server MCP {{serverName}}",
+		"wantsToAccessResource": "Trinit ingin mengakses resource di server MCP {{serverName}}"
 	},
 	"modes": {
-		"wantsToSwitch": "Zoo ingin beralih ke mode {{mode}}",
-		"wantsToSwitchWithReason": "Zoo ingin beralih ke mode {{mode}} karena: {{reason}}",
-		"didSwitch": "Zoo beralih ke mode {{mode}}",
-		"didSwitchWithReason": "Zoo beralih ke mode {{mode}} karena: {{reason}}"
+		"wantsToSwitch": "Trinit ingin beralih ke mode {{mode}}",
+		"wantsToSwitchWithReason": "Trinit ingin beralih ke mode {{mode}} karena: {{reason}}",
+		"didSwitch": "Trinit beralih ke mode {{mode}}",
+		"didSwitchWithReason": "Trinit beralih ke mode {{mode}} karena: {{reason}}"
 	},
 	"subtasks": {
-		"wantsToCreate": "Zoo ingin membuat subtugas baru dalam mode {{mode}}",
-		"wantsToFinish": "Zoo ingin menyelesaikan subtugas ini",
+		"wantsToCreate": "Trinit ingin membuat subtugas baru dalam mode {{mode}}",
+		"wantsToFinish": "Trinit ingin menyelesaikan subtugas ini",
 		"newTaskContent": "Instruksi Subtugas",
 		"completionContent": "Subtugas Selesai",
 		"resultContent": "Hasil Subtugas",
@@ -321,7 +321,7 @@
 		"goToSubtask": "Lihat tugas"
 	},
 	"questions": {
-		"hasQuestion": "Zoo punya pertanyaan"
+		"hasQuestion": "Trinit punya pertanyaan"
 	},
 	"taskCompleted": "Tugas Selesai",
 	"error": "Error",
@@ -335,7 +335,7 @@
 	"diffError": {
 		"title": "Edit Tidak Berhasil"
 	},
-	"troubleMessage": "Zoo mengalami masalah...",
+	"troubleMessage": "Trinit mengalami masalah...",
 	"errorDetails": {
 		"link": "Details",
 		"title": "Detail Kesalahan",
@@ -410,12 +410,12 @@
 	"ask": {
 		"autoApprovedRequestLimitReached": {
 			"title": "Batas Permintaan yang Disetujui Otomatis Tercapai",
-			"description": "Zoo telah mencapai batas {{count}} permintaan API yang disetujui otomatis. Apakah Anda ingin mengatur ulang hitungan dan melanjutkan tugas?",
+			"description": "Trinit telah mencapai batas {{count}} permintaan API yang disetujui otomatis. Apakah Anda ingin mengatur ulang hitungan dan melanjutkan tugas?",
 			"button": "Setel Ulang dan Lanjutkan"
 		},
 		"autoApprovedCostLimitReached": {
 			"title": "Batas Biaya yang Disetujui Otomatis Tercapai",
-			"description": "Zoo telah mencapai batas biaya yang disetujui otomatis sebesar ${{count}}. Apakah Anda ingin mengatur ulang biaya dan melanjutkan tugas?",
+			"description": "Trinit telah mencapai batas biaya yang disetujui otomatis sebesar ${{count}}. Apakah Anda ingin mengatur ulang biaya dan melanjutkan tugas?",
 			"button": "Setel Ulang dan Lanjutkan"
 		}
 	},
@@ -472,8 +472,8 @@
 		"clickToEdit": "Klik untuk mengedit pesan"
 	},
 	"slashCommand": {
-		"wantsToRun": "Zoo ingin menjalankan perintah slash",
-		"didRun": "Zoo telah menjalankan perintah slash"
+		"wantsToRun": "Trinit ingin menjalankan perintah slash",
+		"didRun": "Trinit telah menjalankan perintah slash"
 	},
 	"todo": {
 		"partial": "{{completed}} dari {{total}} to-do selesai",
@@ -492,7 +492,7 @@
 		"openMcpSettings": "Buka Pengaturan MCP"
 	},
 	"readCommandOutput": {
-		"title": "Zoo read command output"
+		"title": "Trinit read command output"
 	},
 	"retiredProvider": {
 		"title": "Penyedia tidak lagi didukung",

@@ -316,9 +316,9 @@ describe("ApiOptions", () => {
 
 		const providerSelectContainer = screen.getByTestId("provider-select")
 		const providerSelect = providerSelectContainer.querySelector("select") as HTMLSelectElement
-		fireEvent.change(providerSelect, { target: { value: "zoo-gateway" } })
+		fireEvent.change(providerSelect, { target: { value: "trinit-gateway" } })
 
-		expect(mockSetApiConfigurationField).toHaveBeenCalledWith("apiProvider", "zoo-gateway")
+		expect(mockSetApiConfigurationField).toHaveBeenCalledWith("apiProvider", "trinit-gateway")
 		expect(mockSetApiConfigurationField).toHaveBeenCalledWith("zooGatewayModelId", zooGatewayDefaultModelId, false)
 	})
 

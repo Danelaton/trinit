@@ -142,7 +142,7 @@
 	"diffError": {
 		"title": "Edició fallida"
 	},
-	"troubleMessage": "Zoo està tenint problemes...",
+	"troubleMessage": "Trinit està tenint problemes...",
 	"apiRequest": {
 		"title": "Sol·licitud API",
 		"failed": "Sol·licitud API ha fallat",
@@ -188,40 +188,40 @@
 		"wantsToFetch": "Roo vol obtenir instruccions detallades per ajudar amb la tasca actual."
 	},
 	"fileOperations": {
-		"wantsToRead": "Zoo vol llegir aquest fitxer",
-		"wantsToReadOutsideWorkspace": "Zoo vol llegir aquest fitxer fora de l'espai de treball",
-		"didRead": "Zoo ha llegit aquest fitxer",
-		"wantsToEdit": "Zoo vol editar aquest fitxer",
-		"wantsToEditOutsideWorkspace": "Zoo vol editar aquest fitxer fora de l'espai de treball",
-		"wantsToEditProtected": "Zoo vol editar un fitxer de configuració protegit",
-		"wantsToCreate": "Zoo vol crear un nou fitxer",
+		"wantsToRead": "Trinit vol llegir aquest fitxer",
+		"wantsToReadOutsideWorkspace": "Trinit vol llegir aquest fitxer fora de l'espai de treball",
+		"didRead": "Trinit ha llegit aquest fitxer",
+		"wantsToEdit": "Trinit vol editar aquest fitxer",
+		"wantsToEditOutsideWorkspace": "Trinit vol editar aquest fitxer fora de l'espai de treball",
+		"wantsToEditProtected": "Trinit vol editar un fitxer de configuració protegit",
+		"wantsToCreate": "Trinit vol crear un nou fitxer",
 		"wantsToSearchReplace": "Roo vol realitzar cerca i substitució en aquest fitxer",
 		"didSearchReplace": "Roo ha realitzat cerca i substitució en aquest fitxer",
-		"wantsToInsert": "Zoo vol inserir contingut en aquest fitxer",
-		"wantsToInsertWithLineNumber": "Zoo vol inserir contingut a la línia {{lineNumber}} d'aquest fitxer",
-		"wantsToInsertAtEnd": "Zoo vol afegir contingut al final d'aquest fitxer",
+		"wantsToInsert": "Trinit vol inserir contingut en aquest fitxer",
+		"wantsToInsertWithLineNumber": "Trinit vol inserir contingut a la línia {{lineNumber}} d'aquest fitxer",
+		"wantsToInsertAtEnd": "Trinit vol afegir contingut al final d'aquest fitxer",
 		"wantsToReadAndXMore": "En Zoo vol llegir aquest fitxer i {{count}} més",
-		"wantsToReadMultiple": "Zoo vol llegir diversos fitxers",
-		"wantsToApplyBatchChanges": "Zoo vol aplicar canvis a múltiples fitxers",
-		"wantsToGenerateImage": "Zoo vol generar una imatge",
-		"wantsToGenerateImageOutsideWorkspace": "Zoo vol generar una imatge fora de l'espai de treball",
-		"wantsToGenerateImageProtected": "Zoo vol generar una imatge en una ubicació protegida",
-		"didGenerateImage": "Zoo ha generat una imatge"
+		"wantsToReadMultiple": "Trinit vol llegir diversos fitxers",
+		"wantsToApplyBatchChanges": "Trinit vol aplicar canvis a múltiples fitxers",
+		"wantsToGenerateImage": "Trinit vol generar una imatge",
+		"wantsToGenerateImageOutsideWorkspace": "Trinit vol generar una imatge fora de l'espai de treball",
+		"wantsToGenerateImageProtected": "Trinit vol generar una imatge en una ubicació protegida",
+		"didGenerateImage": "Trinit ha generat una imatge"
 	},
 	"directoryOperations": {
-		"wantsToViewTopLevel": "Zoo vol veure els fitxers de nivell superior en aquest directori",
-		"didViewTopLevel": "Zoo ha vist els fitxers de nivell superior en aquest directori",
-		"wantsToViewRecursive": "Zoo vol veure recursivament tots els fitxers en aquest directori",
-		"didViewRecursive": "Zoo ha vist recursivament tots els fitxers en aquest directori",
-		"wantsToSearch": "Zoo vol cercar en aquest directori <code>{{regex}}</code>",
-		"didSearch": "Zoo ha cercat en aquest directori <code>{{regex}}</code>",
-		"wantsToSearchOutsideWorkspace": "Zoo vol cercar en aquest directori (fora de l'espai de treball) <code>{{regex}}</code>",
-		"didSearchOutsideWorkspace": "Zoo ha cercat en aquest directori (fora de l'espai de treball) <code>{{regex}}</code>",
-		"wantsToViewTopLevelOutsideWorkspace": "Zoo vol veure els fitxers de nivell superior en aquest directori (fora de l'espai de treball)",
-		"didViewTopLevelOutsideWorkspace": "Zoo ha vist els fitxers de nivell superior en aquest directori (fora de l'espai de treball)",
-		"wantsToViewRecursiveOutsideWorkspace": "Zoo vol veure recursivament tots els fitxers en aquest directori (fora de l'espai de treball)",
-		"didViewRecursiveOutsideWorkspace": "Zoo ha vist recursivament tots els fitxers en aquest directori (fora de l'espai de treball)",
-		"wantsToViewMultipleDirectories": "Zoo vol veure diversos directoris"
+		"wantsToViewTopLevel": "Trinit vol veure els fitxers de nivell superior en aquest directori",
+		"didViewTopLevel": "Trinit ha vist els fitxers de nivell superior en aquest directori",
+		"wantsToViewRecursive": "Trinit vol veure recursivament tots els fitxers en aquest directori",
+		"didViewRecursive": "Trinit ha vist recursivament tots els fitxers en aquest directori",
+		"wantsToSearch": "Trinit vol cercar en aquest directori <code>{{regex}}</code>",
+		"didSearch": "Trinit ha cercat en aquest directori <code>{{regex}}</code>",
+		"wantsToSearchOutsideWorkspace": "Trinit vol cercar en aquest directori (fora de l'espai de treball) <code>{{regex}}</code>",
+		"didSearchOutsideWorkspace": "Trinit ha cercat en aquest directori (fora de l'espai de treball) <code>{{regex}}</code>",
+		"wantsToViewTopLevelOutsideWorkspace": "Trinit vol veure els fitxers de nivell superior en aquest directori (fora de l'espai de treball)",
+		"didViewTopLevelOutsideWorkspace": "Trinit ha vist els fitxers de nivell superior en aquest directori (fora de l'espai de treball)",
+		"wantsToViewRecursiveOutsideWorkspace": "Trinit vol veure recursivament tots els fitxers en aquest directori (fora de l'espai de treball)",
+		"didViewRecursiveOutsideWorkspace": "Trinit ha vist recursivament tots els fitxers en aquest directori (fora de l'espai de treball)",
+		"wantsToViewMultipleDirectories": "Trinit vol veure diversos directoris"
 	},
 	"commandOutput": "Sortida de la comanda",
 	"commandExecution": {
@@ -250,18 +250,18 @@
 		"youSaid": "Has dit"
 	},
 	"mcp": {
-		"wantsToUseTool": "Zoo vol utilitzar una eina al servidor MCP {{serverName}}",
-		"wantsToAccessResource": "Zoo vol accedir a un recurs al servidor MCP {{serverName}}"
+		"wantsToUseTool": "Trinit vol utilitzar una eina al servidor MCP {{serverName}}",
+		"wantsToAccessResource": "Trinit vol accedir a un recurs al servidor MCP {{serverName}}"
 	},
 	"modes": {
-		"wantsToSwitch": "Zoo vol canviar a mode <code>{{mode}}</code>",
-		"wantsToSwitchWithReason": "Zoo vol canviar a mode <code>{{mode}}</code> perquè: {{reason}}",
-		"didSwitch": "Zoo ha canviat a mode <code>{{mode}}</code>",
-		"didSwitchWithReason": "Zoo ha canviat a mode <code>{{mode}}</code> perquè: {{reason}}"
+		"wantsToSwitch": "Trinit vol canviar a mode <code>{{mode}}</code>",
+		"wantsToSwitchWithReason": "Trinit vol canviar a mode <code>{{mode}}</code> perquè: {{reason}}",
+		"didSwitch": "Trinit ha canviat a mode <code>{{mode}}</code>",
+		"didSwitchWithReason": "Trinit ha canviat a mode <code>{{mode}}</code> perquè: {{reason}}"
 	},
 	"subtasks": {
-		"wantsToCreate": "Zoo vol crear una nova subtasca en mode <code>{{mode}}</code>",
-		"wantsToFinish": "Zoo vol finalitzar aquesta subtasca",
+		"wantsToCreate": "Trinit vol crear una nova subtasca en mode <code>{{mode}}</code>",
+		"wantsToFinish": "Trinit vol finalitzar aquesta subtasca",
 		"newTaskContent": "Instruccions de la subtasca",
 		"completionContent": "Subtasca completada",
 		"resultContent": "Resultats de la subtasca",
@@ -270,7 +270,7 @@
 		"goToSubtask": "Veure tasca"
 	},
 	"questions": {
-		"hasQuestion": "Zoo té una pregunta"
+		"hasQuestion": "Trinit té una pregunta"
 	},
 	"taskCompleted": "Tasca completada",
 	"modelResponseIncomplete": "Resposta del model incompleta",
@@ -373,18 +373,18 @@
 	"ask": {
 		"autoApprovedRequestLimitReached": {
 			"title": "S'ha arribat al límit de sol·licituds aprovades automàticament",
-			"description": "Zoo ha arribat al límit aprovat automàticament de {{count}} sol·licitud(s) d'API. Vols reiniciar el comptador i continuar amb la tasca?",
+			"description": "Trinit ha arribat al límit aprovat automàticament de {{count}} sol·licitud(s) d'API. Vols reiniciar el comptador i continuar amb la tasca?",
 			"button": "Reiniciar i continuar"
 		},
 		"autoApprovedCostLimitReached": {
 			"title": "S'ha arribat al límit de cost d'aprovació automàtica",
 			"button": "Restableix i continua",
-			"description": "Zoo ha arribat al límit de cost aprovat automàticament de ${{count}}. Vols restablir el cost i continuar amb la tasca?"
+			"description": "Trinit ha arribat al límit de cost aprovat automàticament de ${{count}}. Vols restablir el cost i continuar amb la tasca?"
 		}
 	},
 	"codebaseSearch": {
-		"wantsToSearch": "Zoo vol cercar a la base de codi <code>{{query}}</code>",
-		"wantsToSearchWithPath": "Zoo vol cercar a la base de codi <code>{{query}}</code> a <code>{{path}}</code>",
+		"wantsToSearch": "Trinit vol cercar a la base de codi <code>{{query}}</code>",
+		"wantsToSearchWithPath": "Trinit vol cercar a la base de codi <code>{{query}}</code> a <code>{{path}}</code>",
 		"didSearch_one": "S'ha trobat 1 resultat",
 		"didSearch_other": "S'han trobat {{count}} resultats",
 		"resultTooltip": "Puntuació de similitud: {{score}} (fes clic per obrir el fitxer)"
@@ -460,8 +460,8 @@
 		"clickToEdit": "Feu clic per editar el missatge"
 	},
 	"slashCommand": {
-		"wantsToRun": "Zoo vol executar una comanda slash",
-		"didRun": "Zoo ha executat una comanda slash"
+		"wantsToRun": "Trinit vol executar una comanda slash",
+		"didRun": "Trinit ha executat una comanda slash"
 	},
 	"contextMenu": {
 		"noResults": "Sense resultats",
@@ -486,7 +486,7 @@
 		"openMcpSettings": "Obrir configuració de MCP"
 	},
 	"readCommandOutput": {
-		"title": "Zoo read command output"
+		"title": "Trinit read command output"
 	},
 	"retiredProvider": {
 		"title": "Proveïdor ja no compatible",

@@ -1033,7 +1033,7 @@ export const webviewMessageHandler = async (
 				: {
 						openrouter: {},
 						"vercel-ai-gateway": {},
-						"zoo-gateway": {},
+						"trinit-gateway": {},
 						litellm: {},
 						requesty: {},
 						unbound: {},
@@ -1077,9 +1077,9 @@ export const webviewMessageHandler = async (
 				},
 				{ key: "vercel-ai-gateway", options: { provider: "vercel-ai-gateway" } },
 				{
-					key: "zoo-gateway",
+					key: "trinit-gateway",
 					options: {
-						provider: "zoo-gateway",
+						provider: "trinit-gateway",
 						apiKey: apiConfiguration.zooSessionToken,
 						baseUrl: apiConfiguration.zooGatewayBaseUrl,
 					},
@@ -2642,18 +2642,18 @@ export const webviewMessageHandler = async (
 				const { disconnectZooCode } = await import("../../services/trinit-auth")
 				await disconnectZooCode()
 
-				// Clear zooSessionToken from ALL provider profiles with apiProvider === "zoo-gateway".
-				// Profiles are user-renameable, so we cannot rely on a hardcoded name like "Zoo Gateway".
+				// Clear zooSessionToken from ALL provider profiles with apiProvider === "trinit-gateway".
+				// Profiles are user-renameable, so we cannot rely on a hardcoded name like "Trinit Gateway".
 				// We must scan all profiles and clear tokens from any that use the zoo-gateway provider.
 				try {
 					const allProfiles = await provider.providerSettingsManager.listConfig()
-					// Check if Zoo Gateway is the currently active profile by apiProvider identity
+					// Check if Trinit Gateway is the currently active profile by apiProvider identity
 					const currentSettings = provider.contextProxy.getProviderSettings()
-					const isZooGatewayActive = currentSettings.apiProvider === "zoo-gateway"
+					const isZooGatewayActive = currentSettings.apiProvider === "trinit-gateway"
 					const currentApiConfigName = provider.contextProxy.getValues().currentApiConfigName
 
 					for (const entry of allProfiles) {
-						if (entry.apiProvider !== "zoo-gateway") {
+						if (entry.apiProvider !== "trinit-gateway") {
 							continue
 						}
 

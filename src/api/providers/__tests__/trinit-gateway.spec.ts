@@ -226,7 +226,7 @@ describe("ZooGatewayHandler", () => {
 		it("requires authentication at request time when no session token is available", async () => {
 			const handler = new ZooGatewayHandler({})
 			await expect(drainCreateMessage(handler)).rejects.toThrow(
-				"Zoo Gateway requires authentication. Please sign in to Zoo Code first.",
+				"Trinit Gateway requires authentication. Please sign in to Zoo Code first.",
 			)
 		})
 
@@ -260,7 +260,7 @@ describe("ZooGatewayHandler", () => {
 				for await (const _chunk of stream) {
 					// drain
 				}
-			}).rejects.toThrow("Zoo Gateway requires authentication. Please sign in to Zoo Code first.")
+			}).rejects.toThrow("Trinit Gateway requires authentication. Please sign in to Zoo Code first.")
 		})
 
 		it("streams text and usage chunks", async () => {
@@ -448,14 +448,14 @@ describe("ZooGatewayHandler", () => {
 			)
 		})
 
-		it("wraps errors with a Zoo Gateway prefix", async () => {
+		it("wraps errors with a Trinit Gateway prefix", async () => {
 			const handler = new ZooGatewayHandler(mockOptions)
 			mockCreate.mockImplementation(function () {
 				throw new Error("upstream failure")
 			})
 
 			await expect(handler.completePrompt("Test")).rejects.toThrow(
-				"Zoo Gateway completion error: upstream failure",
+				"Trinit Gateway completion error: upstream failure",
 			)
 		})
 
@@ -522,7 +522,7 @@ describe("ZooGatewayHandler", () => {
 		it("falls back to a default message and leaves status/code undefined", () => {
 			const error = toGatewayStreamError({}) as Error & { status?: number; code?: string }
 
-			expect(error.message).toBe("Zoo Gateway stream error")
+			expect(error.message).toBe("Trinit Gateway stream error")
 			expect(error.status).toBeUndefined()
 			expect(error.code).toBeUndefined()
 		})
@@ -628,7 +628,7 @@ describe("ZooGatewayHandler", () => {
 				throw makeApiError(402, { message: "out of credits" })
 			})
 
-			await expect(handler.completePrompt("ping")).rejects.toThrow("Zoo Gateway completion error: out of credits")
+			await expect(handler.completePrompt("ping")).rejects.toThrow("Trinit Gateway completion error: out of credits")
 			expect(showErrorMessage).toHaveBeenCalledWith(
 				"common:zooAuth.errors.out_of_credits",
 				"common:zooAuth.buttons.add_credits",

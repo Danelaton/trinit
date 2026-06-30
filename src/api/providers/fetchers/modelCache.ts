@@ -44,7 +44,7 @@ const inFlightRefresh = new Map<string, Promise<ModelRecord>>()
 // allowlists or org policies). For these we MUST NOT cache results on disk or
 // in memory: a sign-in/out cycle could otherwise serve a previous user's model
 // list to the next user, and stale data could mask backend allowlist updates.
-const AUTH_SCOPED_PROVIDERS: ReadonlySet<RouterName> = new Set(["zoo-gateway"])
+const AUTH_SCOPED_PROVIDERS: ReadonlySet<RouterName> = new Set(["trinit-gateway"])
 
 // Providers whose model list is determined by the server URL, not just by the provider name.
 // Each unique baseUrl must be cached independently so that switching endpoints never serves
@@ -217,7 +217,7 @@ async function fetchModelsFromProvider(options: GetModelsOptions): Promise<Model
 		case "deepseek":
 			models = await getDeepSeekModels(options.baseUrl, options.apiKey)
 			break
-		case "zoo-gateway":
+		case "trinit-gateway":
 			models = await getZooGatewayModels({ zooSessionToken: options.apiKey, zooGatewayBaseUrl: options.baseUrl })
 			break
 		default: {

@@ -22,14 +22,14 @@ export function useZooGatewayRouterModelsSync() {
 		}
 
 		try {
-			const partial = await fetchRouterModels("zoo-gateway")
-			const zooModels = partial["zoo-gateway"]
+			const partial = await fetchRouterModels("trinit-gateway")
+			const zooModels = partial["trinit-gateway"]
 			if (!zooModels || Object.keys(zooModels).length === 0) {
 				return
 			}
 
 			queryClient.setQueryData<RouterModels>(["routerModels", "all"], (current) =>
-				current ? { ...current, "zoo-gateway": zooModels } : partial,
+				current ? { ...current, "trinit-gateway": zooModels } : partial,
 			)
 		} catch {
 			// Ignore: bulk router fetch may still be in flight.

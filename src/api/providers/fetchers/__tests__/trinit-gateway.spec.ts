@@ -18,7 +18,7 @@ vitest.mock("../../../../services/trinit-auth", () => ({
 }))
 const mockedAxios = axios as any
 
-describe("Zoo Gateway Fetchers", () => {
+describe("Trinit Gateway Fetchers", () => {
 	beforeEach(() => {
 		vitest.clearAllMocks()
 	})

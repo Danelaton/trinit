@@ -44,7 +44,7 @@ const makeQueryClient = () => new QueryClient({ defaultOptions: { queries: { ret
 
 beforeEach(() => {
 	vi.clearAllMocks()
-	mockFetchRouterModels.mockResolvedValue(asRouterModels({ "zoo-gateway": zooModels }))
+	mockFetchRouterModels.mockResolvedValue(asRouterModels({ "trinit-gateway": zooModels }))
 })
 
 describe("useZooGatewayRouterModelsSync", () => {
@@ -66,7 +66,7 @@ describe("useZooGatewayRouterModelsSync", () => {
 		renderSyncHook(queryClient)
 		window.dispatchEvent(new MessageEvent("message", { data: { type: "zooGatewayCredentialsReady" } }))
 
-		await waitFor(() => expect(mockFetchRouterModels).toHaveBeenCalledWith("zoo-gateway"))
+		await waitFor(() => expect(mockFetchRouterModels).toHaveBeenCalledWith("trinit-gateway"))
 	})
 
 	it("fetches once on the false -> true authentication transition", async () => {
@@ -93,14 +93,14 @@ describe("useZooGatewayRouterModelsSync", () => {
 
 		await waitFor(() => {
 			const cached = queryClient.getQueryData<RouterModels>(["routerModels", "all"])
-			expect(cached?.["zoo-gateway"]).toEqual(zooModels)
+			expect(cached?.["trinit-gateway"]).toEqual(zooModels)
 			expect(cached?.openrouter).toEqual(existingOpenrouter)
 		})
 	})
 
 	it("does not overwrite the cache when the fetch returns no zoo-gateway models", async () => {
 		setAuthenticated(true)
-		mockFetchRouterModels.mockResolvedValue(asRouterModels({ "zoo-gateway": {} }))
+		mockFetchRouterModels.mockResolvedValue(asRouterModels({ "trinit-gateway": {} }))
 		const queryClient = makeQueryClient()
 		queryClient.setQueryData(["routerModels", "all"], asRouterModels({ openrouter: { "openai/gpt-4": modelInfo } }))
 
@@ -109,7 +109,7 @@ describe("useZooGatewayRouterModelsSync", () => {
 
 		await waitFor(() => expect(mockFetchRouterModels).toHaveBeenCalled())
 		const cached = queryClient.getQueryData<RouterModels>(["routerModels", "all"])
-		expect(cached?.["zoo-gateway"]).toBeUndefined()
+		expect(cached?.["trinit-gateway"]).toBeUndefined()
 		// The whole cache must survive an empty result, not just the zoo-gateway key.
 		expect(cached?.openrouter).toEqual({ "openai/gpt-4": modelInfo })
 	})

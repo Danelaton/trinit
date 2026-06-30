@@ -52,7 +52,7 @@ describe("Model Validation Functions", () => {
 		poe: {},
 		deepseek: {},
 		"opencode-go": {},
-		"zoo-gateway": {},
+		"trinit-gateway": {},
 	}
 
 	const allowAllOrganization: OrganizationAllowList = {
@@ -217,11 +217,11 @@ describe("Model Validation Functions", () => {
 		})
 	})
 
-	describe("Zoo Gateway validation", () => {
+	describe("Trinit Gateway validation", () => {
 		describe("validateApiConfiguration (welcome-view entry point)", () => {
 			it("returns a sign-in error when neither profile token nor Zoo auth is present", () => {
 				const config: ProviderSettings = {
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooGatewayModelId: "anthropic/claude-sonnet-4",
 				}
 
@@ -231,7 +231,7 @@ describe("Model Validation Functions", () => {
 
 			it("returns undefined when Zoo Code auth is active without a profile token", () => {
 				const config: ProviderSettings = {
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooGatewayModelId: "anthropic/claude-sonnet-4",
 				}
 
@@ -241,7 +241,7 @@ describe("Model Validation Functions", () => {
 
 			it("returns undefined when a profile session token is set", () => {
 				const config: ProviderSettings = {
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooGatewayModelId: "anthropic/claude-sonnet-4",
 					zooSessionToken: "zoo_ext_test_token",
 				}
@@ -257,7 +257,7 @@ describe("Model Validation Functions", () => {
 			// surface a zoo-gateway-specific error regardless of auth state.
 			it("returns undefined for zoo-gateway when unauthenticated and no token", () => {
 				const config: ProviderSettings = {
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooGatewayModelId: "anthropic/claude-sonnet-4",
 				}
 
@@ -271,7 +271,7 @@ describe("Model Validation Functions", () => {
 
 			it("returns undefined for zoo-gateway when a profile token is set", () => {
 				const config: ProviderSettings = {
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooGatewayModelId: "anthropic/claude-sonnet-4",
 					zooSessionToken: "zoo_ext_test_token",
 				}
@@ -293,7 +293,7 @@ describe("Model Validation Functions", () => {
 				}
 
 				const config: ProviderSettings = {
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooGatewayModelId: "anthropic/claude-sonnet-4",
 				}
 

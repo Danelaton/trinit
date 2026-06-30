@@ -486,7 +486,7 @@
 		"openMcpSettings": "MCP 설정 열기"
 	},
 	"readCommandOutput": {
-		"title": "Zoo read command output"
+		"title": "Trinit read command output"
 	},
 	"retiredProvider": {
 		"title": "공급자 지원 종료",

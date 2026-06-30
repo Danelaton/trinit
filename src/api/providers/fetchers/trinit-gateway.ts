@@ -17,7 +17,7 @@ const MODEL_DISCOVERY_TIMEOUT_MS = 15_000
 /**
  * getZooGatewayModels
  *
- * Fetches models from the Zoo Gateway API. Requires authentication via the zoo_ext_ token.
+ * Fetches models from the Trinit Gateway API. Requires authentication via the zoo_ext_ token.
  */
 
 export async function getZooGatewayModels(options?: ApiHandlerOptions): Promise<Record<string, ModelInfo>> {
@@ -41,7 +41,7 @@ export async function getZooGatewayModels(options?: ApiHandlerOptions): Promise<
 		const result = vercelAiGatewayModelsResponseSchema.safeParse(response.data)
 
 		if (!result.success) {
-			console.error(`Zoo Gateway models response is invalid ${JSON.stringify(result.error.format())}`)
+			console.error(`Trinit Gateway models response is invalid ${JSON.stringify(result.error.format())}`)
 			return models
 		}
 
@@ -66,7 +66,7 @@ export async function getZooGatewayModels(options?: ApiHandlerOptions): Promise<
 			response?: { status?: number; statusText?: string }
 		}
 		console.error(
-			`Error fetching Zoo Gateway models: name=${err.name ?? "Error"} code=${err.code ?? "unknown"} status=${err.response?.status ?? "unknown"} ${err.response?.statusText ?? ""} message=${err.message ?? "unknown error"}`,
+			`Error fetching Trinit Gateway models: name=${err.name ?? "Error"} code=${err.code ?? "unknown"} status=${err.response?.status ?? "unknown"} ${err.response?.statusText ?? ""} message=${err.message ?? "unknown error"}`,
 		)
 	}
 
@@ -76,8 +76,8 @@ export async function getZooGatewayModels(options?: ApiHandlerOptions): Promise<
 /**
  * parseZooGatewayModel
  *
- * Parses a Zoo Gateway model into ModelInfo format.
- * Zoo Gateway returns the same format as Vercel AI Gateway, so we can reuse the parsing logic.
+ * Parses a Trinit Gateway model into ModelInfo format.
+ * Trinit Gateway returns the same format as Vercel AI Gateway, so we can reuse the parsing logic.
  */
 
 export const parseZooGatewayModel = ({ id, model }: { id: string; model: VercelAiGatewayModel }): ModelInfo => {

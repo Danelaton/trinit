@@ -25,7 +25,7 @@ async function propagateZooGatewayCallback(token: string): Promise<void> {
 			await instance.handleZooCodeCallback(token)
 		} catch (error) {
 			console.error(
-				"Failed to persist Zoo Gateway token for a provider instance:",
+				"Failed to persist Trinit Gateway token for a provider instance:",
 				error instanceof Error ? error.message : error,
 			)
 		}

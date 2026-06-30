@@ -132,7 +132,7 @@ function validateModelsAndKeysProvided(
 				return i18next.t("settings:validation.apiKey")
 			}
 			break
-		case "zoo-gateway":
+		case "trinit-gateway":
 			if (!apiConfiguration.zooSessionToken && !zooCodeIsAuthenticated) {
 				return i18next.t("settings:validation.zooGatewaySignIn")
 			}
@@ -292,7 +292,7 @@ export function getModelValidationError(
  * This is used for the general API error display to prevent duplication
  * when model errors are shown in the model selector.
  *
- * Zoo Gateway's sign-in error is rendered inline by the `ZooGateway` provider
+ * Trinit Gateway's sign-in error is rendered inline by the `ZooGateway` provider
  * component, so we skip the keys/sign-in check here. Organization provider
  * restrictions still need to be enforced for zoo-gateway, so the org allowlist
  * check below runs for every provider.
@@ -302,7 +302,7 @@ export function validateApiConfigurationExcludingModelErrors(
 	_routerModels?: RouterModels, // Keeping this for compatibility with the old function.
 	organizationAllowList?: OrganizationAllowList,
 ): string | undefined {
-	if (apiConfiguration.apiProvider !== "zoo-gateway") {
+	if (apiConfiguration.apiProvider !== "trinit-gateway") {
 		const keysAndIdsPresentErrorMessage = validateModelsAndKeysProvided(apiConfiguration)
 
 		if (keysAndIdsPresentErrorMessage) {

@@ -909,7 +909,7 @@ export class ClineProvider
 
 		// Ensure zoo-gateway profile is seeded for users who signed in before this feature existed.
 		// Without this, users with a valid cached token but no zoo-gateway profile would need to
-		// re-authenticate to use Zoo Gateway. Fire-and-forget to avoid blocking webview init.
+		// re-authenticate to use Trinit Gateway. Fire-and-forget to avoid blocking webview init.
 		void this.ensureZooGatewayProfileSeeded().catch((err) => {
 			this.log(`[ensureZooGatewayProfileSeeded] Error: ${err instanceof Error ? err.message : String(err)}`)
 		})
@@ -917,7 +917,7 @@ export class ClineProvider
 
 	/**
 	 * Seeds the zoo-gateway provider profile for users who have a cached auth token
-	 * but no profile (e.g., users who signed in before Zoo Gateway was added), or
+	 * but no profile (e.g., users who signed in before Trinit Gateway was added), or
 	 * who have an empty/imported profile without a token.
 	 * Called once per webview init; handleZooCodeCallback is idempotent so repeated calls are safe.
 	 */
@@ -931,7 +931,7 @@ export class ClineProvider
 		// Using .find() would miss stale tokens in duplicate/renamed profiles since handleZooCodeCallback
 		// uses .filter() and updates all of them — the early-return guard must match.
 		const allProfiles = await this.providerSettingsManager.listConfig()
-		const zooGatewayProfiles = allProfiles.filter((p) => p.apiProvider === "zoo-gateway")
+		const zooGatewayProfiles = allProfiles.filter((p) => p.apiProvider === "trinit-gateway")
 
 		if (zooGatewayProfiles.length === 0) {
 			this.log("[ensureZooGatewayProfileSeeded] No zoo-gateway profile found, creating one")
@@ -1772,10 +1772,10 @@ export class ClineProvider
 		// Save the zoo-gateway provider profile with the session token so that
 		// ZooGatewayHandler can authenticate without any manual user input.
 		//
-		// activate: true ONLY if Zoo Gateway is already the active profile — this pushes
+		// activate: true ONLY if Trinit Gateway is already the active profile — this pushes
 		// the new token to the in-memory handler so the current task picks it up immediately.
 		// Otherwise activate: false — do NOT switch providers mid-conversation. The user
-		// must explicitly select Zoo Gateway in settings if they want to use it.
+		// must explicitly select Trinit Gateway in settings if they want to use it.
 		try {
 			const { apiConfiguration } = await this.getState()
 			const currentSettings = this.contextProxy.getProviderSettings()
@@ -1788,28 +1788,28 @@ export class ClineProvider
 			const { getZooCodeBaseUrl } = await import("../../services/trinit-auth")
 			const derivedGatewayBaseUrl = `${getZooCodeBaseUrl()}/api/gateway/v1`
 
-			// Check if Zoo Gateway is the currently active profile by apiProvider identity,
+			// Check if Trinit Gateway is the currently active profile by apiProvider identity,
 			// not by profile name (profile names are user-renameable).
-			const isZooGatewayActive = currentSettings.apiProvider === "zoo-gateway"
+			const isZooGatewayActive = currentSettings.apiProvider === "trinit-gateway"
 
 			// Always scan ALL profiles and update every zoo-gateway profile with the new token.
 			// This ensures renamed profiles, duplicate profiles, and inactive profiles all stay
 			// in sync. The model lookup in requestRouterModels uses .find() which returns the
 			// first zoo-gateway profile it finds — if that profile has a stale token, requests fail.
 			const allProfiles = await this.providerSettingsManager.listConfig()
-			const zooProfiles = allProfiles.filter((p) => p.apiProvider === "zoo-gateway")
+			const zooProfiles = allProfiles.filter((p) => p.apiProvider === "trinit-gateway")
 
 			if (zooProfiles.length === 0) {
 				// No existing zoo-gateway profile — create the canonical default.
 				const newConfiguration: ProviderSettings = {
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooSessionToken: token,
 					zooGatewayModelId: apiConfiguration.zooGatewayModelId,
 					zooGatewayBaseUrl: derivedGatewayBaseUrl,
 				}
 				// Activate only if zoo-gateway was the active provider (shouldn't happen if
 				// no profiles exist, but defensive).
-				await this.upsertProviderProfile("Zoo Gateway", newConfiguration, isZooGatewayActive)
+				await this.upsertProviderProfile("Trinit Gateway", newConfiguration, isZooGatewayActive)
 			} else {
 				// Update every existing zoo-gateway profile with the new token and the
 				// derived base URL so that environment-specific routing stays consistent.

@@ -26,7 +26,7 @@ const vercelAiGatewayPricingSchema = z.object({
 const vercelAiGatewayModelSchema = z.object({
 	id: z.string(),
 	object: z.string(),
-	// Zoo Gateway / Bedrock catalog entries omit these; they are not used for routing.
+	// Trinit Gateway / Bedrock catalog entries omit these; they are not used for routing.
 	created: z.number().optional(),
 	owned_by: z.string(),
 	name: z.string(),

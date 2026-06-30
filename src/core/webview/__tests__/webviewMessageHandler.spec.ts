@@ -393,7 +393,7 @@ describe("webviewMessageHandler - requestRouterModels", () => {
 				requesty: mockModels,
 				unbound: mockModels,
 				"vercel-ai-gateway": mockModels,
-				"zoo-gateway": mockModels,
+				"trinit-gateway": mockModels,
 				litellm: mockModels,
 				ollama: {},
 				lmstudio: {},
@@ -544,7 +544,7 @@ describe("webviewMessageHandler - requestRouterModels", () => {
 				requesty: mockModels,
 				unbound: mockModels,
 				"vercel-ai-gateway": mockModels,
-				"zoo-gateway": mockModels,
+				"trinit-gateway": mockModels,
 				litellm: {},
 				ollama: {},
 				lmstudio: {},
@@ -603,7 +603,7 @@ describe("webviewMessageHandler - requestRouterModels", () => {
 				requesty: {},
 				unbound: mockModels,
 				"vercel-ai-gateway": mockModels,
-				"zoo-gateway": mockModels,
+				"trinit-gateway": mockModels,
 				litellm: {},
 				ollama: {},
 				lmstudio: {},
@@ -622,7 +622,7 @@ describe("webviewMessageHandler - requestRouterModels", () => {
 			.mockRejectedValueOnce(new Error("Requesty API error")) // requesty
 			.mockRejectedValueOnce(new Error("Unbound error")) // unbound
 			.mockRejectedValueOnce(new Error("Vercel AI Gateway error")) // vercel-ai-gateway
-			.mockRejectedValueOnce(new Error("Zoo Gateway error")) // zoo-gateway
+			.mockRejectedValueOnce(new Error("Trinit Gateway error")) // zoo-gateway
 			.mockRejectedValueOnce(new Error("LiteLLM connection failed")) // litellm
 
 		await webviewMessageHandler(mockClineProvider, {
@@ -1363,23 +1363,23 @@ describe("zooCodeSignOut", () => {
 
 		;(mockClineProvider as any).contextProxy = {
 			...mockClineProvider.contextProxy,
-			getProviderSettings: vi.fn().mockReturnValue({ apiProvider: "zoo-gateway" }),
-			getValues: vi.fn().mockReturnValue({ currentApiConfigName: "Zoo Gateway" }),
+			getProviderSettings: vi.fn().mockReturnValue({ apiProvider: "trinit-gateway" }),
+			getValues: vi.fn().mockReturnValue({ currentApiConfigName: "Trinit Gateway" }),
 		}
 		;(mockClineProvider as any).providerSettingsManager = {
 			listConfig: vi.fn().mockResolvedValue([
-				{ name: "Zoo Gateway", apiProvider: "zoo-gateway" },
-				{ name: "Backup Zoo", apiProvider: "zoo-gateway" },
+				{ name: "Trinit Gateway", apiProvider: "trinit-gateway" },
+				{ name: "Backup Zoo", apiProvider: "trinit-gateway" },
 			]),
 			getProfile: vi
 				.fn()
 				.mockResolvedValueOnce({
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooSessionToken: "token-active",
 					zooGatewayModelId: "anthropic/claude-sonnet-4",
 				})
 				.mockResolvedValueOnce({
-					apiProvider: "zoo-gateway",
+					apiProvider: "trinit-gateway",
 					zooSessionToken: "token-backup",
 				}),
 			saveConfig,
@@ -1390,7 +1390,7 @@ describe("zooCodeSignOut", () => {
 
 		expect(disconnectZooCode).toHaveBeenCalled()
 		expect(upsertProviderProfile).toHaveBeenCalledWith(
-			"Zoo Gateway",
+			"Trinit Gateway",
 			expect.not.objectContaining({ zooSessionToken: expect.anything() }),
 			true,
 		)
@@ -1406,13 +1406,13 @@ describe("zooCodeSignOut", () => {
 
 		;(mockClineProvider as any).contextProxy = {
 			...mockClineProvider.contextProxy,
-			getProviderSettings: vi.fn().mockReturnValue({ apiProvider: "zoo-gateway" }),
-			getValues: vi.fn().mockReturnValue({ currentApiConfigName: "Zoo Gateway" }),
+			getProviderSettings: vi.fn().mockReturnValue({ apiProvider: "trinit-gateway" }),
+			getValues: vi.fn().mockReturnValue({ currentApiConfigName: "Trinit Gateway" }),
 		}
 		;(mockClineProvider as any).providerSettingsManager = {
-			listConfig: vi.fn().mockResolvedValue([{ name: "Zoo Gateway", apiProvider: "zoo-gateway" }]),
+			listConfig: vi.fn().mockResolvedValue([{ name: "Trinit Gateway", apiProvider: "trinit-gateway" }]),
 			getProfile: vi.fn().mockResolvedValue({
-				apiProvider: "zoo-gateway",
+				apiProvider: "trinit-gateway",
 				zooGatewayModelId: "anthropic/claude-sonnet-4",
 			}),
 			saveConfig: vi.fn(),
@@ -1422,7 +1422,7 @@ describe("zooCodeSignOut", () => {
 		await webviewMessageHandler(mockClineProvider, { type: "zooCodeSignOut" })
 
 		expect(upsertProviderProfile).toHaveBeenCalledWith(
-			"Zoo Gateway",
+			"Trinit Gateway",
 			expect.not.objectContaining({ zooSessionToken: expect.anything() }),
 			true,
 		)

@@ -27,7 +27,7 @@ function isClaudeSonnetModelId(id: string) {
 	return /claude.*sonnet/i.test(id)
 }
 
-// Exported for unit tests. Picks the default Zoo Gateway model id, preferring
+// Exported for unit tests. Picks the default Trinit Gateway model id, preferring
 // Claude Sonnet 4.5 → Sonnet 4 → first available Sonnet → first model overall.
 export function pickZooGatewayDefaultModelId(modelIds: string[]) {
 	if (modelIds.length === 0) {
@@ -63,7 +63,7 @@ export const ZooGateway = ({
 	const authUrl = getZooCodeAuthUrl(uriScheme, zooCodeBaseUrl, deviceName)
 	const resolvedDashboardBase = zooCodeBaseUrl?.replace(/\/$/, "") || "https://www.trinit.dev"
 
-	const zooModels = useMemo(() => routerModels?.["zoo-gateway"] ?? {}, [routerModels])
+	const zooModels = useMemo(() => routerModels?.["trinit-gateway"] ?? {}, [routerModels])
 	const modelIds = useMemo(() => Object.keys(zooModels), [zooModels])
 	const resolvedDefaultModelId = useMemo(() => pickZooGatewayDefaultModelId(modelIds), [modelIds])
 
@@ -114,7 +114,7 @@ export const ZooGateway = ({
 				defaultModelId={resolvedDefaultModelId}
 				models={zooModels}
 				modelIdKey="zooGatewayModelId"
-				serviceName="Zoo Gateway"
+				serviceName="Trinit Gateway"
 				serviceUrl={`${resolvedDashboardBase}/dashboard/models`}
 				organizationAllowList={organizationAllowList}
 				errorMessage={modelValidationError}

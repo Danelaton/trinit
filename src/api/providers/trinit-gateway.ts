@@ -44,7 +44,7 @@ function getApiErrorCode(error: unknown): string | undefined {
 export function toGatewayStreamError(raw: unknown): Error {
 	const err = raw as { message?: unknown; status?: unknown; code?: unknown } | null
 	const message =
-		typeof err?.message === "string" && err.message.length > 0 ? err.message : "Zoo Gateway stream error"
+		typeof err?.message === "string" && err.message.length > 0 ? err.message : "Trinit Gateway stream error"
 	return Object.assign(new Error(message), {
 		status: typeof err?.status === "number" ? err.status : undefined,
 		code: typeof err?.code === "string" ? err.code : undefined,
@@ -132,13 +132,13 @@ async function surfaceGatewayApiError(error: unknown): Promise<void> {
 	}
 }
 
-// Extend OpenAI's CompletionUsage to include Zoo Gateway specific fields (same as Vercel AI Gateway)
+// Extend OpenAI's CompletionUsage to include Trinit Gateway specific fields (same as Vercel AI Gateway)
 interface ZooGatewayUsage extends OpenAI.CompletionUsage {
 	cache_creation_input_tokens?: number
 	cost?: number
 }
 
-const ZOO_GATEWAY_AUTH_ERROR = "Zoo Gateway requires authentication. Please sign in to Zoo Code first."
+const ZOO_GATEWAY_AUTH_ERROR = "Trinit Gateway requires authentication. Please sign in to Zoo Code first."
 
 export class ZooGatewayHandler extends RouterProvider implements SingleCompletionHandler {
 	constructor(options: ApiHandlerOptions) {
@@ -159,7 +159,7 @@ export class ZooGatewayHandler extends RouterProvider implements SingleCompletio
 					...(options.openAiHeaders || {}),
 				},
 			},
-			name: "zoo-gateway",
+			name: "trinit-gateway",
 			baseURL,
 			apiKey: sessionToken || "not-provided",
 			modelId: options.zooGatewayModelId,
@@ -189,7 +189,7 @@ export class ZooGatewayHandler extends RouterProvider implements SingleCompletio
 		]
 
 		// Apply prompt caching for models that support it
-		// Zoo Gateway serves the same models as Vercel AI Gateway, so caching support is identical
+		// Trinit Gateway serves the same models as Vercel AI Gateway, so caching support is identical
 		if (VERCEL_AI_GATEWAY_PROMPT_CACHING_MODELS.has(modelId) && info.supportsPromptCache) {
 			addCacheBreakpoints(systemPrompt, openAiMessages)
 		}
@@ -268,7 +268,7 @@ export class ZooGatewayHandler extends RouterProvider implements SingleCompletio
 				await surfaceGatewayApiError(error)
 			} catch (surfaceError) {
 				console.error(
-					"Failed to surface Zoo Gateway error:",
+					"Failed to surface Trinit Gateway error:",
 					surfaceError instanceof Error ? surfaceError.message : surfaceError,
 				)
 			}
@@ -301,12 +301,12 @@ export class ZooGatewayHandler extends RouterProvider implements SingleCompletio
 				await surfaceGatewayApiError(error)
 			} catch (surfaceError) {
 				console.error(
-					"Failed to surface Zoo Gateway error:",
+					"Failed to surface Trinit Gateway error:",
 					surfaceError instanceof Error ? surfaceError.message : surfaceError,
 				)
 			}
 			if (error instanceof Error) {
-				throw new Error(`Zoo Gateway completion error: ${error.message}`)
+				throw new Error(`Trinit Gateway completion error: ${error.message}`)
 			}
 			throw error
 		}
