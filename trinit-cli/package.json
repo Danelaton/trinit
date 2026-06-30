@@ -1,0 +1,22 @@
+{
+  "name": "trinit-cli",
+  "version": "0.1.0",
+  "description": "One-liner CLI to install Ollama, pull models, and set up the Trinit VS Code extension",
+  "main": "dist/index.js",
+  "bin": {
+    "trinit": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "trinit-core": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": ["trinit", "ollama", "cli"],
+  "license": "MIT"
+}

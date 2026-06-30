@@ -1,0 +1,15 @@
+{
+  "name": "trinit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Trinit — Local LLM wrapper for Ollama + VS Code agent teams",
+  "workspaces": [
+    "trinit-core",
+    "trinit-cli"
+  ],
+  "// trinit-vscode": "pnpm monorepo (separate from npm workspaces) — fork of Zoo-Code, rebranded as Trinit",
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "clean": "npm run clean --workspaces"
+  }
+}

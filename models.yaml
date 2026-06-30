@@ -1,0 +1,51 @@
+# Trinit Model Manifest
+# Source of truth for models to pull via Ollama.
+# Synced with dev/docs/ — update both when adding models.
+
+models:
+  - name: glm-ocr
+    tag: latest
+    ollama_ref: glm-ocr:latest
+    size: "2.2 GB"
+    context: 128000
+    input:
+      - text
+      - image
+    description: "Multimodal OCR for documents, tables, and figures — 0.9B params, #1 on OmniDocBench"
+    priority: 1
+    doc: dev/docs/03-glm-ocr.md
+
+  - name: gemma4
+    tag: e2b
+    ollama_ref: gemma4:e2b
+    size: "7.2 GB"
+    context: 128000
+    input:
+      - text
+      - image
+    description: "Gemma 4 Edge 2B effective — chat, reasoning, and coding by Google DeepMind"
+    priority: 2
+    doc: dev/docs/02-gemma4.md
+
+  - name: gemma4
+    tag: e4b
+    ollama_ref: gemma4:e4b
+    size: "9.6 GB"
+    context: 128000
+    input:
+      - text
+      - image
+    description: "Gemma 4 Edge 4B effective — better quality than E2B for chat and coding"
+    priority: 3
+    doc: dev/docs/02-gemma4.md
+
+  - name: ornith
+    tag: 9b
+    ollama_ref: ornith:9b
+    size: "5.6 GB"
+    context: 256000
+    input:
+      - text
+    description: "Agentic coding model with RL self-improvement — 9B params, MIT license"
+    priority: 4
+    doc: dev/docs/01-ornith.md

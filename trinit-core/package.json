@@ -1,0 +1,21 @@
+{
+  "name": "trinit-core",
+  "version": "0.1.0",
+  "description": "Shared Ollama client library for Trinit CLI and Trinit VS Code extension",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  },
+  "keywords": ["ollama", "llm", "trinit"],
+  "license": "MIT"
+}
