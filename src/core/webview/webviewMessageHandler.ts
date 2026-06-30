@@ -2,7 +2,7 @@ import { safeWriteJson } from "../../utils/safeWriteJson"
 import * as path from "path"
 import * as os from "os"
 import * as fs from "fs/promises"
-import { getRooDirectoriesForCwd } from "../../services/roo-config/index.js"
+import { getRooDirectoriesForCwd } from "../../services/trinit-config/index.js"
 import pWaitFor from "p-wait-for"
 import * as vscode from "vscode"
 
@@ -2697,9 +2697,7 @@ export const webviewMessageHandler = async (
 
 				await provider.postStateToWebview()
 			} catch (error) {
-				provider.log(
-					`Failed to sign out of Trinit: ${error instanceof Error ? error.message : String(error)}`,
-				)
+				provider.log(`Failed to sign out of Trinit: ${error instanceof Error ? error.message : String(error)}`)
 			}
 			break
 		}

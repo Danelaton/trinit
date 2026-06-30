@@ -42,7 +42,7 @@ vi.mock("fs/promises", () => ({
 }))
 
 // Mock the roo-config service
-vi.mock("../../../../services/roo-config", () => ({
+vi.mock("../../../../services/trinit-config", () => ({
 	getRooDirectoriesForCwd: mockGetRooDirectoriesForCwd,
 	getAllRooDirectoriesForCwd: mockGetAllRooDirectoriesForCwd,
 	getAgentsDirectoriesForCwd: mockGetAgentsDirectoriesForCwd,

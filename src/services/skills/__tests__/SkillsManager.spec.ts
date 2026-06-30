@@ -85,7 +85,7 @@ const GLOBAL_ROO_DIR = p(HOME_DIR, ".roo")
 const GLOBAL_AGENTS_DIR = p(HOME_DIR, ".agents")
 
 // Mock roo-config
-vi.mock("../../roo-config", () => ({
+vi.mock("../../trinit-config", () => ({
 	getGlobalRooDirectory: () => GLOBAL_ROO_DIR,
 	getGlobalAgentsDirectory: () => GLOBAL_AGENTS_DIR,
 	getProjectAgentsDirectoryForCwd: (cwd: string) => p(cwd, ".agents"),

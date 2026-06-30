@@ -50,5 +50,19 @@
 	"settings.debugProxy.tlsInsecure.description": "Allow insecure TLS connections for debug proxy",
 	"settings.workspace.rootResolution.description": "How to determine the workspace root folder",
 	"settings.workspace.rootResolution.activeEditor.description": "Use the active editor's workspace folder",
-	"settings.workspace.rootResolution.firstFolder.description": "Always use the first workspace folder"
+	"settings.workspace.rootResolution.firstFolder.description": "Always use the first workspace folder",
+	"commands.commandExecutionTimeout.description": "Maximum execution time for commands (seconds)",
+	"commands.commandTimeoutAllowlist.description": "Commands exempt from execution timeout",
+	"commands.preventCompletionWithOpenTodos.description": "Prevent task completion while todos remain open",
+	"settings.apiRequestTimeout.description": "API request timeout in milliseconds",
+	"settings.autoImportSettingsPath.description": "Path to auto-import settings from",
+	"settings.codeIndex.embeddingBatchSize.description": "Batch size for code index embeddings",
+	"settings.customStoragePath.description": "Custom path for task storage",
+	"settings.enableCodeActions.description": "Enable Trinit code actions in the editor",
+	"settings.maximumIndexedFilesForFileSearch.description": "Maximum files to index for search",
+	"settings.newTaskRequireTodos.description": "Require todo list for new tasks",
+	"settings.useAgentRules.description": "Use agent rules from .trinitrules files",
+	"settings.vsCodeLmModelSelector.description": "VS Code LM model selector",
+	"settings.vsCodeLmModelSelector.family.description": "Model family filter for VS Code LM",
+	"settings.vsCodeLmModelSelector.vendor.description": "Model vendor filter for VS Code LM"
 }

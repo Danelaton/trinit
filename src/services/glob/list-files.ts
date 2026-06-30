@@ -6,7 +6,7 @@ import * as vscode from "vscode"
 import ignore from "ignore"
 import { arePathsEqual } from "../../utils/path"
 import { getBinPath } from "../../services/ripgrep"
-import { directoryExists } from "../../services/roo-config"
+import { directoryExists } from "../../services/trinit-config"
 import { DIRS_TO_IGNORE } from "./constants"
 
 /**

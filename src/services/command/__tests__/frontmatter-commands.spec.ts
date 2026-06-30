@@ -5,7 +5,7 @@ import { getCommand, getCommands } from "../commands"
 
 // Mock fs and path modules
 vi.mock("fs/promises")
-vi.mock("../roo-config", () => ({
+vi.mock("../trinit-config", () => ({
 	getGlobalRooDirectory: vi.fn(() => "/mock/global/.roo"),
 	getProjectRooDirectoryForCwd: vi.fn(() => "/mock/project/.roo"),
 }))

@@ -13,7 +13,7 @@ import {
 	getAllRooDirectoriesForCwd,
 	getAgentsDirectoriesForCwd,
 	getGlobalRooDirectory,
-} from "../../../services/roo-config"
+} from "../../../services/trinit-config"
 
 /**
  * Safely read a file and return its trimmed content

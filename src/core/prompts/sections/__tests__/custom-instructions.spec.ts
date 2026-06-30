@@ -10,7 +10,7 @@ vi.mock("os", async () => ({
 }))
 
 // Mock roo-config to avoid environment-dependent global directory paths in tests
-vi.mock("../../../../services/roo-config", () => ({
+vi.mock("../../../../services/trinit-config", () => ({
 	getRooDirectoriesForCwd: vi.fn().mockImplementation((cwd: string) => {
 		return [`${cwd}/.roo`]
 	}),

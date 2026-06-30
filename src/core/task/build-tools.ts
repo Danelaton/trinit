@@ -6,7 +6,7 @@ import type { ProviderSettings, ModeConfig, ModelInfo } from "@roo-code/types"
 import { customToolRegistry, formatNative } from "@roo-code/core"
 
 import type { ClineProvider } from "../webview/ClineProvider"
-import { getRooDirectoriesForCwd } from "../../services/roo-config/index.js"
+import { getRooDirectoriesForCwd } from "../../services/trinit-config/index.js"
 import { getModeBySlug, defaultModeSlug } from "../../shared/modes"
 
 import { getNativeTools, getMcpServerTools } from "../prompts/tools/native-tools"

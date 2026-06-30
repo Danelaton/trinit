@@ -2,7 +2,7 @@
 	"name": "trinit",
 	"displayName": "Trinit",
 	"description": "Local AI dev team powered by Ollama — agents for coding, planning, debugging, and docs.",
-	"publisher": "Dan&Elaton",
+	"publisher": "DanElaton",
 	"version": "0.1.0",
 	"icon": "assets/icons/icon.png",
 	"galleryBanner": {

@@ -12,7 +12,7 @@ import type {
 } from "@roo-code/types"
 import { DEFAULT_MODES, type ModeConfig } from "@roo-code/types"
 
-import { getGlobalRooDirectory, getProjectRooDirectoryForCwd } from "../roo-config"
+import { getGlobalRooDirectory, getProjectRooDirectoryForCwd } from "../trinit-config"
 
 const MAX_DEPTH = 5
 const VALID_RULE_FILENAME_PATTERN = /^[a-z0-9_-]+(?:\.md)?$/

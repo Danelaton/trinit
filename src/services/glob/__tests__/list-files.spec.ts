@@ -1,11 +1,11 @@
 import * as path from "path"
 import * as childProcess from "child_process"
 import { listFiles } from "../list-files"
-import { directoryExists } from "../../../services/roo-config"
+import { directoryExists } from "../../../services/trinit-config"
 
 vi.mock("child_process")
 vi.mock("fs")
-vi.mock("../../../services/roo-config", () => ({
+vi.mock("../../../services/trinit-config", () => ({
 	directoryExists: vi.fn().mockResolvedValue(true),
 }))
 vi.mock("vscode", () => ({
