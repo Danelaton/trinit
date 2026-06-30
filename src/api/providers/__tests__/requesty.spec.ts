@@ -85,8 +85,8 @@ describe("RequestyHandler", () => {
 			apiKey: mockOptions.requestyApiKey,
 			defaultHeaders: {
 				"HTTP-Referer": "https://github.com/Zoo-Code-Org/Zoo-Code",
-				"X-Title": "Zoo Code",
-				"User-Agent": `ZooCode/${Package.version}`,
+				"X-Title": "Trinit",
+				"User-Agent": `Trinit/${Package.version}`,
 			},
 			timeout: MOCK_TIMEOUT_MS,
 		})
@@ -101,8 +101,8 @@ describe("RequestyHandler", () => {
 			apiKey: mockOptions.requestyApiKey,
 			defaultHeaders: {
 				"HTTP-Referer": "https://github.com/Zoo-Code-Org/Zoo-Code",
-				"X-Title": "Zoo Code",
-				"User-Agent": `ZooCode/${Package.version}`,
+				"X-Title": "Trinit",
+				"User-Agent": `Trinit/${Package.version}`,
 			},
 			timeout: MOCK_TIMEOUT_MS,
 		})

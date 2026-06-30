@@ -46,7 +46,7 @@ describe("UnboundHandler", () => {
 		expect(OpenAI).toHaveBeenCalledWith(
 			expect.objectContaining({
 				defaultHeaders: expect.objectContaining({
-					"X-Unbound-Metadata": JSON.stringify({ labels: [{ key: "app", value: "zoo-code" }] }),
+					"X-Unbound-Metadata": JSON.stringify({ labels: [{ key: "app", value: "trinit" }] }),
 				}),
 			}),
 		)
@@ -174,7 +174,7 @@ describe("UnboundHandler", () => {
 		expect(mockCreate).toHaveBeenCalledWith(
 			expect.objectContaining({
 				unbound_metadata: {
-					originApp: "zoo-code",
+					originApp: "trinit",
 					taskId: "task-123",
 					mode: "architect",
 				},

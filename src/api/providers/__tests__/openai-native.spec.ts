@@ -113,8 +113,8 @@ describe("OpenAiNativeHandler", () => {
 			expect(OpenAI).toHaveBeenCalledWith(
 				expect.objectContaining({
 					defaultHeaders: expect.objectContaining({
-						originator: "zoo-code",
-						"User-Agent": expect.stringContaining(`zoo-code/${Package.version}`),
+						originator: "trinit",
+						"User-Agent": expect.stringContaining(`trinit/${Package.version}`),
 					}),
 				}),
 			)

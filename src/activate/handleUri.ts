@@ -2,7 +2,7 @@ import * as vscode from "vscode"
 
 import { getRouterUnavailableSignInMessage } from "../core/config/routerRemoval"
 import { ClineProvider } from "../core/webview/ClineProvider"
-import { handleAuthCallback as handleZooCodeAuthCallback, setZooCodeUserInfo } from "../services/zoo-code-auth"
+import { handleAuthCallback as handleZooCodeAuthCallback, setZooCodeUserInfo } from "../services/trinit-auth"
 
 /**
  * Persist the Zoo Code session token to every active provider instance.

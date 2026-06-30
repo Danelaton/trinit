@@ -2,10 +2,10 @@
 
 import axios from "axios"
 
-import { getZooGatewayModels, parseZooGatewayModel } from "../zoo-gateway"
+import { getZooGatewayModels, parseZooGatewayModel } from "../trinit-gateway"
 
 vitest.mock("axios")
-vitest.mock("../../../../services/zoo-code-auth", () => ({
+vitest.mock("../../../../services/trinit-auth", () => ({
 	getCachedZooCodeToken: vitest.fn(function () {
 		return ""
 	}),

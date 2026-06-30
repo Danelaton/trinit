@@ -1,9 +1,9 @@
 {
-	"name": "zoo-code",
-	"displayName": "%extension.displayName%",
-	"description": "%extension.description%",
-	"publisher": "ZooCodeOrganization",
-	"version": "3.64.0",
+	"name": "trinit",
+	"displayName": "Trinit",
+	"description": "Local AI dev team powered by Ollama — agents for coding, planning, debugging, and docs.",
+	"publisher": "Dan&Elaton",
+	"version": "0.1.0",
 	"icon": "assets/icons/icon.png",
 	"galleryBanner": {
 		"color": "#617A91",
@@ -14,13 +14,13 @@
 		"node": "20.20.2"
 	},
 	"author": {
-		"name": "Zoo Code"
+		"name": "Trinit"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Zoo-Code-Org/Zoo-Code"
+		"url": "https://github.com/USER/Trinit"
 	},
-	"homepage": "https://zoocode.dev",
+	"homepage": "https://trinit.dev",
 	"categories": [
 		"AI",
 		"Chat",
@@ -30,20 +30,17 @@
 		"Testing"
 	],
 	"keywords": [
+		"ollama",
+		"local-llm",
+		"trinit",
+		"trinit",
 		"cline",
-		"claude",
 		"dev",
 		"mcp",
-		"openrouter",
 		"coding",
 		"agent",
 		"autonomous",
-		"chatgpt",
-		"sonnet",
-		"ai",
-		"llama",
-		"zoo code",
-		"zoocode"
+		"ai"
 	],
 	"activationEvents": [
 		"onLanguage",
@@ -54,119 +51,119 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "zoo-code-ActivityBar",
+					"id": "trinit-ActivityBar",
 					"title": "%views.activitybar.title%",
 					"icon": "assets/icons/icon.svg"
 				}
 			]
 		},
 		"views": {
-			"zoo-code-ActivityBar": [
+			"trinit-ActivityBar": [
 				{
 					"type": "webview",
-					"id": "zoo-code.SidebarProvider",
+					"id": "trinit.SidebarProvider",
 					"name": "%views.sidebar.name%"
 				}
 			]
 		},
 		"commands": [
 			{
-				"command": "zoo-code.plusButtonClicked",
+				"command": "trinit.plusButtonClicked",
 				"title": "%command.newTask.title%",
 				"icon": "$(edit)"
 			},
 			{
-				"command": "zoo-code.historyButtonClicked",
+				"command": "trinit.historyButtonClicked",
 				"title": "%command.history.title%",
 				"icon": "$(history)"
 			},
 			{
-				"command": "zoo-code.marketplaceButtonClicked",
+				"command": "trinit.marketplaceButtonClicked",
 				"title": "%command.marketplace.title%",
 				"icon": "$(extensions)"
 			},
 			{
-				"command": "zoo-code.popoutButtonClicked",
+				"command": "trinit.popoutButtonClicked",
 				"title": "%command.openInEditor.title%",
 				"icon": "$(link-external)"
 			},
 			{
-				"command": "zoo-code.settingsButtonClicked",
+				"command": "trinit.settingsButtonClicked",
 				"title": "%command.settings.title%",
 				"icon": "$(settings-gear)"
 			},
 			{
-				"command": "zoo-code.openInNewTab",
+				"command": "trinit.openInNewTab",
 				"title": "%command.openInNewTab.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.explainCode",
+				"command": "trinit.explainCode",
 				"title": "%command.explainCode.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.fixCode",
+				"command": "trinit.fixCode",
 				"title": "%command.fixCode.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.improveCode",
+				"command": "trinit.improveCode",
 				"title": "%command.improveCode.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.addToContext",
+				"command": "trinit.addToContext",
 				"title": "%command.addToContext.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.newTask",
+				"command": "trinit.newTask",
 				"title": "%command.newTask.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.terminalAddToContext",
+				"command": "trinit.terminalAddToContext",
 				"title": "%command.terminal.addToContext.title%",
 				"category": "Terminal"
 			},
 			{
-				"command": "zoo-code.terminalFixCommand",
+				"command": "trinit.terminalFixCommand",
 				"title": "%command.terminal.fixCommand.title%",
 				"category": "Terminal"
 			},
 			{
-				"command": "zoo-code.terminalExplainCommand",
+				"command": "trinit.terminalExplainCommand",
 				"title": "%command.terminal.explainCommand.title%",
 				"category": "Terminal"
 			},
 			{
-				"command": "zoo-code.setCustomStoragePath",
+				"command": "trinit.setCustomStoragePath",
 				"title": "%command.setCustomStoragePath.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.importSettings",
+				"command": "trinit.importSettings",
 				"title": "%command.importSettings.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.focusInput",
+				"command": "trinit.focusInput",
 				"title": "%command.focusInput.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.acceptInput",
+				"command": "trinit.acceptInput",
 				"title": "%command.acceptInput.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.showRipgrepDiagnostic",
+				"command": "trinit.showRipgrepDiagnostic",
 				"title": "%command.showRipgrepDiagnostic.title%",
 				"category": "%configuration.title%"
 			},
 			{
-				"command": "zoo-code.toggleAutoApprove",
+				"command": "trinit.toggleAutoApprove",
 				"title": "%command.toggleAutoApprove.title%",
 				"category": "%configuration.title%"
 			}
@@ -174,102 +171,102 @@
 		"menus": {
 			"editor/context": [
 				{
-					"submenu": "zoo-code.contextMenu",
+					"submenu": "trinit.contextMenu",
 					"group": "1"
 				}
 			],
-			"zoo-code.contextMenu": [
+			"trinit.contextMenu": [
 				{
-					"command": "zoo-code.addToContext",
+					"command": "trinit.addToContext",
 					"group": "1_actions@1"
 				},
 				{
-					"command": "zoo-code.explainCode",
+					"command": "trinit.explainCode",
 					"group": "1_actions@2"
 				},
 				{
-					"command": "zoo-code.improveCode",
+					"command": "trinit.improveCode",
 					"group": "1_actions@3"
 				}
 			],
 			"terminal/context": [
 				{
-					"submenu": "zoo-code.terminalMenu",
+					"submenu": "trinit.terminalMenu",
 					"group": "2"
 				}
 			],
-			"zoo-code.terminalMenu": [
+			"trinit.terminalMenu": [
 				{
-					"command": "zoo-code.terminalAddToContext",
+					"command": "trinit.terminalAddToContext",
 					"group": "1_actions@1"
 				},
 				{
-					"command": "zoo-code.terminalFixCommand",
+					"command": "trinit.terminalFixCommand",
 					"group": "1_actions@2"
 				},
 				{
-					"command": "zoo-code.terminalExplainCommand",
+					"command": "trinit.terminalExplainCommand",
 					"group": "1_actions@3"
 				}
 			],
 			"view/title": [
 				{
-					"command": "zoo-code.plusButtonClicked",
+					"command": "trinit.plusButtonClicked",
 					"group": "navigation@1",
-					"when": "view == zoo-code.SidebarProvider"
+					"when": "view == trinit.SidebarProvider"
 				},
 				{
-					"command": "zoo-code.settingsButtonClicked",
+					"command": "trinit.settingsButtonClicked",
 					"group": "navigation@2",
-					"when": "view == zoo-code.SidebarProvider"
+					"when": "view == trinit.SidebarProvider"
 				},
 				{
-					"command": "zoo-code.marketplaceButtonClicked",
+					"command": "trinit.marketplaceButtonClicked",
 					"group": "navigation@3",
-					"when": "view == zoo-code.SidebarProvider"
+					"when": "view == trinit.SidebarProvider"
 				},
 				{
-					"command": "zoo-code.historyButtonClicked",
+					"command": "trinit.historyButtonClicked",
 					"group": "overflow@1",
-					"when": "view == zoo-code.SidebarProvider"
+					"when": "view == trinit.SidebarProvider"
 				},
 				{
-					"command": "zoo-code.popoutButtonClicked",
+					"command": "trinit.popoutButtonClicked",
 					"group": "overflow@2",
-					"when": "view == zoo-code.SidebarProvider"
+					"when": "view == trinit.SidebarProvider"
 				}
 			],
 			"editor/title": [
 				{
-					"command": "zoo-code.plusButtonClicked",
+					"command": "trinit.plusButtonClicked",
 					"group": "navigation@1",
-					"when": "activeWebviewPanelId == zoo-code.TabPanelProvider"
+					"when": "activeWebviewPanelId == trinit.TabPanelProvider"
 				},
 				{
-					"command": "zoo-code.settingsButtonClicked",
+					"command": "trinit.settingsButtonClicked",
 					"group": "navigation@2",
-					"when": "activeWebviewPanelId == zoo-code.TabPanelProvider"
+					"when": "activeWebviewPanelId == trinit.TabPanelProvider"
 				},
 				{
-					"command": "zoo-code.marketplaceButtonClicked",
+					"command": "trinit.marketplaceButtonClicked",
 					"group": "navigation@3",
-					"when": "activeWebviewPanelId == zoo-code.TabPanelProvider"
+					"when": "activeWebviewPanelId == trinit.TabPanelProvider"
 				},
 				{
-					"command": "zoo-code.historyButtonClicked",
+					"command": "trinit.historyButtonClicked",
 					"group": "overflow@1",
-					"when": "activeWebviewPanelId == zoo-code.TabPanelProvider"
+					"when": "activeWebviewPanelId == trinit.TabPanelProvider"
 				},
 				{
-					"command": "zoo-code.popoutButtonClicked",
+					"command": "trinit.popoutButtonClicked",
 					"group": "overflow@2",
-					"when": "activeWebviewPanelId == zoo-code.TabPanelProvider"
+					"when": "activeWebviewPanelId == trinit.TabPanelProvider"
 				}
 			]
 		},
 		"keybindings": [
 			{
-				"command": "zoo-code.addToContext",
+				"command": "trinit.addToContext",
 				"key": "cmd+k cmd+a",
 				"mac": "cmd+k cmd+a",
 				"win": "ctrl+k ctrl+a",
@@ -277,7 +274,7 @@
 				"when": "editorTextFocus && editorHasSelection"
 			},
 			{
-				"command": "zoo-code.toggleAutoApprove",
+				"command": "trinit.toggleAutoApprove",
 				"key": "cmd+alt+a",
 				"mac": "cmd+alt+a",
 				"win": "ctrl+alt+a",
@@ -286,18 +283,18 @@
 		],
 		"submenus": [
 			{
-				"id": "zoo-code.contextMenu",
+				"id": "trinit.contextMenu",
 				"label": "%views.contextMenu.label%"
 			},
 			{
-				"id": "zoo-code.terminalMenu",
+				"id": "trinit.terminalMenu",
 				"label": "%views.terminalMenu.label%"
 			}
 		],
 		"configuration": {
 			"title": "%configuration.title%",
 			"properties": {
-				"zoo-code.allowedCommands": {
+				"trinit.allowedCommands": {
 					"type": "array",
 					"items": {
 						"type": "string"
@@ -309,7 +306,7 @@
 					],
 					"description": "%commands.allowedCommands.description%"
 				},
-				"zoo-code.deniedCommands": {
+				"trinit.deniedCommands": {
 					"type": "array",
 					"items": {
 						"type": "string"
@@ -317,14 +314,14 @@
 					"default": [],
 					"description": "%commands.deniedCommands.description%"
 				},
-				"zoo-code.commandExecutionTimeout": {
+				"trinit.commandExecutionTimeout": {
 					"type": "number",
 					"default": 0,
 					"minimum": 0,
 					"maximum": 600,
 					"description": "%commands.commandExecutionTimeout.description%"
 				},
-				"zoo-code.commandTimeoutAllowlist": {
+				"trinit.commandTimeoutAllowlist": {
 					"type": "array",
 					"items": {
 						"type": "string"
@@ -332,12 +329,12 @@
 					"default": [],
 					"description": "%commands.commandTimeoutAllowlist.description%"
 				},
-				"zoo-code.preventCompletionWithOpenTodos": {
+				"trinit.preventCompletionWithOpenTodos": {
 					"type": "boolean",
 					"default": false,
 					"description": "%commands.preventCompletionWithOpenTodos.description%"
 				},
-				"zoo-code.vsCodeLmModelSelector": {
+				"trinit.vsCodeLmModelSelector": {
 					"type": "object",
 					"properties": {
 						"vendor": {
@@ -351,76 +348,76 @@
 					},
 					"description": "%settings.vsCodeLmModelSelector.description%"
 				},
-				"zoo-code.customStoragePath": {
+				"trinit.customStoragePath": {
 					"type": "string",
 					"default": "",
 					"description": "%settings.customStoragePath.description%"
 				},
-				"zoo-code.enableCodeActions": {
+				"trinit.enableCodeActions": {
 					"type": "boolean",
 					"default": true,
 					"description": "%settings.enableCodeActions.description%"
 				},
-				"zoo-code.autoImportSettingsPath": {
+				"trinit.autoImportSettingsPath": {
 					"type": "string",
 					"default": "",
 					"description": "%settings.autoImportSettingsPath.description%"
 				},
-				"zoo-code.maximumIndexedFilesForFileSearch": {
+				"trinit.maximumIndexedFilesForFileSearch": {
 					"type": "number",
 					"default": 10000,
 					"minimum": 5000,
 					"maximum": 500000,
 					"description": "%settings.maximumIndexedFilesForFileSearch.description%"
 				},
-				"zoo-code.useAgentRules": {
+				"trinit.useAgentRules": {
 					"type": "boolean",
 					"default": true,
 					"description": "%settings.useAgentRules.description%"
 				},
-				"zoo-code.apiRequestTimeout": {
+				"trinit.apiRequestTimeout": {
 					"type": "integer",
 					"default": 600,
 					"minimum": 1,
 					"maximum": 3600,
 					"description": "%settings.apiRequestTimeout.description%"
 				},
-				"zoo-code.newTaskRequireTodos": {
+				"trinit.newTaskRequireTodos": {
 					"type": "boolean",
 					"default": false,
 					"description": "%settings.newTaskRequireTodos.description%"
 				},
-				"zoo-code.codeIndex.embeddingBatchSize": {
+				"trinit.codeIndex.embeddingBatchSize": {
 					"type": "number",
 					"default": 60,
 					"minimum": 1,
 					"maximum": 200,
 					"description": "%settings.codeIndex.embeddingBatchSize.description%"
 				},
-				"zoo-code.debug": {
+				"trinit.debug": {
 					"type": "boolean",
 					"default": false,
 					"description": "%settings.debug.description%"
 				},
-				"zoo-code.debugProxy.enabled": {
+				"trinit.debugProxy.enabled": {
 					"type": "boolean",
 					"default": false,
 					"description": "%settings.debugProxy.enabled.description%",
 					"markdownDescription": "%settings.debugProxy.enabled.description%"
 				},
-				"zoo-code.debugProxy.serverUrl": {
+				"trinit.debugProxy.serverUrl": {
 					"type": "string",
 					"default": "http://127.0.0.1:8888",
 					"description": "%settings.debugProxy.serverUrl.description%",
 					"markdownDescription": "%settings.debugProxy.serverUrl.description%"
 				},
-				"zoo-code.debugProxy.tlsInsecure": {
+				"trinit.debugProxy.tlsInsecure": {
 					"type": "boolean",
 					"default": false,
 					"description": "%settings.debugProxy.tlsInsecure.description%",
 					"markdownDescription": "%settings.debugProxy.tlsInsecure.description%"
 				},
-				"zoo-code.workspace.rootResolution": {
+				"trinit.workspace.rootResolution": {
 					"type": "string",
 					"enum": [
 						"activeEditor",
@@ -449,8 +446,8 @@
 		"bundle": "node esbuild.mjs",
 		"vscode:prepublish": "pnpm bundle --production",
 		"vsix": "mkdirp ../bin && vsce package --no-dependencies --out ../bin",
-		"publish:vsce": "npx @vscode/vsce publish --packagePath ../bin/zoo-code-$npm_package_version.vsix",
-		"publish:ovsx": "pnpm exec ovsx publish ../bin/zoo-code-$npm_package_version.vsix --skip-duplicate",
+		"publish:vsce": "npx @vscode/vsce publish --packagePath ../bin/trinit-$npm_package_version.vsix",
+		"publish:ovsx": "pnpm exec ovsx publish ../bin/trinit-$npm_package_version.vsix --skip-duplicate",
 		"publish:marketplace": "pnpm vsix && pnpm publish:vsce && pnpm publish:ovsx",
 		"watch:bundle": "pnpm bundle --watch",
 		"watch:tsc": "cd .. && tsc --noEmit --watch --project src/tsconfig.json",

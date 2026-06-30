@@ -257,7 +257,7 @@ vi.mock("../../../api/providers/fetchers/modelCache", () => ({
 	getModelsFromCache: vi.fn().mockReturnValue(undefined),
 }))
 
-vi.mock("../../../services/zoo-code-auth", () => ({
+vi.mock("../../../services/trinit-auth", () => ({
 	getZooCodeBaseUrl: vi.fn(() => "https://www.zoocode.dev"),
 	getCachedZooCodeToken: vi.fn(),
 	handleAuthCallback: vi.fn(),
@@ -3901,7 +3901,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 
 	describe("Zoo Code auth profile sync", () => {
 		beforeEach(async () => {
-			const { getCachedZooCodeToken } = await import("../../../services/zoo-code-auth")
+			const { getCachedZooCodeToken } = await import("../../../services/trinit-auth")
 			vi.mocked(getCachedZooCodeToken).mockReturnValue("")
 		})
 
@@ -4019,7 +4019,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 			})
 
 			it("skips seeding when every zoo-gateway profile already has the current token and base URL", async () => {
-				const { getCachedZooCodeToken } = await import("../../../services/zoo-code-auth")
+				const { getCachedZooCodeToken } = await import("../../../services/trinit-auth")
 				vi.mocked(getCachedZooCodeToken).mockReturnValue("current-token")
 				const handleSpy = vi.spyOn(provider, "handleZooCodeCallback").mockResolvedValue(undefined)
 				const postMessageSpy = vi.spyOn(provider, "postMessageToWebview").mockResolvedValue(undefined)
@@ -4039,7 +4039,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 			})
 
 			it("re-seeds when any zoo-gateway profile has a stale or missing token", async () => {
-				const { getCachedZooCodeToken } = await import("../../../services/zoo-code-auth")
+				const { getCachedZooCodeToken } = await import("../../../services/trinit-auth")
 				vi.mocked(getCachedZooCodeToken).mockReturnValue("fresh-token")
 				const handleSpy = vi.spyOn(provider, "handleZooCodeCallback").mockResolvedValue(undefined)
 
@@ -4057,7 +4057,7 @@ describe("ClineProvider - Comprehensive Edit/Delete Edge Cases", () => {
 			})
 
 			it("re-seeds when any zoo-gateway profile has a stale base URL", async () => {
-				const { getCachedZooCodeToken } = await import("../../../services/zoo-code-auth")
+				const { getCachedZooCodeToken } = await import("../../../services/trinit-auth")
 				vi.mocked(getCachedZooCodeToken).mockReturnValue("current-token")
 				const handleSpy = vi.spyOn(provider, "handleZooCodeCallback").mockResolvedValue(undefined)
 

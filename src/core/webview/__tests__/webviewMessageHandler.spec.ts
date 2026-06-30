@@ -4,7 +4,7 @@ import type { Mock } from "vitest"
 
 // Mock dependencies - must come before imports
 vi.mock("../../../api/providers/fetchers/modelCache")
-vi.mock("../../../services/zoo-code-auth", () => ({
+vi.mock("../../../services/trinit-auth", () => ({
 	disconnectZooCode: vi.fn().mockResolvedValue(undefined),
 }))
 vi.mock("../../../api/providers/fetchers/lmstudio", () => ({
@@ -1357,7 +1357,7 @@ describe("zooCodeSignOut", () => {
 	})
 
 	it("disconnects Zoo Code and clears tokens from all zoo-gateway profiles", async () => {
-		const { disconnectZooCode } = await import("../../../services/zoo-code-auth")
+		const { disconnectZooCode } = await import("../../../services/trinit-auth")
 		const upsertProviderProfile = vi.fn().mockResolvedValue(undefined)
 		const saveConfig = vi.fn().mockResolvedValue(undefined)
 

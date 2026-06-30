@@ -2639,7 +2639,7 @@ export const webviewMessageHandler = async (
 		}
 		case "zooCodeSignOut": {
 			try {
-				const { disconnectZooCode } = await import("../../services/zoo-code-auth")
+				const { disconnectZooCode } = await import("../../services/trinit-auth")
 				await disconnectZooCode()
 
 				// Clear zooSessionToken from ALL provider profiles with apiProvider === "zoo-gateway".
@@ -2698,7 +2698,7 @@ export const webviewMessageHandler = async (
 				await provider.postStateToWebview()
 			} catch (error) {
 				provider.log(
-					`Failed to sign out of Zoo Code: ${error instanceof Error ? error.message : String(error)}`,
+					`Failed to sign out of Trinit: ${error instanceof Error ? error.message : String(error)}`,
 				)
 			}
 			break

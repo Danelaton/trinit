@@ -3,7 +3,7 @@ import axios from "axios"
 import type { ModelInfo } from "@roo-code/types"
 
 import type { ApiHandlerOptions } from "../../../shared/api"
-import { getZooCodeBaseUrl, resolveZooGatewaySessionToken } from "../../../services/zoo-code-auth"
+import { getZooCodeBaseUrl, resolveZooGatewaySessionToken } from "../../../services/trinit-auth"
 
 import {
 	type VercelAiGatewayModel,

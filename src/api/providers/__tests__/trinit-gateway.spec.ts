@@ -30,10 +30,10 @@ import OpenAI from "openai"
 
 import { zooGatewayDefaultModelId, ZOO_GATEWAY_DEFAULT_TEMPERATURE } from "@roo-code/types"
 
-import { ZooGatewayHandler, classifyGatewayApiError, toGatewayStreamError } from "../zoo-gateway"
+import { ZooGatewayHandler, classifyGatewayApiError, toGatewayStreamError } from "../trinit-gateway"
 import { ApiHandlerOptions } from "../../../shared/api"
 import { Package } from "../../../shared/package"
-import { clearZooCodeToken } from "../../../services/zoo-code-auth"
+import { clearZooCodeToken } from "../../../services/trinit-auth"
 
 vitest.mock("openai")
 vitest.mock("delay", () => ({
@@ -74,7 +74,7 @@ vitest.mock("../fetchers/modelCache", () => ({
 const mockGetCachedZooCodeToken = vitest.hoisted(() => vitest.fn<() => string | undefined>(() => undefined))
 const mockSessionCleared = vitest.hoisted(() => ({ value: false }))
 
-vitest.mock("../../../services/zoo-code-auth", () => ({
+vitest.mock("../../../services/trinit-auth", () => ({
 	getZooCodeBaseUrl: vitest.fn(function () {
 		return "https://www.zoocode.dev"
 	}),
@@ -185,7 +185,7 @@ describe("ZooGatewayHandler", () => {
 				apiKey: mockOptions.zooSessionToken,
 				defaultHeaders: expect.objectContaining({
 					"HTTP-Referer": "https://github.com/Zoo-Code-Org/Zoo-Code",
-					"X-Title": "Zoo Code",
+					"X-Title": "Trinit",
 					"X-Zoo-Editor": "vscode",
 					"X-Zoo-Extension-Version": Package.version,
 				}),

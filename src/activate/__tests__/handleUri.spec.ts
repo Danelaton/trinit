@@ -35,7 +35,7 @@ vi.mock("../../core/webview/ClineProvider", () => ({
 	},
 }))
 
-vi.mock("../../services/zoo-code-auth", () => ({
+vi.mock("../../services/trinit-auth", () => ({
 	handleAuthCallback: mockHandleZooCodeAuthCallback,
 	setZooCodeUserInfo: mockSetZooCodeUserInfo,
 }))

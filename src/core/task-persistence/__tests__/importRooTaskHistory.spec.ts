@@ -44,7 +44,7 @@ describe("importRooTaskHistory", () => {
 						return roo
 					}
 
-					if (resolvedSection === "zoo-code") {
+					if (resolvedSection === "trinit") {
 						return zoo
 					}
 

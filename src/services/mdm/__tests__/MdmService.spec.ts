@@ -35,7 +35,7 @@ vi.mock("vscode", () => ({
 vi.mock("../../../shared/package", () => ({
 	Package: {
 		publisher: "ZooCodeOrganization",
-		name: "zoo-code",
+		name: "trinit",
 		version: "1.0.0",
 		outputChannel: "Zoo-Code",
 		sha: undefined,

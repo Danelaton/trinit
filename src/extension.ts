@@ -50,7 +50,7 @@ import {
 } from "./activate"
 import { initializeI18n } from "./i18n"
 import { initializeModelCacheRefresh } from "./api/providers/fetchers/modelCache"
-import { initZooCodeAuth } from "./services/zoo-code-auth"
+import { initZooCodeAuth } from "./services/trinit-auth"
 
 /**
  * Built using https://github.com/microsoft/vscode-webview-ui-toolkit
@@ -102,7 +102,7 @@ async function checkWorktreeAutoOpen(
 			// Open the Zoo Code sidebar with a slight delay to ensure UI is ready
 			setTimeout(async () => {
 				try {
-					await vscode.commands.executeCommand("zoo-code.plusButtonClicked")
+					await vscode.commands.executeCommand("trinit.plusButtonClicked")
 				} catch (error) {
 					outputChannel.appendLine(
 						`[Worktree] Error auto-opening sidebar: ${error instanceof Error ? error.message : String(error)}`,

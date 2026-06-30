@@ -10,7 +10,7 @@ import {
 } from "@roo-code/types"
 
 import { ApiHandlerOptions } from "../../shared/api"
-import { clearZooCodeToken, getZooCodeBaseUrl, resolveZooGatewaySessionToken } from "../../services/zoo-code-auth"
+import { clearZooCodeToken, getZooCodeBaseUrl, resolveZooGatewaySessionToken } from "../../services/trinit-auth"
 import { Package } from "../../shared/package"
 import { t } from "../../i18n"
 
