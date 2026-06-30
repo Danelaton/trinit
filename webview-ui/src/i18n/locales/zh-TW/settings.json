@@ -40,7 +40,7 @@
 		"ui": "UI",
 		"experimental": "實驗性",
 		"language": "語言",
-		"about": "關於 Zoo Code",
+		"about": "關於 Trinit",
 		"skills": "Skills",
 		"rules": "規則"
 	},
@@ -57,7 +57,7 @@
 			"label": "發現安全漏洞？",
 			"link": "遵循我們的揭露流程"
 		},
-		"community": "想要取得使用技巧或與其他 Zoo Code 使用者交流？加入 <redditLink>reddit.com/r/ZooCode</redditLink> 或 <discordLink>discord.gg/VxfP4Vx3gX</discordLink>",
+		"community": "想要取得使用技巧或與其他 Trinit 使用者交流？加入 <redditLink>reddit.com/r/ZooCode</redditLink> 或 <discordLink>discord.gg/VxfP4Vx3gX</discordLink>",
 		"contactAndCommunity": "聯絡與社群",
 		"manageSettings": "管理設定",
 		"debugMode": {
@@ -67,7 +67,7 @@
 		"rooHistoryImport": {
 			"settingLabel": "從 Roo Code 匯入歷史記錄",
 			"cardTitle": "Roo Code 歷史記錄",
-			"cardDescription": "將已儲存的 Roo Code 對話複製到 Zoo Code。",
+			"cardDescription": "將已儲存的 Roo Code 對話複製到 Trinit。",
 			"statusImporting": "正在匯入歷史記錄",
 			"statusFailed": "匯入失敗",
 			"statusComplete": "匯入完成",
@@ -119,7 +119,7 @@
 		"footer": "使用斜線命令快速存取經常使用的提示詞和工作流程。"
 	},
 	"rules": {
-		"description": "從全域與工作區 .roo/rules 目錄管理 Zoo Code 規則檔案。無需手動瀏覽設定資料夾，即可建立一般規則或特定模式規則。",
+		"description": "從全域與工作區 .roo/rules 目錄管理 Trinit 規則檔案。無需手動瀏覽設定資料夾，即可建立一般規則或特定模式規則。",
 		"workspaceRules": "工作區規則",
 		"globalRules": "全域規則",
 		"noWorkspaceRules": "此專案尚無規則。",
@@ -175,7 +175,7 @@
 		},
 		"chatFontSize": {
 			"label": "聊天字型大小",
-			"description": "設定 Zoo Code 聊天的字型大小（以像素為單位）。保留預設值以符合 VS Code 的字型大小。",
+			"description": "設定 Trinit 聊天的字型大小（以像素為單位）。保留預設值以符合 VS Code 的字型大小。",
 			"reset": "使用 VS Code 預設值"
 		},
 		"autoCloseZooOpenedFiles": {
@@ -559,7 +559,7 @@
 			"draftModelDesc": "草稿模型必須來自相同模型系列才能正確運作。",
 			"selectDraftModel": "選擇草稿模型",
 			"noModelsFound": "未找到草稿模型。請確保 LM Studio 以伺服器模式執行。",
-			"description": "LM Studio 允許您在本機電腦執行模型。詳細資訊請參閱快速入門指南。您需要啟動 LM Studio 的本機伺服器功能才能與此擴充功能搭配使用。<span>注意：</span> Zoo Code 使用複雜提示詞，與 Claude 模型搭配最佳。功能較弱的模型可能無法正常運作。"
+			"description": "LM Studio 允許您在本機電腦執行模型。詳細資訊請參閱快速入門指南。您需要啟動 LM Studio 的本機伺服器功能才能與此擴充功能搭配使用。<span>注意：</span> Trinit 使用複雜提示詞，與 Claude 模型搭配最佳。功能較弱的模型可能無法正常運作。"
 		},
 		"ollama": {
 			"baseUrl": "基礎 URL（選用）",
@@ -569,7 +569,7 @@
 			"numCtx": "上下文視窗大小（num_ctx）",
 			"numCtxHelp": "覆寫模型的預設上下文視窗大小。留空以使用模型的 Modelfile 設定。最小值為 128。",
 			"description": "Ollama 允許您在本機電腦執行模型。請參閱快速入門指南。",
-			"warning": "注意：Zoo Code 使用複雜提示詞，與 Claude 模型搭配最佳。功能較弱的模型可能無法正常運作。"
+			"warning": "注意：Trinit 使用複雜提示詞，與 Claude 模型搭配最佳。功能較弱的模型可能無法正常運作。"
 		},
 		"openRouter": {
 			"providerRouting": {
@@ -579,7 +579,7 @@
 			}
 		},
 		"customModel": {
-			"capabilities": "設定自訂 OpenAI 相容模型的功能和定價。請謹慎設定模型功能，因為這會影響 Zoo Code 的運作方式。",
+			"capabilities": "設定自訂 OpenAI 相容模型的功能和定價。請謹慎設定模型功能，因為這會影響 Trinit 的運作方式。",
 			"maxTokens": {
 				"label": "最大輸出 Token",
 				"description": "模型能在一則回應中產生的最大 Token 數量。（設為 -1 則由伺服器決定最大值）"
@@ -656,8 +656,8 @@
 			"maxTokensDescription": "Claude Code 回應的最大輸出 Token 數量。預設為 8000。"
 		},
 		"zooGateway": {
-			"account": "Zoo Code 帳戶",
-			"signInButton": "登入 Zoo Code",
+			"account": "Trinit 帳戶",
+			"signInButton": "登入 Trinit",
 			"signInDescription": "登入以使用您的帳戶存取 Zoo Gateway",
 			"authenticated": "已認證",
 			"authenticatedAs": "已認證為 {{name}}"
@@ -850,9 +850,9 @@
 			"description": "啟用此選項以從父 VS Code 程序繼承環境變數。<0>了解更多</0>"
 		},
 		"profile": {
-			"label": "Zoo Code 終端機設定檔",
+			"label": "Trinit 終端機設定檔",
 			"followVscode": "跟隨 VS Code 設定檔 （推薦）",
-			"description": "預設情況下，Zoo Code 使用 VS Code 設定的 Shell。從清單中選擇 VS Code 公開的路徑型 Shell 設定檔。僅含來源的設定檔（如內建的 PowerShell 項目）無法在此列出。 <0>了解更多</0>",
+			"description": "預設情況下，Trinit 使用 VS Code 設定的 Shell。從清單中選擇 VS Code 公開的路徑型 Shell 設定檔。僅含來源的設定檔（如內建的 PowerShell 項目）無法在此列出。 <0>了解更多</0>",
 			"configureButton": "在 VS Code 中選擇預設設定檔",
 			"noProfiles": "(在 terminal.integrated.profiles 中未找到路徑型設定檔)"
 		}
@@ -977,7 +977,7 @@
 		}
 	},
 	"modelPicker": {
-		"automaticFetch": "此擴充功能會自動從 <serviceLink>{{serviceName}}</serviceLink> 取得最新的可用模型清單。如果不確定要選哪個模型，建議使用 <defaultModelLink>{{defaultModelId}}</defaultModelLink>，這是與 Zoo Code 最佳搭配的模型。您也可以搜尋「free」來檢視目前可用的免費選項。",
+		"automaticFetch": "此擴充功能會自動從 <serviceLink>{{serviceName}}</serviceLink> 取得最新的可用模型清單。如果不確定要選哪個模型，建議使用 <defaultModelLink>{{defaultModelId}}</defaultModelLink>，這是與 Trinit 最佳搭配的模型。您也可以搜尋「free」來檢視目前可用的免費選項。",
 		"label": "模型",
 		"searchPlaceholder": "搜尋",
 		"noMatchFound": "找不到符合的結果",
@@ -987,7 +987,7 @@
 	"footer": {
 		"telemetry": {
 			"label": "允許匿名錯誤與使用情況回報",
-			"description": "透過發送匿名使用資料和錯誤回報來協助改善 Zoo Code。此遙測不會收集程式碼、提示詞或個人資訊。查看我們的 <privacyLink>隱私權政策</privacyLink> 以了解更多資訊。"
+			"description": "透過發送匿名使用資料和錯誤回報來協助改善 Trinit。此遙測不會收集程式碼、提示詞或個人資訊。查看我們的 <privacyLink>隱私權政策</privacyLink> 以了解更多資訊。"
 		},
 		"settings": {
 			"import": "匯入",
@@ -1016,7 +1016,7 @@
 		"modelNotAllowed": "模型 '{{model}}' 不允許用於供應商 '{{provider}}'，此設定已被組織禁止",
 		"profileInvalid": "此設定檔包含您的組織不允許的供應商或模型",
 		"qwenCodeOauthPath": "您必須提供有效的 OAuth 憑證路徑",
-		"zooGatewaySignIn": "請登入 Zoo Code 以使用 Zoo Gateway。"
+		"zooGatewaySignIn": "請登入 Trinit 以使用 Zoo Gateway。"
 	},
 	"placeholders": {
 		"apiKey": "請輸入 API 金鑰...",

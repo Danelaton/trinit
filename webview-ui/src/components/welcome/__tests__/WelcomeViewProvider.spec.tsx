@@ -47,7 +47,7 @@ vi.mock("../../common/Tab", () => ({
 	),
 }))
 
-vi.mock("../RooHero", () => ({
+vi.mock("../TrinitHero", () => ({
 	default: () => <div data-testid="roo-hero">Roo Hero</div>,
 }))
 

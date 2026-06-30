@@ -1,5 +1,5 @@
 {
-	"greeting": "Welkom bij Zoo Code!",
+	"greeting": "Welkom bij Trinit!",
 	"task": {
 		"title": "Taak",
 		"expand": "Taak uitvouwen",
@@ -96,7 +96,7 @@
 	"enqueueMessage": "Bericht aan de wachtrij toevoegen (wordt verzonden nadat de huidige taak is voltooid)",
 	"scrollToBottom": "Scroll naar onderaan de chat",
 	"scrollToLatestCheckpoint": "Scroll naar het vorige checkpoint",
-	"about": "Zoo Code is een heel AI-ontwikkelteam in je editor.",
+	"about": "Trinit is een heel AI-ontwikkelteam in je editor.",
 	"docs": "Bekijk onze <DocsLink>documentatie</DocsLink> voor meer informatie.",
 	"onboarding": "Je takenlijst in deze werkruimte is leeg.",
 	"rooTips": {
@@ -155,7 +155,7 @@
 			"500": "Provider-serverfout. Er is iets mis aan de kant van de provider, er is niets mis met je verzoek.",
 			"docs": "Documentatie",
 			"goToSettings": "Instellingen",
-			"unknown": "Onbekende API-fout. Neem contact op met Zoo Code-support.",
+			"unknown": "Onbekende API-fout. Neem contact op met Trinit-support.",
 			"connection": "Verbindingsfout. Zorg ervoor dat je een werkende internetverbinding hebt.",
 			"claudeCodeNotAuthenticated": "Je moet inloggen om Claude Code te gebruiken. Ga naar Instellingen en klik op \"Inloggen bij Claude Code\" om te authenticeren."
 		}
@@ -310,8 +310,8 @@
 		"triggerLabelAll": "BRRR"
 	},
 	"announcement": {
-		"title": "Zoo Code {{version}} uitgebracht",
-		"support": "Steun Zoo Code door ons een ster te geven op <githubLink>GitHub</githubLink>.",
+		"title": "Trinit {{version}} uitgebracht",
+		"support": "Steun Trinit door ons een ster te geven op <githubLink>GitHub</githubLink>.",
 		"release": {
 			"heading": "Wat is nieuw:",
 			"highlight1": "Regelbeheer-UI — een nieuw tabblad Regels in Instellingen maakt het mogelijk om globale en werkruimte Zoo-regels rechtstreeks vanuit de editor aan te maken, te verwijderen en te openen.",
@@ -367,7 +367,7 @@
 	"profileViolationWarning": "Het huidige profiel is niet compatibel met de instellingen van uw organisatie",
 	"shellIntegration": {
 		"title": "Waarschuwing commando-uitvoering",
-		"description": "Je commando wordt uitgevoerd zonder VSCode-terminal-shellintegratie. Om deze waarschuwing te onderdrukken kun je shellintegratie uitschakelen in de sectie <strong>Terminal</strong> van de <settingsLink>Zoo Code-instellingen</settingsLink> of de VSCode-terminalintegratie oplossen via de onderstaande link.",
+		"description": "Je commando wordt uitgevoerd zonder VSCode-terminal-shellintegratie. Om deze waarschuwing te onderdrukken kun je shellintegratie uitschakelen in de sectie <strong>Terminal</strong> van de <settingsLink>Trinit-instellingen</settingsLink> of de VSCode-terminalintegratie oplossen via de onderstaande link.",
 		"troubleshooting": "Klik hier voor shell-integratie documentatie."
 	},
 	"ask": {
@@ -425,7 +425,7 @@
 		"ariaLabel": "Versie {{version}} - Klik om release notes te bekijken"
 	},
 	"rooCloudCTA": {
-		"title": "Zoo Code Cloud evolueert!",
+		"title": "Trinit Cloud evolueert!",
 		"description": "Voer externe agenten uit in de cloud, krijg overal toegang tot je taken, werk samen met anderen en nog veel meer.",
 		"joinWaitlist": "Meld je aan om de laatste updates te ontvangen."
 	},

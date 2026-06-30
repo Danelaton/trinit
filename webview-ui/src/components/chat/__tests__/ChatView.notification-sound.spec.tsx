@@ -112,9 +112,9 @@ vi.mock("@src/components/welcome/RooTips", () => ({
 	},
 }))
 
-// Mock RooHero component
-vi.mock("@src/components/welcome/RooHero", () => ({
-	default: function MockRooHero() {
+// Mock TrinitHero component
+vi.mock("@src/components/welcome/TrinitHero", () => ({
+	default: function MockTrinitHero() {
 		return <div data-testid="roo-hero">Hero content</div>
 	},
 }))

@@ -40,7 +40,7 @@
 		"ui": "UI",
 		"experimental": "Expérimental",
 		"language": "Langue",
-		"about": "À propos de Zoo Code",
+		"about": "À propos de Trinit",
 		"skills": "Skills",
 		"rules": "Règles"
 	},
@@ -57,7 +57,7 @@
 			"label": "Vous avez découvert une vulnérabilité ?",
 			"link": "Suivez notre processus de divulgation"
 		},
-		"community": "Vous voulez des conseils ou simplement discuter avec d'autres utilisateurs de Zoo Code ? Rejoignez <redditLink>reddit.com/r/ZooCode</redditLink> ou <discordLink>discord.gg/VxfP4Vx3gX</discordLink>",
+		"community": "Vous voulez des conseils ou simplement discuter avec d'autres utilisateurs de Trinit ? Rejoignez <redditLink>reddit.com/r/ZooCode</redditLink> ou <discordLink>discord.gg/VxfP4Vx3gX</discordLink>",
 		"contactAndCommunity": "Contact et Communauté",
 		"manageSettings": "Gérer les Paramètres",
 		"debugMode": {
@@ -67,7 +67,7 @@
 		"rooHistoryImport": {
 			"settingLabel": "Importer l'historique depuis Roo Code",
 			"cardTitle": "Historique Roo Code",
-			"cardDescription": "Copier les conversations Roo Code sauvegardées dans Zoo Code.",
+			"cardDescription": "Copier les conversations Roo Code sauvegardées dans Trinit.",
 			"statusImporting": "Importation de l'historique",
 			"statusFailed": "Échec de l'importation",
 			"statusComplete": "Importation terminée",
@@ -119,7 +119,7 @@
 		"footer": "Utilisez les commandes slash pour accéder rapidement aux invites et flux de travail fréquemment utilisés."
 	},
 	"rules": {
-		"description": "Gère les fichiers de règles Zoo Code depuis les répertoires .roo/rules globaux et d’espace de travail. Crée des règles générales ou propres à un mode sans parcourir manuellement les dossiers de configuration.",
+		"description": "Gère les fichiers de règles Trinit depuis les répertoires .roo/rules globaux et d’espace de travail. Crée des règles générales ou propres à un mode sans parcourir manuellement les dossiers de configuration.",
 		"workspaceRules": "Règles de l’espace de travail",
 		"globalRules": "Règles globales",
 		"noWorkspaceRules": "Aucune règle dans ce projet pour le moment.",
@@ -532,7 +532,7 @@
 			"draftModelDesc": "Le modèle brouillon doit être de la même famille de modèles pour que le décodage spéculatif fonctionne correctement.",
 			"selectDraftModel": "Sélectionner le modèle brouillon",
 			"noModelsFound": "Aucun modèle brouillon trouvé. Veuillez vous assurer que LM Studio est en cours d'exécution avec le mode serveur activé.",
-			"description": "LM Studio vous permet d'exécuter des modèles localement sur votre ordinateur. Pour obtenir des instructions sur la mise en route, consultez leur <a>guide de démarrage rapide</a>. Vous devrez également démarrer la fonction <b>serveur local</b> de LM Studio pour l'utiliser avec cette extension. <span>Remarque :</span> Zoo Code utilise des prompts complexes et fonctionne mieux avec les modèles Claude. Les modèles moins performants peuvent ne pas fonctionner comme prévu."
+			"description": "LM Studio vous permet d'exécuter des modèles localement sur votre ordinateur. Pour obtenir des instructions sur la mise en route, consultez leur <a>guide de démarrage rapide</a>. Vous devrez également démarrer la fonction <b>serveur local</b> de LM Studio pour l'utiliser avec cette extension. <span>Remarque :</span> Trinit utilise des prompts complexes et fonctionne mieux avec les modèles Claude. Les modèles moins performants peuvent ne pas fonctionner comme prévu."
 		},
 		"ollama": {
 			"baseUrl": "URL de base (optionnel)",
@@ -542,7 +542,7 @@
 			"numCtx": "Taille de la fenêtre de contexte (num_ctx)",
 			"numCtxHelp": "Remplace la taille de la fenêtre de contexte par défaut du modèle. Laissez vide pour utiliser la configuration du Modelfile du modèle. La valeur minimale est 128.",
 			"description": "Ollama vous permet d'exécuter des modèles localement sur votre ordinateur. Pour obtenir des instructions sur la mise en route, consultez le guide de démarrage rapide.",
-			"warning": "Remarque : Zoo Code utilise des prompts complexes et fonctionne mieux avec les modèles Claude. Les modèles moins performants peuvent ne pas fonctionner comme prévu."
+			"warning": "Remarque : Trinit utilise des prompts complexes et fonctionne mieux avec les modèles Claude. Les modèles moins performants peuvent ne pas fonctionner comme prévu."
 		},
 		"openRouter": {
 			"providerRouting": {
@@ -552,7 +552,7 @@
 			}
 		},
 		"customModel": {
-			"capabilities": "Configurez les capacités et les prix pour votre modèle personnalisé compatible OpenAI. Soyez prudent lors de la spécification des capacités du modèle, car elles peuvent affecter le fonctionnement de Zoo Code.",
+			"capabilities": "Configurez les capacités et les prix pour votre modèle personnalisé compatible OpenAI. Soyez prudent lors de la spécification des capacités du modèle, car elles peuvent affecter le fonctionnement de Trinit.",
 			"maxTokens": {
 				"label": "Tokens de sortie maximum",
 				"description": "Nombre maximum de tokens que le modèle peut générer dans une réponse. (Spécifiez -1 pour permettre au serveur de définir les tokens maximum.)"
@@ -629,8 +629,8 @@
 			"maxTokensDescription": "Nombre maximum de jetons de sortie pour les réponses de Claude Code. La valeur par défaut est 8000."
 		},
 		"zooGateway": {
-			"account": "Compte Zoo Code",
-			"signInButton": "Se connecter à Zoo Code",
+			"account": "Compte Trinit",
+			"signInButton": "Se connecter à Trinit",
 			"signInDescription": "Connectez-vous pour utiliser Zoo Gateway avec votre compte",
 			"authenticated": "Authentifié",
 			"authenticatedAs": "Authentifié en tant que {{name}}"
@@ -823,9 +823,9 @@
 			"description": "Activez pour hériter des variables d'environnement du processus parent VS Code. <0>En savoir plus</0>"
 		},
 		"profile": {
-			"label": "Profil de terminal Zoo Code",
+			"label": "Profil de terminal Trinit",
 			"followVscode": "Suivre le profil de VS Code (recommandé)",
-			"description": "Par défaut, Zoo Code utilise le shell configuré dans VS Code. Sélectionnez un profil shell dans la liste pour choisir un profil shell avec chemin exposé par VS Code. Les profils source uniquement (ex. : l'entrée PowerShell intégrée) ne peuvent pas être listés ici. <0>En savoir plus</0>",
+			"description": "Par défaut, Trinit utilise le shell configuré dans VS Code. Sélectionnez un profil shell dans la liste pour choisir un profil shell avec chemin exposé par VS Code. Les profils source uniquement (ex. : l'entrée PowerShell intégrée) ne peuvent pas être listés ici. <0>En savoir plus</0>",
 			"configureButton": "Choisir le profil par défaut dans VS Code",
 			"noProfiles": "(aucun profil avec chemin trouvé dans terminal.integrated.profiles)"
 		}
@@ -950,7 +950,7 @@
 		}
 	},
 	"modelPicker": {
-		"automaticFetch": "L'extension récupère automatiquement la liste la plus récente des modèles disponibles sur <serviceLink>{{serviceName}}</serviceLink>. Si vous ne savez pas quel modèle choisir, Zoo Code fonctionne mieux avec <defaultModelLink>{{defaultModelId}}</defaultModelLink>. Vous pouvez également rechercher \"free\" pour les options gratuites actuellement disponibles.",
+		"automaticFetch": "L'extension récupère automatiquement la liste la plus récente des modèles disponibles sur <serviceLink>{{serviceName}}</serviceLink>. Si vous ne savez pas quel modèle choisir, Trinit fonctionne mieux avec <defaultModelLink>{{defaultModelId}}</defaultModelLink>. Vous pouvez également rechercher \"free\" pour les options gratuites actuellement disponibles.",
 		"label": "Modèle",
 		"searchPlaceholder": "Rechercher",
 		"noMatchFound": "Aucune correspondance trouvée",
@@ -960,7 +960,7 @@
 	"footer": {
 		"telemetry": {
 			"label": "Autoriser les rapports anonymes d'erreurs et d'utilisation",
-			"description": "Aidez à améliorer Zoo Code en envoyant des données d'utilisation anonymes et des rapports d'erreurs. Cette télémétrie ne collecte pas de code, de prompts ou d'informations personnelles. Consultez notre <privacyLink>politique de confidentialité</privacyLink> pour plus de détails."
+			"description": "Aidez à améliorer Trinit en envoyant des données d'utilisation anonymes et des rapports d'erreurs. Cette télémétrie ne collecte pas de code, de prompts ou d'informations personnelles. Consultez notre <privacyLink>politique de confidentialité</privacyLink> pour plus de détails."
 		},
 		"settings": {
 			"import": "Importer",
@@ -989,7 +989,7 @@
 		"modelNotAllowed": "Le modèle '{{model}}' n'est pas autorisé pour le fournisseur '{{provider}}' par votre organisation",
 		"profileInvalid": "Ce profil contient un fournisseur ou un modèle qui n'est pas autorisé par votre organisation",
 		"qwenCodeOauthPath": "Tu dois fournir un chemin valide pour les identifiants OAuth",
-		"zooGatewaySignIn": "Connectez-vous à Zoo Code pour utiliser Zoo Gateway."
+		"zooGatewaySignIn": "Connectez-vous à Trinit pour utiliser Zoo Gateway."
 	},
 	"placeholders": {
 		"apiKey": "Saisissez la clé API...",
@@ -1054,7 +1054,7 @@
 		},
 		"chatFontSize": {
 			"label": "Taille de police du chat",
-			"description": "Définissez la taille de police (en pixels) du chat Zoo Code. Laissez la valeur par défaut pour correspondre à la taille de police de VS Code.",
+			"description": "Définissez la taille de police (en pixels) du chat Trinit. Laissez la valeur par défaut pour correspondre à la taille de police de VS Code.",
 			"reset": "Utiliser la valeur par défaut de VS Code"
 		},
 		"autoCloseZooOpenedFiles": {

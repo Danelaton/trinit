@@ -73,6 +73,8 @@ schemas/
 # Upstream GitHub (keep only our CI)
 .github/*
 !.github/workflows/
+.github/workflows/*
+!.github/workflows/build.yml
 
 # Upstream apps (CLI, e2e, nightly — not part of extension core)
 apps/

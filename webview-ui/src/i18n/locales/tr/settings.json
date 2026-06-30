@@ -40,7 +40,7 @@
 		"ui": "UI",
 		"experimental": "Deneysel",
 		"language": "Dil",
-		"about": "Zoo Code Hakkında",
+		"about": "Trinit Hakkında",
 		"skills": "Skills",
 		"rules": "Kurallar"
 	},
@@ -57,7 +57,7 @@
 			"label": "Bir güvenlik açığı mı keşfettiniz?",
 			"link": "Açıklama sürecimizi takip edin"
 		},
-		"community": "İpuçları mı istiyorsunuz yoksa sadece diğer Zoo Code kullanıcılarıyla takılmak mı istiyorsunuz? <redditLink>reddit.com/r/ZooCode</redditLink> veya <discordLink>discord.gg/VxfP4Vx3gX</discordLink>'a katılın",
+		"community": "İpuçları mı istiyorsunuz yoksa sadece diğer Trinit kullanıcılarıyla takılmak mı istiyorsunuz? <redditLink>reddit.com/r/ZooCode</redditLink> veya <discordLink>discord.gg/VxfP4Vx3gX</discordLink>'a katılın",
 		"contactAndCommunity": "İletişim ve Topluluk",
 		"manageSettings": "Ayarları Yönet",
 		"debugMode": {
@@ -67,7 +67,7 @@
 		"rooHistoryImport": {
 			"settingLabel": "Roo Code'dan geçmişi içe aktar",
 			"cardTitle": "Roo Code geçmişi",
-			"cardDescription": "Kayıtlı Roo Code konuşmalarını Zoo Code'a kopyala.",
+			"cardDescription": "Kayıtlı Roo Code konuşmalarını Trinit'a kopyala.",
 			"statusImporting": "Geçmiş içe aktarılıyor",
 			"statusFailed": "İçe aktarma başarısız",
 			"statusComplete": "İçe aktarma tamamlandı",
@@ -119,7 +119,7 @@
 		"footer": "Sık kullanılan komutlara ve iş akışlarına hızlı erişim için eğik çizgi komutlarını kullanın."
 	},
 	"rules": {
-		"description": "Genel ve workspace .roo/rules dizinlerinden Zoo Code kural dosyalarını yönet. Yapılandırma klasörlerinde manuel gezinmeden genel kurallar veya moda özel kurallar oluştur.",
+		"description": "Genel ve workspace .roo/rules dizinlerinden Trinit kural dosyalarını yönet. Yapılandırma klasörlerinde manuel gezinmeden genel kurallar veya moda özel kurallar oluştur.",
 		"workspaceRules": "Workspace Kuralları",
 		"globalRules": "Genel Kurallar",
 		"noWorkspaceRules": "Bu projede henüz kural yok.",
@@ -532,7 +532,7 @@
 			"draftModelDesc": "Spekülatif kod çözmenin doğru çalışması için taslak model aynı model ailesinden olmalıdır.",
 			"selectDraftModel": "Taslak Model Seç",
 			"noModelsFound": "Taslak model bulunamadı. Lütfen LM Studio'nun Sunucu Modu etkinken çalıştığından emin olun.",
-			"description": "LM Studio, modelleri bilgisayarınızda yerel olarak çalıştırmanıza olanak tanır. Başlamak için <a>hızlı başlangıç kılavuzlarına</a> bakın. Bu uzantıyla kullanmak için LM Studio'nun <b>yerel sunucu</b> özelliğini de başlatmanız gerekecektir. <span>Not:</span> Zoo Code karmaşık istemler kullanır ve Claude modelleriyle en iyi şekilde çalışır. Daha az yetenekli modeller beklendiği gibi çalışmayabilir."
+			"description": "LM Studio, modelleri bilgisayarınızda yerel olarak çalıştırmanıza olanak tanır. Başlamak için <a>hızlı başlangıç kılavuzlarına</a> bakın. Bu uzantıyla kullanmak için LM Studio'nun <b>yerel sunucu</b> özelliğini de başlatmanız gerekecektir. <span>Not:</span> Trinit karmaşık istemler kullanır ve Claude modelleriyle en iyi şekilde çalışır. Daha az yetenekli modeller beklendiği gibi çalışmayabilir."
 		},
 		"ollama": {
 			"baseUrl": "Temel URL (İsteğe bağlı)",
@@ -542,7 +542,7 @@
 			"numCtx": "Bağlam Penceresi Boyutu (num_ctx)",
 			"numCtxHelp": "Modelin varsayılan bağlam penceresi boyutunu geçersiz kılar. Modelin Modelfile yapılandırmasını kullanmak için boş bırakın. Minimum değer 128'dir.",
 			"description": "Ollama, modelleri bilgisayarınızda yerel olarak çalıştırmanıza olanak tanır. Başlamak için hızlı başlangıç kılavuzlarına bakın.",
-			"warning": "Not: Zoo Code karmaşık istemler kullanır ve Claude modelleriyle en iyi şekilde çalışır. Daha az yetenekli modeller beklendiği gibi çalışmayabilir."
+			"warning": "Not: Trinit karmaşık istemler kullanır ve Claude modelleriyle en iyi şekilde çalışır. Daha az yetenekli modeller beklendiği gibi çalışmayabilir."
 		},
 		"openRouter": {
 			"providerRouting": {
@@ -552,7 +552,7 @@
 			}
 		},
 		"customModel": {
-			"capabilities": "Özel OpenAI uyumlu modelinizin yeteneklerini ve fiyatlandırmasını yapılandırın. Model yeteneklerini belirtirken dikkatli olun, çünkü bunlar Zoo Code'un performansını etkileyebilir.",
+			"capabilities": "Özel OpenAI uyumlu modelinizin yeteneklerini ve fiyatlandırmasını yapılandırın. Model yeteneklerini belirtirken dikkatli olun, çünkü bunlar Trinit'un performansını etkileyebilir.",
 			"maxTokens": {
 				"label": "Maksimum Çıktı Token'ları",
 				"description": "Modelin bir yanıtta üretebileceği maksimum token sayısı. (Sunucunun maksimum token'ları ayarlamasına izin vermek için -1 belirtin.)"
@@ -629,8 +629,8 @@
 			"maxTokensDescription": "Claude Code yanıtları için maksimum çıktı token sayısı. Varsayılan 8000'dir."
 		},
 		"zooGateway": {
-			"account": "Zoo Code Hesabı",
-			"signInButton": "Zoo Code'a giriş yap",
+			"account": "Trinit Hesabı",
+			"signInButton": "Trinit'a giriş yap",
 			"signInDescription": "Hesabınızla Zoo Gateway kullanmak için giriş yapın",
 			"authenticated": "Kimlik doğrulandı",
 			"authenticatedAs": "{{name}} olarak kimlik doğrulandı"
@@ -823,9 +823,9 @@
 			"description": "Ana VS Code işleminden ortam değişkenlerini devralmak için bunu açın. <0>Daha fazla bilgi edinin</0>"
 		},
 		"profile": {
-			"label": "Zoo Code terminal profili",
+			"label": "Trinit terminal profili",
 			"followVscode": "VS Code profili takip ediliyor (önerilir)",
-			"description": "Varsayılan olarak Zoo Code, VS Code'da yapılandırılmış kabuğu kullanır. VS Code'un sunduğu yol tabanlı bir kabuk profili seçmek için listeden bir kabuk profili seçin. Yalnızca kaynak profiller (örn. yerleşik PowerShell girişi) burada listelenemez. <0>Daha fazla bilgi</0>",
+			"description": "Varsayılan olarak Trinit, VS Code'da yapılandırılmış kabuğu kullanır. VS Code'un sunduğu yol tabanlı bir kabuk profili seçmek için listeden bir kabuk profili seçin. Yalnızca kaynak profiller (örn. yerleşik PowerShell girişi) burada listelenemez. <0>Daha fazla bilgi</0>",
 			"configureButton": "VS Code'da varsayılan profili seç",
 			"noProfiles": "(terminal.integrated.profiles'da yol tabanlı profil bulunamadı)"
 		}
@@ -950,7 +950,7 @@
 		}
 	},
 	"modelPicker": {
-		"automaticFetch": "Uzantı <serviceLink>{{serviceName}}</serviceLink> üzerinde bulunan mevcut modellerin en güncel listesini otomatik olarak alır. Hangi modeli seçeceğinizden emin değilseniz, Zoo Code <defaultModelLink>{{defaultModelId}}</defaultModelLink> ile en iyi şekilde çalışır. Şu anda mevcut olan ücretsiz seçenekleri bulmak için \"free\" araması da yapabilirsiniz.",
+		"automaticFetch": "Uzantı <serviceLink>{{serviceName}}</serviceLink> üzerinde bulunan mevcut modellerin en güncel listesini otomatik olarak alır. Hangi modeli seçeceğinizden emin değilseniz, Trinit <defaultModelLink>{{defaultModelId}}</defaultModelLink> ile en iyi şekilde çalışır. Şu anda mevcut olan ücretsiz seçenekleri bulmak için \"free\" araması da yapabilirsiniz.",
 		"label": "Model",
 		"searchPlaceholder": "Ara",
 		"noMatchFound": "Eşleşme bulunamadı",
@@ -960,7 +960,7 @@
 	"footer": {
 		"telemetry": {
 			"label": "Anonim hata ve kullanım raporlamaya izin ver",
-			"description": "Anonim kullanım verileri ve hata raporları göndererek Zoo Code'u geliştirmeye yardım edin. Bu telemetri kod, prompt veya kişisel bilgi toplamaz. Daha fazla ayrıntı için <privacyLink>gizlilik politikamıza</privacyLink> bakın. Bunu istediğiniz zaman kapatabilirsiniz."
+			"description": "Anonim kullanım verileri ve hata raporları göndererek Trinit'u geliştirmeye yardım edin. Bu telemetri kod, prompt veya kişisel bilgi toplamaz. Daha fazla ayrıntı için <privacyLink>gizlilik politikamıza</privacyLink> bakın. Bunu istediğiniz zaman kapatabilirsiniz."
 		},
 		"settings": {
 			"import": "İçe Aktar",
@@ -989,7 +989,7 @@
 		"modelNotAllowed": "Model '{{model}}' sağlayıcı '{{provider}}' için kuruluşunuz tarafından izin verilmiyor",
 		"profileInvalid": "Bu profil, kuruluşunuz tarafından izin verilmeyen bir sağlayıcı veya model içeriyor",
 		"qwenCodeOauthPath": "Geçerli bir OAuth kimlik bilgileri yolu sağlamalısınız",
-		"zooGatewaySignIn": "Zoo Gateway'i kullanmak için Zoo Code'a giriş yapın."
+		"zooGatewaySignIn": "Zoo Gateway'i kullanmak için Trinit'a giriş yapın."
 	},
 	"placeholders": {
 		"apiKey": "API anahtarını girin...",
@@ -1054,7 +1054,7 @@
 		},
 		"chatFontSize": {
 			"label": "Sohbet yazı tipi boyutu",
-			"description": "Zoo Code sohbeti için yazı tipi boyutunu (piksel cinsinden) ayarlayın. VS Code yazı tipi boyutuyla eşleşmesi için varsayılan değerde bırakın.",
+			"description": "Trinit sohbeti için yazı tipi boyutunu (piksel cinsinden) ayarlayın. VS Code yazı tipi boyutuyla eşleşmesi için varsayılan değerde bırakın.",
 			"reset": "VS Code varsayılanını kullan"
 		},
 		"autoCloseZooOpenedFiles": {

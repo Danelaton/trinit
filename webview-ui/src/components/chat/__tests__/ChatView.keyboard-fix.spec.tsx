@@ -48,7 +48,7 @@ vi.mock("@src/components/welcome/RooTips", () => ({
 	default: () => null,
 }))
 
-vi.mock("@src/components/welcome/RooHero", () => ({
+vi.mock("@src/components/welcome/TrinitHero", () => ({
 	default: () => null,
 }))
 

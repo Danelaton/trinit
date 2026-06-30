@@ -87,7 +87,7 @@ vi.mock("@src/components/welcome/RooTips", () => ({
 	default: () => <div data-testid="roo-tips">Tips content</div>,
 }))
 
-vi.mock("@src/components/welcome/RooHero", () => ({
+vi.mock("@src/components/welcome/TrinitHero", () => ({
 	default: () => <div data-testid="roo-hero">Hero content</div>,
 }))
 

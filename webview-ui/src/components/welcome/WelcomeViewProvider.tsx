@@ -13,7 +13,7 @@ import { Button } from "@src/components/ui"
 import ApiOptions from "../settings/ApiOptions"
 import { Tab, TabContent } from "../common/Tab"
 
-import RooHero from "./RooHero"
+import TrinitHero from "./TrinitHero"
 
 const DEFAULT_WELCOME_API_CONFIGURATION: ProviderSettings = {
 	apiProvider: "openrouter",
@@ -96,7 +96,7 @@ const WelcomeViewProvider = () => {
 		return (
 			<Tab>
 				<TabContent className="relative flex flex-col gap-4 p-6 justify-center">
-					<RooHero />
+					<TrinitHero />
 					<h2 className="mt-0 mb-0 text-xl">{t("welcome:landing.greeting")}</h2>
 
 					<div className="space-y-4 leading-normal">
