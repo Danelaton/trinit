@@ -1,4 +1,4 @@
-# 01 — Ornith 9B
+# Ornith 9B
 
 **URL:** <https://ollama.com/library/ornith>  
 **Tag in use:** `ornith:9b`

@@ -20,14 +20,24 @@
 
 ---
 
-## Documentos de modelos (preexistentes)
+## Documentos de modelos
+
+Fichas técnicas detalladas de cada modelo, en `models/`:
 
 | Documento | Descripción |
 |---|---|
-| [01-ornith.md](01-ornith.md) | Ornith 9B — modelo de coding agentico con RL |
-| [02-gemma4.md](02-gemma4.md) | Gemma 4 E2B & E4B — modelos edge multimodal de Google DeepMind |
-| [03-glm-ocr.md](03-glm-ocr.md) | GLM-OCR — OCR multimodal de 0.9B parámetros |
+| [models/ornith.md](models/ornith.md) | Ornith 9B — modelo de coding agentico con RL |
+| [models/gemma4.md](models/gemma4.md) | Gemma 4 E2B & E4B — modelos edge multimodal de Google DeepMind |
+| [models/glm-ocr.md](models/glm-ocr.md) | GLM-OCR — OCR multimodal de 0.9B parámetros |
+
+---
+
+## Otros recursos
+
+| Documento | Descripción |
+|---|---|
 | [dev-commands.md](dev-commands.md) | Comandos de desarrollo del proyecto |
+| [TRINIT.svg](TRINIT.svg) | Logo vectorial de Trinit |
 
 ---
 

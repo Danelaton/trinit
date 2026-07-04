@@ -1,7 +1,7 @@
 # Trinit — Los Modelos
 
 > Versión: v0.1.0 · Fecha: 2026-07-04  
-> Fuente: `models.yaml` (fuente de verdad), `dev/docs/01-ornith.md`, `dev/docs/02-gemma4.md`, `dev/docs/03-glm-ocr.md`
+> Fuente: `models.yaml` (fuente de verdad), `dev/docs/models/ornith.md`, `dev/docs/models/gemma4.md`, `dev/docs/models/glm-ocr.md`
 
 ---
 

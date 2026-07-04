@@ -1,4 +1,4 @@
-# 02 — Gemma 4 (E2B / E4B)
+# Gemma 4 (E2B / E4B)
 
 **URL:** <https://ollama.com/library/gemma4>  
 **Tags in use:** `gemma4:e2b`, `gemma4:e4b`

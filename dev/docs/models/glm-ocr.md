@@ -1,4 +1,4 @@
-# 03 — GLM-OCR
+# GLM-OCR
 
 **URL:** <https://ollama.com/library/glm-ocr>  
 **Tag in use:** `glm-ocr:latest`
