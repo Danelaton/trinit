@@ -1,5 +1,5 @@
 # Trinit One-Liner Installer — Windows
-# Run: irm https://raw.githubusercontent.com/USER/Trinit/main/install.ps1 | iex
+# Run: irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex
 
 Write-Host "╔══════════════════════════════════╗" -ForegroundColor Cyan
 Write-Host "║      T R I N I T  Setup       ║" -ForegroundColor Cyan
@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 
 # ── Step 1: Install Ollama ────────────────────────────────
 
-Write-Host "[1/4] Installing Ollama..." -ForegroundColor Yellow
+Write-Host "[1/3] Installing Ollama..." -ForegroundColor Yellow
 $ollamaInstalled = Get-Command ollama -ErrorAction SilentlyContinue
 if (-not $ollamaInstalled) {
     irm https://ollama.com/install.ps1 | iex
@@ -20,33 +20,27 @@ if (-not $ollamaInstalled) {
     Write-Host "       Ollama already installed" -ForegroundColor Green
 }
 
-# ── Step 2: Clone Trinit repo ────────────────────────────
+# ── Step 2: Pull models ────────────────────────────────────
 
-Write-Host "[2/4] Cloning Trinit..." -ForegroundColor Yellow
-$trinitDir = "$env:USERPROFILE\Trinit"
-if (Test-Path $trinitDir) {
-    Write-Host "       Trinit directory exists, pulling latest..." -ForegroundColor Yellow
-    Set-Location $trinitDir
-    git pull
-} else {
-    git clone https://github.com/USER/Trinit.git $trinitDir
-    Set-Location $trinitDir
+Write-Host "[2/3] Pulling models..." -ForegroundColor Yellow
+$models = @("glm-ocr:latest", "gemma4:e2b", "gemma4:e4b", "ornith:9b")
+foreach ($model in $models) {
+    Write-Host "       Pulling $model..." -ForegroundColor Yellow
+    ollama pull $model
+    Write-Host "       $model ready" -ForegroundColor Green
 }
-Write-Host "       Trinit ready at $trinitDir" -ForegroundColor Green
 
-# ── Step 3: Install dependencies & build ──────────────────
+# ── Step 3: Install VS Code extension ──────────────────────
 
-Write-Host "[3/4] Installing dependencies..." -ForegroundColor Yellow
-Set-Location $trinitDir
-npm install
-npm run build
-Write-Host "       Dependencies installed and built" -ForegroundColor Green
-
-# ── Step 4: Pull models & install extension ───────────────
-
-Write-Host "[4/4] Running Trinit setup (models + extension)..." -ForegroundColor Yellow
-node trinit-cli/dist/index.js setup
+Write-Host "[3/3] Installing Trinit VS Code extension..." -ForegroundColor Yellow
+$vsixUrl = "https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
+$vsixPath = "$env:TEMP\trinit.vsix"
+Invoke-WebRequest -Uri $vsixUrl -OutFile $vsixPath
+code --install-extension $vsixPath
+Remove-Item $vsixPath
 
 Write-Host ""
-Write-Host "Trinit setup complete!" -ForegroundColor Green
-Write-Host "Open VS Code and look for the Trinit sidebar." -ForegroundColor Cyan
+Write-Host "╔══════════════════════════════════╗" -ForegroundColor Green
+Write-Host "║   Trinit setup complete!         ║" -ForegroundColor Green
+Write-Host "║   Open VS Code → Trinit sidebar  ║" -ForegroundColor Green
+Write-Host "╚══════════════════════════════════╝" -ForegroundColor Green

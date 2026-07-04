@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Trinit One-Liner Installer — macOS / Linux
-# Run: curl -fsSL https://raw.githubusercontent.com/USER/Trinit/main/install.sh | sh
+# Run: curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
 
 set -e
 
@@ -20,7 +20,7 @@ echo -e "${NC}"
 
 # ── Step 1: Install Ollama ────────────────────────────────
 
-echo -e "${YELLOW}[1/4] Installing Ollama...${NC}"
+echo -e "${YELLOW}[1/3] Installing Ollama...${NC}"
 if command -v ollama &>/dev/null; then
     echo -e "${GREEN}       Ollama already installed${NC}"
 else
@@ -28,33 +28,29 @@ else
     echo -e "${GREEN}       Ollama installed${NC}"
 fi
 
-# ── Step 2: Clone Trinit repo ────────────────────────────
+# ── Step 2: Pull models ────────────────────────────────────
 
-echo -e "${YELLOW}[2/4] Cloning Trinit...${NC}"
-TRINITY_DIR="$HOME/Trinit"
-if [ -d "$TRINITY_DIR" ]; then
-    echo -e "${YELLOW}       Trinit directory exists, pulling latest...${NC}"
-    cd "$TRINITY_DIR"
-    git pull
-else
-    git clone https://github.com/USER/Trinit.git "$TRINITY_DIR"
-    cd "$TRINITY_DIR"
-fi
-echo -e "${GREEN}       Trinit ready at $TRINITY_DIR${NC}"
+echo -e "${YELLOW}[2/3] Pulling models...${NC}"
+MODELS=("glm-ocr:latest" "gemma4:e2b" "gemma4:e4b" "ornith:9b")
+for model in "${MODELS[@]}"; do
+    echo -e "${YELLOW}       Pulling $model...${NC}"
+    ollama pull "$model"
+    echo -e "${GREEN}       $model ready${NC}"
+done
 
-# ── Step 3: Install dependencies & build ──────────────────
+# ── Step 3: Install VS Code extension ──────────────────────
 
-echo -e "${YELLOW}[3/4] Installing dependencies...${NC}"
-cd "$TRINITY_DIR"
-npm install
-npm run build
-echo -e "${GREEN}       Dependencies installed and built${NC}"
-
-# ── Step 4: Pull models & install extension ───────────────
-
-echo -e "${YELLOW}[4/4] Running Trinit setup (models + extension)...${NC}"
-node trinit-cli/dist/index.js setup
+echo -e "${YELLOW}[3/3] Installing Trinit VS Code extension...${NC}"
+VSIX_URL="https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
+VSIX_PATH="/tmp/trinit.vsix"
+curl -fsSL "$VSIX_URL" -o "$VSIX_PATH"
+code --install-extension "$VSIX_PATH"
+rm -f "$VSIX_PATH"
 
 echo ""
-echo -e "${GREEN}Trinit setup complete!${NC}"
-echo -e "${CYAN}Open VS Code and look for the Trinit sidebar.${NC}"
+echo -e "${GREEN}${BOLD}"
+echo "╔══════════════════════════════════╗"
+echo "║   Trinit setup complete!         ║"
+echo "║   Open VS Code → Trinit sidebar  ║"
+echo "╚══════════════════════════════════╝"
+echo -e "${NC}"
