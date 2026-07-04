@@ -1,6 +1,7 @@
 import { OllamaClient, ModelManager, ModelDefinition } from 'trinit-core';
 import * as path from 'path';
 import * as os from 'os';
+import * as readline from 'readline';
 import { execSync, spawnSync } from 'child_process';
 
 const MANIFEST_PATH = path.resolve(__dirname, '..', '..', 'models.yaml');
@@ -18,6 +19,55 @@ const RESET = '\x1b[0m';
 
 function log(msg: string, color = '') {
   console.log(`${color}${msg}${RESET}`);
+}
+
+// ── Interactive prompts (non-interactive-safe) ───────────────
+
+const NON_INTERACTIVE =
+  process.argv.includes('--yes') ||
+  process.argv.includes('-y') ||
+  process.env.TRINIT_YES === '1' ||
+  !process.stdin.isTTY;
+
+function readYesNo(promptText: string, defaultYes: boolean): Promise<boolean> {
+  const suffix = defaultYes ? '[Y/n]' : '[y/N]';
+  if (NON_INTERACTIVE) {
+    log(`${promptText} ${suffix} (non-interactive, using default)`, YELLOW);
+    return Promise.resolve(defaultYes);
+  }
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise((resolve) => {
+    rl.question(`${promptText} ${suffix} `, (answer) => {
+      rl.close();
+      const trimmed = answer.trim();
+      if (!trimmed) {
+        resolve(defaultYes);
+        return;
+      }
+      resolve(/^(y|yes)$/i.test(trimmed));
+    });
+  });
+}
+
+function getOllamaVersion(): string | null {
+  try {
+    const out = execSync('ollama --version', { encoding: 'utf-8' });
+    const match = out.match(/([0-9]+\.[0-9]+\.[0-9]+)/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
+function isOllamaOnPath(): boolean {
+  try {
+    execSync(os.platform() === 'win32' ? 'where ollama' : 'command -v ollama', {
+      stdio: 'ignore',
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function banner() {
@@ -59,10 +109,7 @@ async function cmdStatus() {
   log(`\n   ${installed}/${total} models installed`, installed === total ? GREEN : YELLOW);
 }
 
-async function cmdInstall() {
-  banner();
-  log('📥 Installing Ollama...', CYAN);
-
+function runOfficialInstaller() {
   const platform = os.platform();
   if (platform === 'win32') {
     log('   Running Windows installer...');
@@ -81,21 +128,74 @@ async function cmdInstall() {
     log('   Running Linux installer...');
     execSync('curl -fsSL https://ollama.com/install.sh | sh', { stdio: 'inherit' });
   }
+}
 
-  log('   ✅ Ollama installed', GREEN);
-
-  // Wait for Ollama daemon
+async function waitForOllamaDaemon() {
   log('\n⏳ Waiting for Ollama daemon...', CYAN);
   let attempts = 0;
   while (attempts < 30) {
     const running = await client.check();
     if (running) {
       log('   ✅ Ollama daemon ready', GREEN);
-      break;
+      return;
     }
     await new Promise((r) => setTimeout(r, 1000));
     attempts++;
   }
+  log('   ⚠️  Could not confirm Ollama daemon is running — continuing anyway', YELLOW);
+}
+
+async function cmdInstall() {
+  banner();
+  log('🔍 Checking for Ollama...', CYAN);
+
+  const onPath = isOllamaOnPath();
+
+  if (onPath) {
+    const version = getOllamaVersion();
+    log(`   ✅ Ollama ${version || '(version unknown)'} detected`, GREEN);
+
+    const doUpdate = await readYesNo('   Update it?', false);
+    if (doUpdate) {
+      log('📥 Updating Ollama...', CYAN);
+      const platform = os.platform();
+      try {
+        if (platform === 'win32') {
+          execSync('winget upgrade --id Ollama.Ollama --silent --accept-package-agreements --accept-source-agreements', {
+            stdio: 'inherit',
+          });
+        } else if (platform === 'darwin') {
+          try {
+            execSync('brew upgrade ollama', { stdio: 'inherit' });
+          } catch {
+            runOfficialInstaller();
+          }
+        } else {
+          runOfficialInstaller();
+        }
+        log('   ✅ Ollama updated', GREEN);
+      } catch {
+        log('   ⚠️  Update may have failed. Continuing with existing install.', YELLOW);
+      }
+    } else {
+      log('   Skipping update, continuing with existing install', GREEN);
+    }
+  } else {
+    const doInstall = await readYesNo(
+      "   Ollama is required for Trinit's local mode. Install it now?",
+      true
+    );
+    if (!doInstall) {
+      log('\n❌ Trinit local mode requires Ollama to run local models.', RED);
+      log('   Install manually from https://ollama.com/download, then re-run this command.', YELLOW);
+      process.exit(1);
+    }
+    log('📥 Installing Ollama...', CYAN);
+    runOfficialInstaller();
+    log('   ✅ Ollama installed', GREEN);
+  }
+
+  await waitForOllamaDaemon();
 }
 
 async function cmdPull(modelName?: string) {
@@ -130,12 +230,18 @@ async function cmdPull(modelName?: string) {
     console.log('');
     log(`   ✅ ${model.ollama_ref} pulled successfully`, GREEN);
   } else {
-    // Pull all
+    // Pull all (skip models already installed)
     log('📥 Pulling all models from manifest...', CYAN);
     const models = manager.getModels();
+    const installed = await manager.getInstalledModels();
     log(`   ${models.length} models defined\n`, YELLOW);
 
     for (const model of models) {
+      if (installed.has(model.ollama_ref)) {
+        log(`   ✅ ${model.ollama_ref} already installed`, GREEN);
+        continue;
+      }
+
       log(`\n📥 ${model.ollama_ref} (${model.size})`, CYAN);
       log(`   ${model.description}`, YELLOW);
 
