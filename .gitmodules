@@ -1,0 +1,3 @@
+[submodule "trinit-vscode"]
+	path = trinit-vscode
+	url = https://github.com/Danelaton/trinit-vscode.git
