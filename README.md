@@ -236,7 +236,9 @@ Complete technical documentation lives in [`dev/docs/`](dev/docs/):
 
 ## License
 
-See [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
+
+Trinit is a fork of [Roo Code](https://github.com/RooCodeInc/Roo-Code). Portions inherited from the upstream codebase remain under their original Apache 2.0 license; see the "Third-party / Upstream attribution" section of the [LICENSE](LICENSE) file for details.
 
 ---
 

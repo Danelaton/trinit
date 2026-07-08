@@ -302,16 +302,24 @@ async function cmdSetup() {
 
   // Step 3: VS Code extension
   log('\nStep 3/3: Installing Trinit VS Code extension...', CYAN);
+  let extensionInstalled = false;
   try {
-    execSync('code --install-extension trinit.trinit-vscode', { stdio: 'inherit' });
+    execSync('code --install-extension DanElaton.trinit', { stdio: 'inherit' });
     log('   ✅ Extension installed (or marketplace pending)', GREEN);
+    extensionInstalled = true;
   } catch {
     log('   ⚠️  Could not auto-install extension', YELLOW);
-    log('   👉 Install manually from VS Code Marketplace: "Trinit"', YELLOW);
+    log('   👉 Install manually from VS Code Marketplace: "Trinit" (ID: DanElaton.trinit)', YELLOW);
   }
 
   log('\n🎉 Trinit setup complete!', BOLD + GREEN);
   log('   Open VS Code and look for the Trinit sidebar.', CYAN);
+
+  if (!extensionInstalled) {
+    log('\n❌ Setup did not finish cleanly: the VS Code extension could not be installed.', RED);
+    log('   Install it manually, then re-run `trinit status` to verify.', YELLOW);
+    process.exit(1);
+  }
 }
 
 // ── Main ──────────────────────────────────────────────────
@@ -319,6 +327,26 @@ async function cmdSetup() {
 async function main() {
   const args = process.argv.slice(2);
   const cmd = args[0] || 'status';
+
+  if (cmd === '--help' || cmd === '-h' || cmd === 'help') {
+    banner();
+    console.log(`${BOLD}Usage:${RESET} trinit <command> [options]`);
+    console.log('');
+    console.log(`${BOLD}Commands:${RESET}`);
+    console.log('  setup            Full setup: Ollama + models + VS Code extension');
+    console.log('  install          Install or update Ollama');
+    console.log('  pull [model]     Pull all models, or a specific model, from the manifest');
+    console.log('  list             List installed Ollama models');
+    console.log('  status           Show Ollama + model status (default)');
+    console.log('');
+    console.log(`${BOLD}Options:${RESET}`);
+    console.log('  --help, -h       Show this help message');
+    console.log('  --yes, -y        Run non-interactively (use defaults, no prompts)');
+    console.log('');
+    console.log(`${BOLD}Environment:${RESET}`);
+    console.log('  TRINIT_YES=1     Equivalent to --yes');
+    return;
+  }
 
   switch (cmd) {
     case 'status':
