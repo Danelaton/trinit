@@ -79,7 +79,8 @@ graph TB
             M3["gemma4:e2b<br/>lightweight chat"]
         end
         subgraph MCP["5 MCP servers · pre-seeded"]
-            FS["filesystem"] & FT["fetch"] & GT["git"]<br/>MM["memory"] & ST["sequential-thinking"]
+            FS["filesystem"] & FT["fetch"] & GT["git"]
+            MM["memory"] & ST["sequential-thinking"]
         end
         EXT -->|"inference"| Ollama
         EXT -->|"tools"| MCP
@@ -101,6 +102,86 @@ graph TB
 | 🔎 **OCR** | Vision | `glm-ocr` | Extracts structured text from images, scanned PDFs, screenshots. Multimodal. |
 
 **Full Local vs. Custom:** In Full Local (the default), every mode is locked to its local model — the UI selector is disabled, so the binding cannot be changed by accident. In Custom, `architect` and `orchestrator` unlock by default and any mode can be individually unlocked to point at an external provider (OpenAI, Anthropic, OpenRouter, Bedrock, Vertex). Unlocking is reversible — re-locking restores the local model instantly. The provider infrastructure from Roo Code is preserved intact, so Trinit is compatible with every provider Roo Code supports; it simply requires none of them.
+
+### Request lifecycle — how a mode binds to a model
+
+Every request is routed through the active mode, which resolves to a model via `LOCAL_MODE_BINDINGS` (`src/shared/localModeBindings.ts`). The global toggle controls whether that binding is locked (Full Local) or user-overridable (Custom).
+
+```mermaid
+flowchart TD
+    U([User types a request in chat]) --> MODE{Active mode?}
+    MODE -->|architect / orchestrator / code / debug| BIND9["LOCAL_MODE_BINDINGS<br/>ornith:9b · 256K ctx"]
+    MODE -->|ask| BIND2["LOCAL_MODE_BINDINGS<br/>gemma4:e2b"]
+    MODE -->|ocr| BINDO["LOCAL_MODE_BINDINGS<br/>glm-ocr:latest"]
+
+    TOGGLE{Global toggle}
+    TOGGLE -->|Full Local default| LOCK["modeApiConfigLocks = true<br/>selector disabled"]
+    TOGGLE -->|Custom| UNLOCK["architect + orchestrator unlocked<br/>others stay locked"]
+
+    LOCK --> RESOLVE["ProviderSettingsManager<br/>resolves locked mode to trinit-local profile"]
+    UNLOCK --> RESOLVE2["ProviderSettingsManager<br/>uses user-selected provider if unlocked"]
+
+    BIND9 --> RESOLVE
+    BIND2 --> RESOLVE
+    BINDO --> RESOLVE
+
+    RESOLVE --> TOOLS["Tool groups available to mode<br/>read · edit · command · mcp"]
+    RESOLVE2 --> TOOLS
+
+    TOOLS --> MCP["5 MCP servers<br/>filesystem · fetch · git · memory · sequential-thinking"]
+    TOOLS --> OL[("Ollama<br/>localhost:11434")]
+
+    OL --> STREAM["SSE token stream"]
+    MCP --> STREAM
+    STREAM --> RESP([Rendered response in webview])
+
+    classDef local fill:#0078d4,color:#fff,stroke:#0d1117
+    classDef model fill:#f0a500,color:#000,stroke:#0d1117
+    classDef toggle fill:#2ea043,color:#fff,stroke:#0d1117
+    class BIND9,BIND2,BINDO model
+    class LOCK,UNLOCK,TOGGLE toggle
+    class OL,STREAM local
+```
+
+### The Orchestrator — delegation and the boomerang resume
+
+The Orchestrator has no tools of its own — its only mechanism is `new_task`, which delegates a subtask to a specialist mode. When the child calls `attempt_completion`, the parent is auto-resumed with the result injected as a `tool_result` (`delegateParentAndOpenChild` → `resumeAfterDelegation` in `ClineProvider.ts`). A single-open invariant means the parent is disposed while the child runs, then restored.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant O as Orchestrator
+    participant NT as new_task tool
+    participant CP as ClineProvider
+    participant A as Architect
+    participant C as Code
+    participant D as Debug
+
+    U->>O: Build feature X end-to-end
+    O->>O: Decompose into subtasks
+    O->>NT: new_task mode=architect
+    NT->>CP: delegateParentAndOpenChild
+    CP->>CP: Flush parent history, dispose parent
+    CP->>A: Switch mode, create child as sole active
+    Note over A: Gathers context, writes plan to .md
+    A->>CP: attempt_completion result=plan
+    CP->>CP: Mark child completed, parent active
+    CP->>O: resumeAfterDelegation injects tool_result
+    O->>NT: new_task mode=code
+    NT->>CP: delegateParentAndOpenChild
+    CP->>C: Switch mode, create child
+    Note over C: Reads/writes files, runs commands
+    C->>CP: attempt_completion result=impl
+    CP->>O: resumeAfterDelegation
+    O->>NT: new_task mode=debug
+    NT->>CP: delegateParentAndOpenChild
+    CP->>D: Switch mode, create child
+    Note over D: Reflects on causes, asks user to confirm fix
+    D->>CP: attempt_completion result=verified
+    CP->>O: resumeAfterDelegation
+    O->>U: Synthesize all subtask results
+```
 
 ---
 

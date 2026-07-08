@@ -17,13 +17,13 @@ code --install-extension ../bin/trinit-0.1.0.vsix
 code trinit-vscode/
 ```
 
-## Update from Upstream (Zoo-Code)
+## Update from Upstream (Roo Code)
 
 ```bash
 cd trinit-vscode
 git fetch upstream
 git merge upstream/main
-# Resolve conflicts in command IDs (trinit.* vs zoo-code.*)
+# Resolve conflicts in command IDs (trinit.* vs upstream roo-code.*)
 node scripts/rebrand.mjs
 pnpm build
 cd src && npx vsce package --no-dependencies --out ../bin

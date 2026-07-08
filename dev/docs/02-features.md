@@ -111,6 +111,32 @@ sequenceDiagram
     A-->>U: Plan de implementación basado en el contenido del documento
 ```
 
+### Pipeline OCR a nivel de implementación
+
+El flujo real en código: Architect detecta input visual y delega vía `new_task` → `delegateParentAndOpenChild` crea el child en modo `ocr` → el modo OCR envía la imagen (base64) a `glm-ocr:latest` en Ollama → el texto extraído se escribe solo en `.md`/`.txt`/`.json` → `attempt_completion` dispara `resumeAfterDelegation` que restaura Architect con el resultado.
+
+```mermaid
+flowchart LR
+    IMG[("Image / scanned PDF<br/>/ screenshot")] --> ARCH["Architect mode<br/>(ornith:9b)"]
+    ARCH -->|detects visual input| NT["new_task<br/>mode=ocr"]
+    NT --> CHILD["ClineProvider<br/>delegateParentAndOpenChild"]
+    CHILD --> OCR["OCR mode<br/>(glm-ocr:latest)"]
+    OCR --> OL[("Ollama<br/>POST /api/chat<br/>images: base64")]
+    OL --> EXTRACT["glm-ocr multimodal<br/>0.9B params · #1 OmniDocBench"]
+    EXTRACT --> OUT["Structured text / markdown<br/>tables · figures · layout"]
+    OUT --> WRITE[("Write to .md / .txt / .json<br/>only these formats")]
+    WRITE --> RESUME["attempt_completion<br/>result = extracted text"]
+    RESUME --> ARCH2["Architect resumes<br/>via resumeAfterDelegation"]
+    ARCH2 --> PLAN([Plan built on real<br/>document content])
+
+    classDef model fill:#f0a500,color:#000,stroke:#0d1117
+    classDef local fill:#0078d4,color:#fff,stroke:#0d1117
+    classDef io fill:#2ea043,color:#fff,stroke:#0d1117
+    class OCR,EXTRACT model
+    class OL,CHILD,NT local
+    class IMG,OUT,WRITE,PLAN io
+```
+
 ---
 
 ## 5. Teams Marketplace
@@ -138,6 +164,34 @@ El único team incluido en v0.1.0, definido en `src/assets/marketplace/teams.yml
     - slug: debug        → ornith:9b
     - slug: ask          → gemma4:e2b
     - slug: ocr          → glm-ocr:latest
+```
+
+### Flujo de instalación de un Team
+
+`SimpleInstaller.installTeam()` itera los modos del team y, para cada uno, crea/recupera un perfil local vinculado al modelo de `LOCAL_MODE_BINDINGS`, lo asigna al modo, y bloquea el binding (`modeApiConfigLocks[mode] = true`). No escribe archivos de modos — los modos del team son siempre `DEFAULT_MODES` ya presentes; solo toca estado en `ProviderSettingsManager`.
+
+```mermaid
+flowchart TD
+    YML[("teams.yml<br/>packaged in extension")] --> LOAD["ConfigLoader.fetchTeams<br/>100% local, no registry"]
+    LOAD --> CAT["Marketplace UI<br/>Teams tab"]
+    CAT -->|user clicks Install on<br/>team-trinit-core| INST["SimpleInstaller.installTeam"]
+
+    INST --> LOOP{"For each mode in team<br/>architect · orchestrator · code · debug · ask · ocr"}
+    LOOP --> GET["getOrCreateLocalProfileFor mode<br/>resolves model from LOCAL_MODE_BINDINGS"]
+    GET --> SET["setModeConfig mode to local profile"]
+    SET --> LOCK["setModeApiConfigLock mode = true<br/>locks binding, disables selector"]
+    LOCK --> LOOP
+
+    LOOP -->|all modes bound| DONE([Team installed<br/>all 6 modes locked to local models])
+
+    DONE -.->|reversible| UNLOCK["User can switch to Custom<br/>to unlock architect + orchestrator"]
+
+    classDef yaml fill:#f0a500,color:#000,stroke:#0d1117
+    classDef install fill:#0078d4,color:#fff,stroke:#0d1117
+    classDef done fill:#2ea043,color:#fff,stroke:#0d1117
+    class YML yaml
+    class INST,GET,SET,LOCK install
+    class DONE done
 ```
 
 ### Estructura del marketplace

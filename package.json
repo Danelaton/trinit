@@ -7,7 +7,7 @@
     "trinit-core",
     "trinit-cli"
   ],
-  "// trinit-vscode": "pnpm monorepo (separate from npm workspaces) — fork of Zoo-Code, rebranded as Trinit",
+  "// trinit-vscode": "pnpm monorepo (separate from npm workspaces) — fork of Roo Code, rebranded as Trinit",
   "scripts": {
     "build": "npm run build --workspaces",
     "clean": "npm run clean --workspaces"
