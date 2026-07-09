@@ -1,12 +1,21 @@
 # Trinit One-Liner Installer -- Windows
 # Run: irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex
 #
-# Non-interactive mode: pass -Yes (or set $env:TRINIT_YES = "1") to assume defaults
-# (install Ollama if missing, do NOT update if already present) so the one-liner
-# never hangs waiting for input, e.g.:
+# Interactive menu: when run WITHOUT skip flags and WITHOUT -Yes, the installer
+# shows an arrow-key menu (Up/Down to move, Enter to select):
+#   1. Trinit VS Code Extension
+#   2. Ollama + AI Models
+#   3. Trinit Extension + Ollama + AI Models (full)   <- default
+# The menu uses $host.UI.RawUI.ReadKey() and only appears when a real interactive
+# console is attached. Under `irm | iex` stdin is redirected
+# ([Console]::IsInputRedirected = True), so ReadKey cannot reliably read
+# keystrokes; in that case the installer falls back to non-interactive full
+# install (option 3) and prints how to get the interactive menu (download the
+# script first, then run .\install.ps1).
+#
+# Non-interactive mode: pass -Yes (or set $env:TRINIT_YES = "1") to skip the
+# menu entirely and assume option 3 (full install), e.g.:
 #   irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex -Yes
-# Note: when piped through `irm | iex`, stdin is never a TTY, so prompts are
-# automatically skipped and defaults are used even without -Yes.
 #
 # Skip flags (useful when Ollama + models are already set up, or you only want
 # the VS Code extension). Custom params do NOT work with `irm | iex` directly
@@ -32,8 +41,106 @@ Write-Host ""
 $ErrorActionPreference = "Stop"
 
 # -- Non-interactive detection --
-# If stdin isn't a real console (e.g. piped via `irm | iex`), never block on Read-Host.
-$NonInteractive = $Yes -or ($env:TRINIT_YES -eq "1") -or ([Console]::IsInputRedirected)
+# stdin is redirected under `irm | iex` (and in CI/automation). In that case we
+# cannot show the arrow-key menu (ReadKey reads the console input buffer, which
+# is not available when input is redirected), so we fall back to option 3.
+$StdinRedirected = [Console]::IsInputRedirected
+$NonInteractive = $Yes -or ($env:TRINIT_YES -eq "1") -or $StdinRedirected
+
+# -- Interactive arrow-key menu --
+# Returns the 1-based index of the chosen option. Falls back to the default
+# (option 3, full install) if the console cannot read keystrokes.
+function Show-InstallMenu {
+    $options = @(
+        "Trinit VS Code Extension",
+        "Ollama + AI Models",
+        "Trinit Extension + Ollama + AI Models (full)"
+    )
+    $selected = 2  # 0-based; default = option 3 (full)
+    $redraw = $true
+
+    # Probe whether ReadKey is usable. Under `irm | iex` stdin is redirected and
+    # ReadKey either throws or blocks forever, so we bail out to the default.
+    if ($StdinRedirected) {
+        Write-Host "Interactive menu is not available in this console (stdin redirected," -ForegroundColor Yellow
+        Write-Host "e.g. via irm | iex). Defaulting to full install (option 3)." -ForegroundColor Yellow
+        Write-Host "To use the arrow-key menu, download the script and run it directly:" -ForegroundColor Yellow
+        Write-Host "  irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 -OutFile install.ps1" -ForegroundColor Cyan
+        Write-Host "  .\install.ps1" -ForegroundColor Cyan
+        Write-Host ""
+        return 3
+    }
+
+    try {
+        # Flush any buffered keystrokes so we don't pick up stale input.
+        while ($host.UI.RawUI.KeyAvailable) {
+            $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | Out-Null
+        }
+    } catch {
+        Write-Host "Interactive menu is not available in this console. Defaulting to full install (option 3)." -ForegroundColor Yellow
+        return 3
+    }
+
+    while ($true) {
+        if ($redraw) {
+            Write-Host ""
+            Write-Host "Select installation profile (Up/Down to move, Enter to select):" -ForegroundColor Cyan
+            Write-Host ""
+            for ($i = 0; $i -lt $options.Count; $i++) {
+                $label = $options[$i]
+                if ($i -eq $selected) {
+                    Write-Host ("  > " + $label) -ForegroundColor Green
+                } else {
+                    Write-Host ("    " + $label) -ForegroundColor Gray
+                }
+            }
+            Write-Host ""
+            $redraw = $false
+        }
+
+        try {
+            $key = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        } catch {
+            Write-Host "Console input lost. Defaulting to full install (option 3)." -ForegroundColor Yellow
+            return 3
+        }
+
+        $code = $key.VirtualKeyCode
+        $chars = $key.Character
+        # 38 = UpArrow, 40 = DownArrow, 13 = Enter (CR)
+        if ($code -eq 38) {
+            $selected = ($selected - 1 + $options.Count) % $options.Count
+            $redraw = $true
+        } elseif ($code -eq 40) {
+            $selected = ($selected + 1) % $options.Count
+            $redraw = $true
+        } elseif ($code -eq 13 -or $chars -eq "`r" -or $chars -eq "`n") {
+            return ($selected + 1)
+        }
+    }
+}
+
+# -- Decide which steps to run --
+# Default: full install (all three steps). Skip flags and the menu override this.
+$DoOllama = -not $SkipOllama
+$DoModels = -not $SkipModels
+$DoExtension = $true
+
+# If no skip flag was passed and we're not in non-interactive mode, show the menu.
+# -Yes / TRINIT_YES / redirected stdin => skip menu, assume option 3 (full).
+if (-not $SkipOllama -and -not $SkipModels -and -not $NonInteractive) {
+    $choice = Show-InstallMenu
+    switch ($choice) {
+        1 { $DoOllama = $false; $DoModels = $false; $DoExtension = $true }
+        2 { $DoOllama = $true;  $DoModels = $true;  $DoExtension = $false }
+        3 { $DoOllama = $true;  $DoModels = $true;  $DoExtension = $true }
+    }
+    Write-Host ("Selected: option " + $choice) -ForegroundColor Cyan
+    Write-Host ""
+} elseif ($NonInteractive -and -not $SkipOllama -and -not $SkipModels) {
+    Write-Host "Non-interactive mode: full install (option 3)." -ForegroundColor Yellow
+    Write-Host ""
+}
 
 function Read-YesNo {
     param(
@@ -75,8 +182,8 @@ function Resolve-ManifestPath {
 
 # -- Step 1: Detect / install / update Ollama --
 
-if ($SkipOllama) {
-    Write-Host "[1/3] Ollama step skipped (-SkipOllama)" -ForegroundColor Yellow
+if (-not $DoOllama) {
+    Write-Host "[1/3] Ollama step skipped" -ForegroundColor Yellow
 } else {
 Write-Host "[1/3] Checking for Ollama..." -ForegroundColor Yellow
 
@@ -187,12 +294,12 @@ if (-not (Test-OllamaRunning)) {
 } else {
     Write-Host "       Ollama is running" -ForegroundColor Green
 }
-} # end if (-not $SkipOllama)
+} # end if ($DoOllama)
 
 # -- Step 2: Pull models (read list from models.yaml) --
 
-if ($SkipModels) {
-    Write-Host "[2/3] Model pull step skipped (-SkipModels)" -ForegroundColor Yellow
+if (-not $DoModels) {
+    Write-Host "[2/3] Model pull step skipped" -ForegroundColor Yellow
 } else {
 Write-Host "[2/3] Pulling models..." -ForegroundColor Yellow
 
@@ -230,10 +337,13 @@ foreach ($model in $models) {
     ollama pull $model
     Write-Host "       $model ready" -ForegroundColor Green
 }
-} # end if (-not $SkipModels)
+} # end if ($DoModels)
 
 # -- Step 3: Install VS Code extension --
 
+if (-not $DoExtension) {
+    Write-Host "[3/3] VS Code extension step skipped" -ForegroundColor Yellow
+} else {
 Write-Host "[3/3] Installing Trinit VS Code extension..." -ForegroundColor Yellow
 $vsixUrl = "https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
 $vsixPath = "$env:TEMP\trinit.vsix"
@@ -253,6 +363,7 @@ try {
     $env:NODE_OPTIONS = $prevNodeOptions
 }
 Remove-Item $vsixPath
+} # end if ($DoExtension)
 
 Write-Host ""
 Write-Host "...................................." -ForegroundColor Green

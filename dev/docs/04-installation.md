@@ -25,15 +25,32 @@ That's it. One command installs Ollama (if absent), downloads the 4 models, and 
 
 ## 2. Smart installer flow
 
-The installer has detection logic at each step to avoid unnecessary work:
+The installer has detection logic at each step to avoid unnecessary work. When run interactively (no skip/yes flags, real terminal), it first shows an arrow-key menu to choose the installation profile, then runs only the selected steps.
 
 ```mermaid
 flowchart TD
-    A["▶ Start\nirm ... | iex\ncurl ... | sh"] --> B
+    A["▶ Start\nirm ... | iex\ncurl ... | sh"] --> MENU
+
+    subgraph "Profile selection"
+        MENU{"Interactive\nconsole?"}
+        MENU -->|Yes| M["Show arrow-key menu\nUp/Down + Enter"]
+        MENU -->|No - redirected stdin\nor no /dev/tty| DEF["Default = option 3\n(full install)"]
+        M --> S1{Option 1?\nExtension only}
+        M --> S2{Option 2?\nOllama + Models}
+        M --> S3{Option 3?\nFull - default}
+    end
+
+    S1 --> SKIP12["Skip Step 1 + 2"]
+    S2 --> SKIP3["Skip Step 3"]
+    S3 --> ALL["Run all steps"]
+    DEF --> ALL
+    SKIP12 --> STEP3
+    SKIP3 --> STEP1
+    ALL --> STEP1
 
     subgraph "Step 1/3: Ollama"
-        B{Is Ollama\non PATH?} -->|Yes| C["✅ Show detected\nversion"]
-        B -->|No| D{"Install\nOllama?"}
+        STEP1{Is Ollama\non PATH?} -->|Yes| C["✅ Show detected\nversion"]
+        STEP1 -->|No| D{"Install\nOllama?"}
         C --> E{"Update?"}
         E -->|Yes| F["winget upgrade /\nbrew upgrade /\ncurl install.sh"]
         E -->|No| G["Continue with\nexisting version"]
@@ -49,8 +66,8 @@ flowchart TD
     end
 
     subgraph "Step 2/3: Models"
-        L --> M["Read models.yaml\n(4 models)"]
-        M --> N{"Is model already\ninstalled?"}
+        L --> M2["Read models.yaml\n(4 models)"]
+        M2 --> N{"Is model already\ninstalled?"}
         N -->|Yes| O["✅ Skip"]
         N -->|No| P["ollama pull model"]
         O --> Q
@@ -59,14 +76,43 @@ flowchart TD
     end
 
     subgraph "Step 3/3: VS Code Extension"
-        R --> S["Download trinit.vsix\nfrom GitHub Releases"]
-        S --> T["code --install-extension\ntrinit.vsix"]
+        STEP3["Download trinit.vsix\nfrom GitHub Releases"]
+        R --> STEP3
+        STEP3 --> T["code --install-extension\ntrinit.vsix"]
         T --> U["✅ Setup complete"]
     end
 
     style I fill:#ff4444,color:#fff
     style U fill:#44aa44,color:#fff
 ```
+
+### 2.1 Interactive install menu
+
+When the installer is run **without** `--yes`/`-Yes`/`TRINIT_YES=1` and **without** any skip flag, and a real interactive terminal is available, it shows an arrow-key menu:
+
+```
+Select installation profile (Up/Down to move, Enter to select):
+
+  > Trinit VS Code Extension
+    Ollama + AI Models
+    Trinit Extension + Ollama + AI Models (full)
+```
+
+| # | Option | Steps executed |
+|---|---|---|
+| 1 | Trinit VS Code Extension | Step 3 only (extension). |
+| 2 | Ollama + AI Models | Steps 1 + 2 (Ollama + models), no extension. |
+| 3 | Trinit Extension + Ollama + AI Models (full) | All three steps. **Default** (just press Enter). |
+
+Navigation: **Up/Down** arrows move the `>` selector (with wrap-around), **Enter** confirms. The default selection is option 3, so pressing Enter immediately runs the full install.
+
+**Per-platform behavior:**
+
+- **Windows (`install.ps1`):** the menu uses `$host.UI.RawUI.ReadKey()` to read keystrokes from the console input buffer. It only appears when a real console is attached. Under `irm | iex`, stdin is redirected (`[Console]::IsInputRedirected = True`), so `ReadKey` cannot reliably read keystrokes; the installer detects this and falls back to the default (option 3, full install), printing instructions on how to get the interactive menu (download the script and run `.\install.ps1` directly). If `ReadKey` throws at runtime, it also falls back to option 3.
+
+- **macOS / Linux (`install.sh`):** the menu reads keystrokes directly from `/dev/tty` (opened on file descriptor 3) rather than stdin, because under `curl | sh` stdin is the piped script and cannot be used for interactive input. Arrow keys are detected via their ANSI escape sequences (`ESC [ A` = Up, `ESC [ B` = Down); Enter is `CR` or `LF`. If `/dev/tty` is unavailable (CI, container, no controlling terminal) or reads fail, the installer falls back to a typed numeric menu (`1`/`2`/`3` + Enter read from `/dev/tty`); if that also cannot read input, it falls back to non-interactive full install (option 3).
+
+The menu only decides **which** steps run; the internal logic of each step (detect / install / update / start Ollama, pull models, install extension) is unchanged.
 
 ---
 
@@ -125,13 +171,19 @@ For each model:
 
 ## 4. Non-interactive mode
 
-The installer automatically detects whether it is running in non-interactive mode (when stdin is not a TTY, as happens when piping with `irm | iex` or `curl | sh`). In that case:
+The installer automatically detects whether it is running in non-interactive mode. In that case the **interactive menu is skipped** and option 3 (full install) is assumed:
+
+- **Windows:** stdin redirected (`[Console]::IsInputRedirected = True`, e.g. `irm | iex`) → non-interactive.
+- **macOS / Linux:** stdin not a TTY **and** `/dev/tty` not readable (CI, container, no controlling terminal) → non-interactive. Note that under `curl | sh` stdin is the piped script (not a TTY), but `/dev/tty` is still the user's terminal, so the menu **can** still be shown — non-interactive mode is only forced when there is no `/dev/tty` at all.
+
+In non-interactive mode:
 
 - **Ollama not installed:** installs automatically (default: Yes)
 - **Ollama installed:** does not update (default: No)
 - **Models:** downloads all missing ones without asking
+- **Menu:** skipped, option 3 (full install) assumed
 
-To explicitly force non-interactive mode:
+To explicitly force non-interactive mode (skip the menu, assume option 3):
 
 ```powershell
 # Windows
@@ -183,10 +235,23 @@ curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | 
 
 ### What gets printed when a step is skipped
 
+A step can be skipped either because a skip flag was passed, or because the interactive menu selected a profile that excludes it. The message is the same in both cases:
+
 ```
-[1/3] Ollama step skipped (-SkipOllama)
-[2/3] Model pull step skipped (-SkipModels)
+[1/3] Ollama step skipped
+[2/3] Model pull step skipped
 [3/3] Installing Trinit VS Code extension...
+```
+
+When the menu is shown, the selected option is also printed:
+
+```
+Select installation profile (Up/Down to move, Enter to select):
+  > Trinit VS Code Extension
+    Ollama + AI Models
+    Trinit Extension + Ollama + AI Models (full)
+
+Selected: option 1
 ```
 
 ---
