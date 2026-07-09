@@ -149,7 +149,49 @@ TRINIT_YES=1 curl -fsSL ... | sh
 
 ---
 
-## 5. Trinit CLI (trinit-cli)
+## 5. Skip flags — install only the extension
+
+For users who already have Ollama + models set up, or who only want the VS Code extension, the installer exposes two skip flags. They can be combined with each other and with `--yes` / `-Yes`.
+
+| Flag (Windows) | Flag (macOS/Linux) | Effect |
+|---|---|---|
+| `-SkipOllama` | `--skip-ollama` | Skips Step 1 entirely: no detect / install / update / start of Ollama. |
+| `-SkipModels` | `--skip-models` | Skips Step 2 entirely: no `ollama pull` of any model. |
+
+When **both** flags are set, the installer jumps straight to Step 3 (VS Code extension only) and prints which steps were skipped.
+
+### Windows (PowerShell)
+
+Custom parameters do **not** work with `irm | iex` directly, because the pipe consumes stdin and PowerShell cannot pass arguments through `iex` to the streamed script. Download the script first, then run it with flags:
+
+```powershell
+irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 -OutFile install.ps1
+.\install.ps1 -SkipOllama -SkipModels -Yes   # extension only
+.\install.ps1 -SkipOllama -Yes               # still pulls models
+.\install.ps1 -SkipModels -Yes               # still installs/updates Ollama
+```
+
+### macOS / Linux (bash)
+
+Flags are passed through the pipe with `sh -s --`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --skip-ollama --skip-models --yes
+curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --skip-ollama --yes
+curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --skip-models --yes
+```
+
+### What gets printed when a step is skipped
+
+```
+[1/3] Ollama step skipped (-SkipOllama)
+[2/3] Model pull step skipped (-SkipModels)
+[3/3] Installing Trinit VS Code extension...
+```
+
+---
+
+## 6. Trinit CLI (trinit-cli)
 
 In addition to the installation scripts, Trinit includes a TypeScript CLI for advanced management:
 
@@ -170,7 +212,7 @@ The CLI uses `trinit-core` (internal library) which exposes `OllamaClient` and `
 
 ---
 
-## 6. First extension activation
+## 7. First extension activation
 
 When opening VS Code after installation, the extension automatically performs:
 
@@ -183,7 +225,7 @@ All of this happens in the background during activation, without interrupting th
 
 ---
 
-## 7. Common troubleshooting
+## 8. Common troubleshooting
 
 ### "code: command not found"
 
@@ -244,3 +286,15 @@ ollama pull ornith:9b        # 5.6 GB
 ```
 
 Then manually configure the `ask` mode to use `ornith:9b` instead of `gemma4:e2b`.
+
+### Localized (non-English) output from winget
+
+On a Windows whose display language is not English, `winget` emits its own messages in that language (e.g. Spanish: `No se ha encontrado ninguna actualización disponible`). This text comes from winget itself, not from the Trinit installer. winget's `--locale` flag only affects the Winget settings UI / BCP47 parsing and does **not** force English command output.
+
+The installer captures winget's native output and emits its own English messages instead (`Ollama already up to date` / `Ollama updated` / `winget upgrade did not complete, falling back...`), so the installer log stays in English regardless of the OS language.
+
+### `[DEP0169] DeprecationWarning: url.parse()` during extension install
+
+This warning is printed by **VS Code's own bundled Node** when running `code --install-extension`. The `code` launcher shim runs VS Code's `Code.exe` with `ELECTRON_RUN_AS_NODE=1` executing its internal `cli.js`, which still uses the legacy `url.parse()` API. It is **not** from Trinit code — `trinit-cli` and `trinit-core` use the modern `new URL(...)` API and contain no `url.parse()` calls.
+
+The installer scopes `NODE_OPTIONS=--no-deprecation` to the `code --install-extension` invocation only, so this third-party warning is silenced without hiding deprecation warnings from Trinit's own code.

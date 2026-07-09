@@ -8,6 +8,13 @@
 #   curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --yes
 # Note: when piped through `curl | sh`, stdin is not a TTY, so prompts are
 # automatically skipped and defaults are used even without --yes.
+#
+# Skip flags (useful when Ollama + models are already set up, or you only want
+# the VS Code extension). Works with the pipe form via `sh -s --`:
+#   curl -fsSL .../install.sh | sh -s -- --skip-ollama --skip-models --yes
+#   curl -fsSL .../install.sh | sh -s -- --skip-ollama   # still pulls models
+#   curl -fsSL .../install.sh | sh -s -- --skip-models   # still installs/updates Ollama
+#   curl -fsSL .../install.sh | sh -s -- --skip-ollama --skip-models  # extension only
 
 set -e
 
@@ -19,9 +26,13 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 NON_INTERACTIVE=0
+SKIP_OLLAMA=0
+SKIP_MODELS=0
 for arg in "$@"; do
     case "$arg" in
         --yes|-y) NON_INTERACTIVE=1 ;;
+        --skip-ollama) SKIP_OLLAMA=1 ;;
+        --skip-models) SKIP_MODELS=1 ;;
     esac
 done
 if [ "${TRINIT_YES:-0}" = "1" ]; then
@@ -66,6 +77,9 @@ echo -e "${NC}"
 
 # ── Step 1: Detect / install / update Ollama ───────────────
 
+if [ "$SKIP_OLLAMA" = "1" ]; then
+    echo -e "${YELLOW}[1/3] Ollama step skipped (--skip-ollama)${NC}"
+else
 echo -e "${YELLOW}[1/3] Checking for Ollama...${NC}"
 
 OLLAMA_VERSION=""
@@ -130,9 +144,13 @@ if ! is_ollama_running; then
 else
     echo -e "${GREEN}       Ollama is running${NC}"
 fi
+fi # end [ "$SKIP_OLLAMA" = "0" ]
 
 # ── Step 2: Pull models (read list from models.yaml) ───────
 
+if [ "$SKIP_MODELS" = "1" ]; then
+    echo -e "${YELLOW}[2/3] Model pull step skipped (--skip-models)${NC}"
+else
 echo -e "${YELLOW}[2/3] Pulling models...${NC}"
 
 # Resolve models.yaml path (works in BOTH local and remote pipe mode).
@@ -180,6 +198,7 @@ for model in "${MODELS[@]}"; do
     ollama pull "$model"
     echo -e "${GREEN}       $model ready${NC}"
 done
+fi # end [ "$SKIP_MODELS" = "0" ]
 
 # ── Step 3: Install VS Code extension ──────────────────────
 
@@ -187,7 +206,25 @@ echo -e "${YELLOW}[3/3] Installing Trinit VS Code extension...${NC}"
 VSIX_URL="https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
 VSIX_PATH="/tmp/trinit.vsix"
 curl -fsSL "$VSIX_URL" -o "$VSIX_PATH"
-code --install-extension "$VSIX_PATH"
+# `code` is a shim that runs VS Code's bundled Node executing its own cli.js.
+# That internal Node code uses the legacy url.parse() API and emits
+# `[DEP0169] DeprecationWarning: url.parse()`. This is NOT from Trinit code
+# (trinit-cli/trinit-core use `new URL(...)` and have no url.parse calls).
+# We scope NODE_OPTIONS=--no-deprecation to THIS command only so the noisy
+# third-party warning is silenced without hiding deprecation warnings from
+# our own code elsewhere.
+PREV_NODE_OPTIONS="${NODE_OPTIONS:-}"
+if [ -n "$PREV_NODE_OPTIONS" ]; then
+    NODE_OPTIONS="$PREV_NODE_OPTIONS --no-deprecation"
+else
+    NODE_OPTIONS="--no-deprecation"
+fi
+export NODE_OPTIONS
+code --install-extension "$VSIX_PATH" || {
+    NODE_OPTIONS="$PREV_NODE_OPTIONS"; export NODE_OPTIONS; rm -f "$VSIX_PATH"; exit 1
+}
+NODE_OPTIONS="$PREV_NODE_OPTIONS"
+export NODE_OPTIONS
 rm -f "$VSIX_PATH"
 
 echo ""

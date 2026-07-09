@@ -223,6 +223,25 @@ Or download directly from the [Releases page](https://github.com/Danelaton/trini
 
 One command. ~30 minutes on a 100 Mbps connection. No account, no login, no configuration prompts. For non-interactive automation (Ansible, SCCM, MDM), prefix with `TRINIT_YES=1` (bash) or `$env:TRINIT_YES = "1"` (PowerShell).
 
+**Skip Ollama and/or models** — if you already have Ollama + models set up, or only want the VS Code extension:
+
+```powershell
+# Windows — custom flags don't work with `irm | iex`, download first then run:
+irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 -OutFile install.ps1
+.\install.ps1 -SkipOllama -SkipModels -Yes   # extension only
+.\install.ps1 -SkipOllama -Yes               # keep pulling models
+.\install.ps1 -SkipModels -Yes               # keep installing/updating Ollama
+```
+
+```bash
+# macOS / Linux — pass flags through `sh -s --`:
+curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --skip-ollama --skip-models --yes
+curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --skip-ollama --yes
+curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --skip-models --yes
+```
+
+When both skip flags are set, the installer jumps straight to Step 3 (extension only) and prints which steps were skipped.
+
 **Requirements:** VS Code on PATH · ~25 GB free disk · 16 GB RAM minimum (32 GB recommended) · a GPU with 8 GB VRAM is recommended but not required (CPU-only runs at 2–8 tok/s).
 
 ---

@@ -7,9 +7,20 @@
 #   irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex -Yes
 # Note: when piped through `irm | iex`, stdin is never a TTY, so prompts are
 # automatically skipped and defaults are used even without -Yes.
+#
+# Skip flags (useful when Ollama + models are already set up, or you only want
+# the VS Code extension). Custom params do NOT work with `irm | iex` directly
+# because the pipe consumes stdin; download the script first, then run it:
+#   irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 -OutFile install.ps1
+#   .\install.ps1 -SkipOllama -SkipModels -Yes
+#   .\install.ps1 -SkipOllama            # still pulls models
+#   .\install.ps1 -SkipModels            # still installs/updates Ollama
+#   .\install.ps1 -SkipOllama -SkipModels  # extension only
 
 param(
-    [switch]$Yes
+    [switch]$Yes,
+    [switch]$SkipOllama,
+    [switch]$SkipModels
 )
 
 Write-Host "...................................." -ForegroundColor Cyan
@@ -64,6 +75,9 @@ function Resolve-ManifestPath {
 
 # -- Step 1: Detect / install / update Ollama --
 
+if ($SkipOllama) {
+    Write-Host "[1/3] Ollama step skipped (-SkipOllama)" -ForegroundColor Yellow
+} else {
 Write-Host "[1/3] Checking for Ollama..." -ForegroundColor Yellow
 
 $ollamaCmd = Get-Command ollama -ErrorAction SilentlyContinue
@@ -91,16 +105,40 @@ if ($ollamaCmd) {
         Write-Host "       Updating Ollama..." -ForegroundColor Yellow
         $wingetCmd = Get-Command winget -ErrorAction SilentlyContinue
         if ($wingetCmd) {
+            # winget emits localized UI text based on the OS display language
+            # (e.g. Spanish on a Spanish Windows), and its --locale flag only
+            # affects the Winget settings UI / BCP47 parsing -- it does NOT
+            # force English output. To keep the installer log consistently in
+            # English, we capture winget's native output and emit our own
+            # messages based on the exit code.
+            $wingetExit = 0
             try {
-                winget upgrade --id Ollama.Ollama --silent --accept-package-agreements --accept-source-agreements
+                $wingetOutput = & winget upgrade --id Ollama.Ollama --silent --accept-package-agreements --accept-source-agreements 2>&1 |
+                    Out-String
+                $wingetExit = $LASTEXITCODE
             } catch {
-                Write-Host "       winget upgrade failed, falling back to official installer..." -ForegroundColor Yellow
+                $wingetExit = $LASTEXITCODE
+            }
+            if ($wingetExit -eq 0) {
+                # winget returns 0 both when it upgraded and when no update was
+                # available; distinguish by checking if "No update" style text
+                # appears in any language. Heuristic: if the output contains no
+                # version arrow / "installed" marker, treat as already current.
+                $looksLikeNoUpdate = $wingetOutput -match '(No update|no hay versiones|ya est|already)'
+                if ($looksLikeNoUpdate) {
+                    Write-Host "       Ollama already up to date" -ForegroundColor Green
+                } else {
+                    Write-Host "       Ollama updated" -ForegroundColor Green
+                }
+            } else {
+                Write-Host "       winget upgrade did not complete (exit $wingetExit), falling back to official installer..." -ForegroundColor Yellow
                 irm https://ollama.com/install.ps1 | iex
+                Write-Host "       Ollama updated" -ForegroundColor Green
             }
         } else {
             irm https://ollama.com/install.ps1 | iex
+            Write-Host "       Ollama updated" -ForegroundColor Green
         }
-        Write-Host "       Ollama updated" -ForegroundColor Green
     } else {
         Write-Host "       Skipping update, continuing with existing install" -ForegroundColor Green
     }
@@ -149,9 +187,13 @@ if (-not (Test-OllamaRunning)) {
 } else {
     Write-Host "       Ollama is running" -ForegroundColor Green
 }
+} # end if (-not $SkipOllama)
 
 # -- Step 2: Pull models (read list from models.yaml) --
 
+if ($SkipModels) {
+    Write-Host "[2/3] Model pull step skipped (-SkipModels)" -ForegroundColor Yellow
+} else {
 Write-Host "[2/3] Pulling models..." -ForegroundColor Yellow
 
 $manifestPath = Resolve-ManifestPath
@@ -188,6 +230,7 @@ foreach ($model in $models) {
     ollama pull $model
     Write-Host "       $model ready" -ForegroundColor Green
 }
+} # end if (-not $SkipModels)
 
 # -- Step 3: Install VS Code extension --
 
@@ -195,7 +238,20 @@ Write-Host "[3/3] Installing Trinit VS Code extension..." -ForegroundColor Yello
 $vsixUrl = "https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
 $vsixPath = "$env:TEMP\trinit.vsix"
 Invoke-WebRequest -Uri $vsixUrl -OutFile $vsixPath
-code --install-extension $vsixPath
+# `code` is a shim that runs VS Code's bundled Node (ELECTRON_RUN_AS_NODE=1)
+# executing its own cli.js. That internal Node code uses the legacy url.parse()
+# API and emits `[DEP0169] DeprecationWarning: url.parse()`. This is NOT from
+# Trinit code (trinit-cli/trinit-core use `new URL(...)` and have no url.parse
+# calls). We scope NODE_OPTIONS=--no-deprecation to THIS command only so the
+# noisy third-party warning is silenced without hiding deprecation warnings
+# from our own code elsewhere.
+$prevNodeOptions = $env:NODE_OPTIONS
+$env:NODE_OPTIONS = if ([string]::IsNullOrWhiteSpace($prevNodeOptions)) { "--no-deprecation" } else { "$prevNodeOptions --no-deprecation" }
+try {
+    code --install-extension $vsixPath
+} finally {
+    $env:NODE_OPTIONS = $prevNodeOptions
+}
 Remove-Item $vsixPath
 
 Write-Host ""
