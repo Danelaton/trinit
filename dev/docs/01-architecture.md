@@ -1,55 +1,55 @@
-# Trinit — Arquitectura Técnica
+# Trinit — Technical Architecture
 
-> Versión: v0.1.0 · Fecha: 2026-07-04
+> Version: v0.1.0 · Date: 2026-07-04
 
 ---
 
-## 1. Visión general del sistema
+## 1. System overview
 
-Trinit es un **monorepo** compuesto por tres componentes principales que trabajan juntos para ofrecer una experiencia de IA local completa:
+Trinit is a **monorepo** composed of three main components that work together to deliver a complete local AI experience:
 
 ```
-trinit/                        ← Repositorio raíz (monorepo)
-├── trinit-vscode/             ← Submodule: extensión VS Code (fork de Roo Code)
-├── trinit-cli/                ← CLI TypeScript para gestión de modelos y setup
-├── trinit-core/               ← Librería core: OllamaClient, ModelManager
-├── models.yaml                ← Manifiesto de modelos (fuente de verdad)
-├── install.ps1                ← Instalador Windows (one-liner)
-└── install.sh                 ← Instalador macOS/Linux (one-liner)
+trinit/                        ← Root repository (monorepo)
+├── trinit-vscode/             ← Submodule: VS Code extension (fork of Roo Code)
+├── trinit-cli/                ← TypeScript CLI for model management and setup
+├── trinit-core/               ← Core library: OllamaClient, ModelManager
+├── models.yaml                ← Model manifest (source of truth)
+├── install.ps1                ← Windows installer (one-liner)
+└── install.sh                 ← macOS/Linux installer (one-liner)
 ```
 
 ### Submodule: trinit-vscode
 
-El corazón de Trinit es un fork de **Roo Code** (a su vez fork de Cline), rebrandeado y modificado para operar sin login ni cloud. Es a su vez un monorepo interno con la siguiente estructura:
+The heart of Trinit is a fork of **Roo Code** (itself a fork of Cline), rebranded and modified to operate without login or cloud. It is in turn an internal monorepo with the following structure:
 
 ```
 trinit-vscode/
-├── src/                       ← Extension host VS Code (TypeScript/Node.js)
-│   ├── extension.ts           ← Punto de entrada, activación
-│   ├── core/webview/          ← ClineProvider: orquestador principal
-│   ├── api/providers/         ← Handlers por proveedor (ollama.ts, etc.)
-│   ├── services/              ← MCP, marketplace, modos, auth (eliminado)
-│   ├── shared/                ← Constantes, localModeBindings.ts
+├── src/                       ← VS Code extension host (TypeScript/Node.js)
+│   ├── extension.ts           ← Entry point, activation
+│   ├── core/webview/          ← ClineProvider: main orchestrator
+│   ├── api/providers/         ← Per-provider handlers (ollama.ts, etc.)
+│   ├── services/              ← MCP, marketplace, modes, auth (removed)
+│   ├── shared/                ← Constants, localModeBindings.ts
 │   └── assets/marketplace/   ← teams.yml, modes.yml, mcps.yml
-├── webview-ui/                ← Frontend React/Vite (panel lateral VS Code)
+├── webview-ui/                ← React/Vite frontend (VS Code side panel)
 ├── packages/
-│   ├── types/                 ← Schemas Zod + tipos TypeScript compartidos
-│   ├── core/                  ← Lógica de agente agnóstica de plataforma
-│   ├── cloud/                 ← Stub neutralizado (sin funcionalidad activa)
-│   ├── ipc/                   ← Comunicación CLI ↔ extensión
-│   └── telemetry/             ← Wrapper PostHog (desactivado en local)
+│   ├── types/                 ← Zod schemas + shared TypeScript types
+│   ├── core/                  ← Platform-agnostic agent logic
+│   ├── cloud/                 ← Neutralized stub (no active functionality)
+│   ├── ipc/                   ← CLI ↔ extension communication
+│   └── telemetry/             ← PostHog wrapper (disabled locally)
 └── apps/
-    ├── cli/                   ← CLI standalone del agente
-    └── vscode-e2e/            ← Tests E2E de la extensión
+    ├── cli/                   ← Standalone agent CLI
+    └── vscode-e2e/            ← Extension E2E tests
 ```
 
 ---
 
-## 2. Diagrama de componentes
+## 2. Component diagram
 
 ```mermaid
 graph TB
-    subgraph "Máquina del usuario"
+    subgraph "User's machine"
         subgraph "VS Code"
             EXT["Extension Host\n(trinit-vscode/src/)"]
             WV["Webview UI\n(React/Vite)"]
@@ -57,9 +57,9 @@ graph TB
         end
 
         subgraph "Trinit Core"
-            PSM["ProviderSettingsManager\n(perfiles API + modeApiConfigs)"]
+            PSM["ProviderSettingsManager\n(API profiles + modeApiConfigs)"]
             MM["MarketplaceManager\n(teams.yml, modes.yml, mcps.yml)"]
-            MCPHub["McpHub\n(servidores MCP locales)"]
+            MCPHub["McpHub\n(local MCP servers)"]
             CM["CustomModesManager\n(.roomodes)"]
         end
 
@@ -75,7 +75,7 @@ graph TB
             OL --> M4
         end
 
-        subgraph "MCPs locales"
+        subgraph "Local MCPs"
             MFS["filesystem\n(npx)"]
             MFETCH["fetch\n(uvx)"]
             MGIT["git\n(uvx)"]
@@ -102,87 +102,87 @@ graph TB
 
 ---
 
-## 3. Flujo de datos local
+## 3. Local data flow
 
-Todo el flujo de datos permanece dentro de la máquina del usuario:
+The entire data flow stays within the user's machine:
 
 ```mermaid
 sequenceDiagram
-    participant U as Usuario
+    participant U as User
     participant WV as Webview UI
     participant EXT as Extension Host
     participant PSM as ProviderSettingsManager
     participant OL as Ollama (localhost:11434)
 
-    U->>WV: Escribe mensaje en chat
+    U->>WV: Types message in chat
     WV->>EXT: postMessage {type: "newTask", text: "..."}
     EXT->>PSM: getModeConfigId(currentMode)
     PSM-->>EXT: configId → {apiProvider: "ollama", ollamaModelId: "ornith:9b"}
     EXT->>OL: POST /api/chat {model: "ornith:9b", messages: [...]}
-    OL-->>EXT: stream de tokens (SSE)
+    OL-->>EXT: token stream (SSE)
     EXT-->>WV: postMessage {type: "partialMessage", text: "..."}
-    WV-->>U: Renderiza respuesta en tiempo real
+    WV-->>U: Renders response in real time
 ```
 
-**Puntos clave del flujo:**
-- No hay ninguna llamada a servidores externos en el flujo por defecto
-- Ollama corre en `http://localhost:11434` (configurable vía `ollamaBaseUrl`)
-- El streaming de tokens es Server-Sent Events (SSE) local
-- El historial de tareas se persiste en `globalStorage` de VS Code (local)
+**Key points of the flow:**
+- There are no calls to external servers in the default flow
+- Ollama runs at `http://localhost:11434` (configurable via `ollamaBaseUrl`)
+- Token streaming is local Server-Sent Events (SSE)
+- Task history is persisted in VS Code's `globalStorage` (local)
 
 ---
 
-## 4. Integración con Ollama
+## 4. Ollama integration
 
-### Detección y arranque
+### Detection and startup
 
-El instalador (`install.ps1` / `install.sh`) detecta si Ollama está instalado antes de proceder:
+The installer (`install.ps1` / `install.sh`) detects whether Ollama is installed before proceeding:
 
 ```mermaid
 flowchart TD
-    A[Inicio instalador] --> B{¿Ollama en PATH?}
-    B -->|Sí| C[Mostrar versión detectada]
-    B -->|No| D{¿Instalar Ollama?}
-    D -->|Sí| E[Ejecutar instalador oficial\nollama.com/install]
-    D -->|No| F[Salir con error]
-    C --> G{¿Actualizar?}
-    G -->|Sí| H[winget upgrade / brew upgrade / curl install]
-    G -->|No| I[Continuar con versión existente]
-    E --> J{¿Ollama corriendo?}
+    A[Installer start] --> B{Is Ollama on PATH?}
+    B -->|Yes| C[Show detected version]
+    B -->|No| D{Install Ollama?}
+    D -->|Yes| E[Run official installer\nollama.com/install]
+    D -->|No| F[Exit with error]
+    C --> G{Update?}
+    G -->|Yes| H[winget upgrade / brew upgrade / curl install]
+    G -->|No| I[Continue with existing version]
+    E --> J{Is Ollama running?}
     H --> J
     I --> J
-    J -->|No| K[ollama serve en background]
-    J -->|Sí| L[Continuar]
+    J -->|No| K[ollama serve in background]
+    J -->|Yes| L[Continue]
     K --> L
-    L --> M[Pull modelos desde models.yaml]
-    M --> N[Instalar trinit.vsix]
+    L --> M[Pull models from models.yaml]
+    M --> N[Install trinit.vsix]
 ```
 
-### Comunicación con Ollama
+### Communication with Ollama
 
-El handler `src/api/providers/ollama.ts` usa el paquete npm `ollama` para comunicarse con el daemon local. La URL base es `http://localhost:11434` por defecto, configurable por el usuario.
+The `src/api/providers/ollama.ts` handler uses the `ollama` npm package to communicate with the local daemon. The base URL is `http://localhost:11434` by default, configurable by the user.
 
-Los modelos disponibles se descubren dinámicamente via `GET /api/tags` — Ollama es un `localProvider` en el sistema de caché de modelos, lo que significa que se consulta directamente sin autenticación.
+Available models are discovered dynamically via `GET /api/tags` — Ollama is a `localProvider` in the model cache system, meaning it is queried directly without authentication.
 
 ---
 
-## 5. Sistema de perfiles de proveedor y vinculación de modos
+## 5. Provider profile system and mode binding
 
-El `ProviderSettingsManager` mantiene un mapa persistente en `SecretStorage` de VS Code:
+The `ProviderSettingsManager` maintains a persistent map in VS Code's `SecretStorage`:
 
 ```typescript
-// Estructura simplificada del schema
+// Simplified schema structure
 {
   currentApiConfigName: string,
-  apiConfigs: Record<string, ProviderSettings>,  // perfiles nombrados
+  apiConfigs: Record<string, ProviderSettings>,  // named profiles
   modeApiConfigs: Record<string, string>,         // modeSlug → configId
-  modeApiConfigLocks: Record<string, boolean>,    // modeSlug → bloqueado en local
+  modeApiConfigLocks: Record<string, boolean>,    // modeSlug → locked to local
 }
 ```
 
-El toggle global **Full Local / Custom** en `ModesView.tsx` llama a dos métodos de `ProviderSettingsManager`:
+The global **Full Local / Custom** toggle in `ModesView.tsx` calls two methods of `ProviderSettingsManager`:
 
-- **`applyFullLocalPreset()`** — bloquea todos los modos (`modeApiConfigLocks[mode] = true`) y resuelve cada modelo desde `LOCAL_MODE_BINDINGS` en `src/shared/localModeBindings.ts`:
+- **`applyFullLocalPreset()`** — locks all modes (`modeApiConfigLocks[mode] = true`) and resolves each model from `LOCAL_MODE_BINDINGS` in `src/shared/localModeBindings.ts`:
 
 ```typescript
 export const LOCAL_MODE_BINDINGS: Record<string, string> = {
@@ -195,66 +195,66 @@ export const LOCAL_MODE_BINDINGS: Record<string, string> = {
 }
 ```
 
-- **`applyCustomPreset()`** — desbloquea `architect` y `orchestrator` por defecto, dejando el resto en local. El usuario puede entonces asignar cualquier proveedor externo a los modos desbloqueados, o desbloquear modos adicionales individualmente desde la UI.
+- **`applyCustomPreset()`** — unlocks `architect` and `orchestrator` by default, leaving the rest on local. The user can then assign any external provider to the unlocked modes, or unlock additional modes individually from the UI.
 
 ---
 
-## 6. Sistema de Teams y Marketplace
+## 6. Teams and Marketplace system
 
-El marketplace es **100% local** — no hay ningún registry remoto. Los datos se cargan desde archivos YAML empaquetados dentro de la extensión:
+The marketplace is **100% local** — there is no remote registry. Data is loaded from YAML files packaged inside the extension:
 
-| Archivo | Contenido | Tamaño aprox. |
+| File | Contents | Approx. size |
 |---|---|---|
-| `src/assets/marketplace/teams.yml` | Teams predefinidos (Trinit Core Team) | ~20 líneas |
-| `src/assets/marketplace/modes.yml` | Catálogo de modos de la comunidad | 4.486 líneas |
-| `src/assets/marketplace/mcps.yml` | Catálogo de servidores MCP | 3.032 líneas |
+| `src/assets/marketplace/teams.yml` | Predefined teams (Trinit Core Team) | ~20 lines |
+| `src/assets/marketplace/modes.yml` | Community mode catalog | 4,486 lines |
+| `src/assets/marketplace/mcps.yml` | MCP server catalog | 3,032 lines |
 
-El `MarketplaceManager` orquesta la carga via `ConfigLoader` y la instalación via `SimpleInstaller`. La instalación de un Team escribe en `.roomodes` (scope de proyecto) o en `custom_modes.yaml` global, y llama a `setModeConfig()` para vincular cada modo a su modelo Ollama correspondiente.
+The `MarketplaceManager` orchestrates loading via `ConfigLoader` and installation via `SimpleInstaller`. Installing a Team writes to `.roomodes` (project scope) or to the global `custom_modes.yaml`, and calls `setModeConfig()` to bind each mode to its corresponding Ollama model.
 
 ---
 
-## 7. MCPs predefinidos
+## 7. Predefined MCPs
 
-En la primera activación, `seedDefaultMcpServers()` escribe en `mcp_settings.json` (global storage de VS Code) los siguientes servidores MCP, todos sin configuración adicional:
+On first activation, `seedDefaultMcpServers()` writes the following MCP servers to `mcp_settings.json` (VS Code global storage), all with no additional configuration:
 
-| Servidor | Comando | Propósito |
+| Server | Command | Purpose |
 |---|---|---|
-| `filesystem` | `npx @modelcontextprotocol/server-filesystem` | Acceso al sistema de archivos del workspace |
-| `fetch` | `uvx mcp-server-fetch` | Peticiones HTTP desde el agente |
-| `git` | `uvx mcp-server-git` | Operaciones Git |
-| `memory` | `npx @modelcontextprotocol/server-memory` | Memoria persistente entre sesiones |
-| `sequential-thinking` | `npx @modelcontextprotocol/server-sequential-thinking` | Razonamiento paso a paso |
+| `filesystem` | `npx @modelcontextprotocol/server-filesystem` | Access to the workspace filesystem |
+| `fetch` | `uvx mcp-server-fetch` | HTTP requests from the agent |
+| `git` | `uvx mcp-server-git` | Git operations |
+| `memory` | `npx @modelcontextprotocol/server-memory` | Persistent memory across sessions |
+| `sequential-thinking` | `npx @modelcontextprotocol/server-sequential-thinking` | Step-by-step reasoning |
 
-El seeding es **estrictamente una vez** (guardado por `mcpDefaultsSeeded` en `globalState`) — si el usuario elimina un servidor, no reaparece en la siguiente activación.
+Seeding is **strictly once** (tracked by `mcpDefaultsSeeded` in `globalState`) — if the user removes a server, it does not reappear on the next activation.
 
 ---
 
-## 8. Linaje del fork
+## 8. Fork lineage
 
 ```
 Cline (original)
-    └── Roo Code (fork con multi-modo, marketplace, cloud)
-            └── Zoo Code (rebrand intermedio)
-                    └── Trinit (fork actual — rebrand completado)
-                            ├── Auth/login eliminado
-                            ├── Ollama como proveedor por defecto
-                            ├── 6 modos con vinculación local
+    └── Roo Code (fork with multi-mode, marketplace, cloud)
+            └── Zoo Code (intermediate rebrand)
+                    └── Trinit (current fork — rebrand completed)
+                            ├── Auth/login removed
+                            ├── Ollama as default provider
+                            ├── 6 modes with local binding
                             ├── Teams marketplace
-                            └── MCPs predefinidos
+                            └── Predefined MCPs
 ```
 
-El rebrand de Roo Code → Trinit está **completado**: ~762 archivos renombrados/actualizados, paquetes migrados de `@roo-code/*` a `@trinit/*`, 18 locales actualizados, `roleDefinitions` con "You are Trinit", y todos los commits pusheados. `zoo-code-index.md` es un documento histórico de planificación del proceso de rebrand, no refleja el estado actual del código.
+The Roo Code → Trinit rebrand is **complete**: ~762 files renamed/updated, packages migrated from `@roo-code/*` to `@trinit/*`, 18 locales updated, `roleDefinitions` set to "You are Trinit", and all commits pushed. `zoo-code-index.md` is a historical document planning the rebrand process; it does not reflect the current state of the code.
 
 ---
 
-## 9. Build y empaquetado
+## 9. Build and packaging
 
-| Herramienta | Uso |
+| Tool | Use |
 |---|---|
-| `pnpm` | Gestor de paquetes (workspace monorepo) |
-| `turbo` | Pipeline de build paralelo |
-| `esbuild` | Bundle de la extensión (`src/esbuild.mjs`) |
-| `vite` | Build del webview React (`webview-ui/vite.config.ts`) |
-| `tsc` | Compilación TypeScript del CLI |
+| `pnpm` | Package manager (monorepo workspace) |
+| `turbo` | Parallel build pipeline |
+| `esbuild` | Extension bundler (`src/esbuild.mjs`) |
+| `vite` | React webview build (`webview-ui/vite.config.ts`) |
+| `tsc` | TypeScript compilation for the CLI |
 
-El artefacto final es `trinit.vsix`, distribuido vía GitHub Releases. La extensión se instala con `code --install-extension trinit.vsix`.
+The final artifact is `trinit.vsix`, distributed via GitHub Releases. The extension is installed with `code --install-extension trinit.vsix`.

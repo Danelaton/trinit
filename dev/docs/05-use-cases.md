@@ -1,175 +1,175 @@
-# Trinit — Casos de Uso
+# Trinit — Use Cases
 
-> Versión: v0.1.0 · Fecha: 2026-07-04  
-> Estos casos de uso están diseñados para ser narrables en videos, demos y presentaciones.
-
----
-
-## Caso 1: Desarrolla una feature completa sin internet
-
-**Escenario:** Un desarrollador backend trabaja en una API REST con datos de clientes. La empresa tiene política de no enviar código a servicios externos. Necesita implementar un nuevo endpoint de autenticación con JWT.
-
-**Actores:** Modo Architect → Modo Code → Modo Debug
-
-**Pasos:**
-
-1. **Planificación (Architect):** El desarrollador abre Trinit en modo Architect y describe la feature: "Necesito un endpoint `/auth/refresh` que valide un refresh token y devuelva un nuevo access token JWT."
-
-2. **Architect responde:** Recopila contexto leyendo los archivos existentes de autenticación, hace preguntas clarificadoras sobre la duración de los tokens y el almacenamiento, y crea una lista de tareas estructurada:
-   - Crear `RefreshTokenService`
-   - Añadir endpoint `POST /auth/refresh`
-   - Escribir tests unitarios
-   - Actualizar documentación OpenAPI
-
-3. **Implementación (Code):** El desarrollador cambia a modo Code. Trinit implementa cada tarea de la lista, leyendo el código existente para mantener consistencia de estilo, escribiendo los archivos necesarios y ejecutando los tests.
-
-4. **Debugging (Debug):** Un test falla. El desarrollador cambia a modo Debug. Trinit analiza el stack trace, identifica que el problema es una condición de carrera en el manejo de tokens expirados, añade logs para confirmar, y propone el fix antes de aplicarlo.
-
-**Beneficio clave:** Todo el código de la empresa — incluyendo la lógica de autenticación, los tokens y la estructura de la base de datos — nunca sale de la máquina. El desarrollador tiene asistencia de IA de nivel profesional sin comprometer la seguridad.
-
-**Modelos usados:** `ornith:9b` en todos los pasos
+> Version: v0.1.0 · Date: 2026-07-04  
+> These use cases are designed to be narratable in videos, demos, and presentations.
 
 ---
 
-## Caso 2: Digitaliza documentos con OCR local
+## Case 1: Develop a complete feature without internet
 
-**Escenario:** Un despacho de abogados tiene 200 contratos escaneados en PDF que necesita indexar. Los documentos contienen información confidencial de clientes. Necesitan extraer las cláusulas clave y estructurarlas en JSON.
+**Scenario:** A backend developer works on a REST API with customer data. The company has a policy of not sending code to external services. They need to implement a new JWT authentication endpoint.
 
-**Actores:** Modo OCR → Modo Code
+**Actors:** Architect mode → Code mode → Debug mode
 
-**Pasos:**
+**Steps:**
 
-1. **Extracción (OCR):** El desarrollador abre Trinit en modo OCR y adjunta una imagen del contrato escaneado. Pide: "Extrae todas las cláusulas de este contrato y estructúralas en JSON con campos: número_cláusula, título, contenido, partes_involucradas."
+1. **Planning (Architect):** The developer opens Trinit in Architect mode and describes the feature: "I need an `/auth/refresh` endpoint that validates a refresh token and returns a new JWT access token."
 
-2. **OCR responde:** `glm-ocr:latest` procesa la imagen, reconoce el texto incluyendo tablas y firmas, y devuelve un JSON estructurado con todas las cláusulas identificadas.
+2. **Architect responds:** It gathers context by reading the existing authentication files, asks clarifying questions about token lifetimes and storage, and creates a structured task list:
+   - Create `RefreshTokenService`
+   - Add `POST /auth/refresh` endpoint
+   - Write unit tests
+   - Update OpenAPI documentation
 
-3. **Automatización (Code):** El desarrollador cambia a modo Code y pide: "Crea un script Python que procese todos los PDFs de la carpeta `/contratos` usando este formato de salida."
+3. **Implementation (Code):** The developer switches to Code mode. Trinit implements each task on the list, reading existing code to maintain style consistency, writing the necessary files, and running the tests.
 
-4. **Resultado:** Un script que procesa los 200 contratos localmente, generando un archivo JSON por contrato, sin que ningún documento salga de la red interna.
+4. **Debugging (Debug):** A test fails. The developer switches to Debug mode. Trinit analyzes the stack trace, identifies that the problem is a race condition in handling expired tokens, adds logs to confirm, and proposes the fix before applying it.
 
-**Beneficio clave:** Datos de clientes confidenciales procesados con IA sin ningún riesgo de exposición. El modelo OCR corre completamente en local — ni las imágenes ni el texto extraído pasan por ningún servidor externo.
+**Key benefit:** All of the company's code — including authentication logic, tokens, and database structure — never leaves the machine. The developer gets professional-grade AI assistance without compromising security.
 
-**Modelos usados:** `glm-ocr:latest` (OCR), `ornith:9b` (Code)
-
----
-
-## Caso 3: Debugging privado de código propietario
-
-**Escenario:** Un equipo de fintech tiene un bug crítico en producción: el cálculo de intereses compuestos da resultados incorrectos en ciertos casos edge. El código es propietario y no puede compartirse con ningún servicio externo.
-
-**Actores:** Modo Debug
-
-**Pasos:**
-
-1. **Diagnóstico inicial:** El desarrollador abre el modo Debug y pega el stack trace del error junto con el código del módulo de cálculo financiero.
-
-2. **Análisis sistemático:** Trinit reflexiona sobre 5-7 posibles causas (precisión de punto flotante, desbordamiento de enteros, error en la fórmula, problema de redondeo, etc.), las reduce a las 2 más probables, y propone añadir logs específicos para confirmar.
-
-3. **Confirmación:** El desarrollador ejecuta el código con los logs añadidos y comparte el output. Trinit confirma que el problema es precisión de punto flotante en la acumulación de intereses diarios.
-
-4. **Fix propuesto:** Trinit propone usar `Decimal` en lugar de `float` para los cálculos financieros, muestra el código modificado, y **espera confirmación del desarrollador antes de aplicar el cambio** (comportamiento explícito del modo Debug).
-
-5. **Verificación:** El desarrollador aprueba, Trinit aplica el fix y sugiere casos de test adicionales para los edge cases identificados.
-
-**Beneficio clave:** Algoritmos financieros propietarios analizados con IA sin salir de la máquina. El modo Debug está diseñado para ser conservador — siempre pide confirmación antes de modificar código, lo que es crítico en sistemas financieros.
-
-**Modelos usados:** `ornith:9b`
+**Models used:** `ornith:9b` in all steps
 
 ---
 
-## Caso 4: Onboarding de un equipo con datos sensibles (salud/banca/legal)
+## Case 2: Digitize documents with local OCR
 
-**Escenario:** Un hospital quiere adoptar IA para asistir a su equipo de desarrollo de software interno. El código maneja datos de pacientes (HIPAA/GDPR). El departamento de IT rechaza cualquier solución que envíe datos a la nube.
+**Scenario:** A law firm has 200 contracts scanned as PDFs that it needs to index. The documents contain confidential client information. They need to extract the key clauses and structure them as JSON.
 
-**Actores:** Administrador IT + Equipo de desarrollo
+**Actors:** OCR mode → Code mode
 
-**Pasos:**
+**Steps:**
 
-1. **Instalación centralizada:** El administrador IT ejecuta el one-liner en cada máquina de desarrollo:
+1. **Extraction (OCR):** The developer opens Trinit in OCR mode and attaches an image of the scanned contract. They ask: "Extract all clauses from this contract and structure them as JSON with fields: clause_number, title, content, parties_involved."
+
+2. **OCR responds:** `glm-ocr:latest` processes the image, recognizes the text including tables and signatures, and returns a structured JSON with all identified clauses.
+
+3. **Automation (Code):** The developer switches to Code mode and asks: "Create a Python script that processes all PDFs in the `/contracts` folder using this output format."
+
+4. **Result:** A script that processes the 200 contracts locally, generating one JSON file per contract, without any document leaving the internal network.
+
+**Key benefit:** Confidential client data processed with AI without any risk of exposure. The OCR model runs entirely locally — neither the images nor the extracted text pass through any external server.
+
+**Models used:** `glm-ocr:latest` (OCR), `ornith:9b` (Code)
+
+---
+
+## Case 3: Private debugging of proprietary code
+
+**Scenario:** A fintech team has a critical bug in production: the compound interest calculation gives incorrect results in certain edge cases. The code is proprietary and cannot be shared with any external service.
+
+**Actors:** Debug mode
+
+**Steps:**
+
+1. **Initial diagnosis:** The developer opens Debug mode and pastes the error's stack trace along with the financial calculation module's code.
+
+2. **Systematic analysis:** Trinit reflects on 5–7 possible causes (floating-point precision, integer overflow, a formula error, a rounding issue, etc.), narrows them down to the 2 most likely, and proposes adding specific logs to confirm.
+
+3. **Confirmation:** The developer runs the code with the added logs and shares the output. Trinit confirms the problem is floating-point precision in the daily interest accumulation.
+
+4. **Proposed fix:** Trinit proposes using `Decimal` instead of `float` for financial calculations, shows the modified code, and **waits for the developer's confirmation before applying the change** (explicit behavior of Debug mode).
+
+5. **Verification:** The developer approves, Trinit applies the fix and suggests additional test cases for the identified edge cases.
+
+**Key benefit:** Proprietary financial algorithms analyzed with AI without leaving the machine. Debug mode is designed to be conservative — it always asks for confirmation before modifying code, which is critical in financial systems.
+
+**Models used:** `ornith:9b`
+
+---
+
+## Case 4: Onboarding a team with sensitive data (healthcare/banking/legal)
+
+**Scenario:** A hospital wants to adopt AI to assist its internal software development team. The code handles patient data (HIPAA/GDPR). The IT department rejects any solution that sends data to the cloud.
+
+**Actors:** IT administrator + Development team
+
+**Steps:**
+
+1. **Centralized installation:** The IT administrator runs the one-liner on each development machine:
    ```bash
    curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
    ```
-   En modo no-interactivo, la instalación es completamente automatizable.
+   In non-interactive mode, installation is fully automatable.
 
-2. **Verificación de privacidad:** El administrador puede verificar con un sniffer de red que ninguna petición sale de `localhost:11434` durante el uso normal de Trinit. No hay telemetría, no hay llamadas a APIs externas, no hay autenticación con servidores remotos.
+2. **Privacy verification:** The administrator can verify with a network sniffer that no request leaves `localhost:11434` during normal Trinit usage. There is no telemetry, no calls to external APIs, no authentication with remote servers.
 
-3. **Configuración del equipo:** El administrador instala el "Trinit Core Team" desde el marketplace para todos los desarrolladores. Todos tienen los mismos 6 modos con los mismos modelos — entorno reproducible.
+3. **Team configuration:** The administrator installs the "Trinit Core Team" from the marketplace for all developers. Everyone has the same 6 modes with the same models — a reproducible environment.
 
-4. **Uso diario:** Los desarrolladores usan Trinit para:
-   - Revisar código que maneja datos de pacientes (modo Ask — solo lectura)
-   - Implementar nuevas features del sistema de historiales (modo Code)
-   - Debuggear problemas en el módulo de facturación (modo Debug)
-   - Planificar migraciones de base de datos (modo Architect)
+4. **Daily use:** Developers use Trinit to:
+   - Review code that handles patient data (Ask mode — read-only)
+   - Implement new features in the medical records system (Code mode)
+   - Debug problems in the billing module (Debug mode)
+   - Plan database migrations (Architect mode)
 
-5. **Cumplimiento normativo:** El equipo de compliance puede documentar que "el asistente de IA opera exclusivamente en infraestructura interna, sin transmisión de datos a terceros" — una afirmación verificable técnicamente.
+5. **Regulatory compliance:** The compliance team can document that "the AI assistant operates exclusively on internal infrastructure, with no data transmission to third parties" — a technically verifiable claim.
 
-**Beneficio clave:** Adopción de IA en un entorno regulado sin comprometer el cumplimiento normativo. Trinit es la única solución de asistencia de IA que puede hacer esta afirmación de forma verificable.
+**Key benefit:** AI adoption in a regulated environment without compromising regulatory compliance. Trinit is the only AI assistance solution that can make this claim in a verifiable way.
 
-**Modelos usados:** Todos los modelos del conjunto
-
----
-
-## Caso 5: Desarrollo offline en zona sin conectividad
-
-**Escenario:** Un consultor trabaja en un proyecto para una empresa minera en una ubicación remota con conectividad intermitente. Necesita asistencia de IA para desarrollar software de control de equipos.
-
-**Actores:** Modo Architect → Modo Code
-
-**Pasos:**
-
-1. **Instalación previa:** Antes de viajar, el consultor instala Trinit con todos los modelos en su laptop. Una vez instalado, no necesita internet para nada.
-
-2. **Trabajo offline:** En la ubicación remota, sin conexión a internet, el consultor usa Trinit normalmente:
-   - Architect para planificar la arquitectura del sistema de control
-   - Code para implementar los módulos
-   - Debug para resolver problemas
-
-3. **Sin interrupciones:** No hay mensajes de "sin conexión", no hay degradación de funcionalidad, no hay límites de uso. Trinit funciona exactamente igual con o sin internet.
-
-**Beneficio clave:** Productividad de IA garantizada independientemente de la conectividad. Una vez instalado, Trinit es completamente autónomo.
-
-**Modelos usados:** `ornith:9b` (Architect, Code), `gemma4:e2b` (Ask)
+**Models used:** All models in the set
 
 ---
 
-## Caso 6: Análisis de código legacy con contexto largo
+## Case 5: Offline development in an area without connectivity
 
-**Escenario:** Un equipo hereda una base de código de 15 años con poca documentación. Necesitan entender la arquitectura antes de refactorizar.
+**Scenario:** A consultant works on a project for a mining company in a remote location with intermittent connectivity. They need AI assistance to develop equipment control software.
 
-**Actores:** Modo Ask → Modo Architect
+**Actors:** Architect mode → Code mode
 
-**Pasos:**
+**Steps:**
 
-1. **Exploración (Ask):** El desarrollador usa el modo Ask para hacer preguntas sobre el código existente. `gemma4:e2b` puede leer múltiples archivos simultáneamente gracias a la ventana de contexto de 128K tokens.
+1. **Pre-installation:** Before traveling, the consultant installs Trinit with all models on their laptop. Once installed, they need no internet at all.
 
-2. **Documentación (Architect):** Una vez entendida la arquitectura, el desarrollador cambia a Architect. `ornith:9b` con su ventana de 256K tokens puede mantener el contexto de toda la base de código mientras crea el plan de refactorización.
+2. **Offline work:** At the remote location, with no internet connection, the consultant uses Trinit normally:
+   - Architect to plan the control system architecture
+   - Code to implement the modules
+   - Debug to resolve issues
 
-3. **Resultado:** Un plan detallado de refactorización con diagramas Mermaid de la arquitectura actual y propuesta, lista de tareas priorizada, y estimación de riesgos.
+3. **No interruptions:** No "offline" messages, no feature degradation, no usage limits. Trinit works exactly the same with or without internet.
 
-**Beneficio clave:** La ventana de contexto de 256K tokens de `ornith:9b` permite analizar proyectos grandes sin perder contexto — algo que los modelos de menor contexto no pueden hacer.
+**Key benefit:** AI productivity guaranteed regardless of connectivity. Once installed, Trinit is fully autonomous.
 
-**Modelos usados:** `gemma4:e2b` (Ask), `ornith:9b` (Architect)
+**Models used:** `ornith:9b` (Architect, Code), `gemma4:e2b` (Ask)
 
 ---
 
-## Caso 7: Orquestación de tareas complejas multi-modo
+## Case 6: Legacy code analysis with long context
 
-**Escenario:** Un desarrollador necesita migrar una aplicación monolítica a microservicios. La tarea involucra análisis de código, diseño de arquitectura, implementación de múltiples servicios, y actualización de documentación.
+**Scenario:** A team inherits a 15-year-old codebase with little documentation. They need to understand the architecture before refactoring.
 
-**Actores:** Modo Orchestrator → Architect → Code → Code → Code
+**Actors:** Ask mode → Architect mode
 
-**Pasos:**
+**Steps:**
 
-1. **Orquestación:** El desarrollador describe la tarea completa al modo Orchestrator. Trinit la descompone en subtareas y las delega:
-   - Subtarea 1 → Architect: "Analiza el monolito y diseña la arquitectura de microservicios"
-   - Subtarea 2 → Code: "Implementa el servicio de usuarios"
-   - Subtarea 3 → Code: "Implementa el servicio de pedidos"
-   - Subtarea 4 → Code: "Implementa el API Gateway"
+1. **Exploration (Ask):** The developer uses Ask mode to ask questions about the existing code. `gemma4:e2b` can read multiple files simultaneously thanks to the 128K-token context window.
 
-2. **Ejecución paralela conceptual:** Cada subtarea se ejecuta en su propio contexto con el modo apropiado. El Orchestrator recibe los resultados y coordina el siguiente paso.
+2. **Documentation (Architect):** Once the architecture is understood, the developer switches to Architect. `ornith:9b` with its 256K-token window can maintain context of the entire codebase while creating the refactoring plan.
 
-3. **Síntesis:** Al completar todas las subtareas, el Orchestrator proporciona un resumen de lo que se implementó y los próximos pasos.
+3. **Result:** A detailed refactoring plan with Mermaid diagrams of the current and proposed architecture, a prioritized task list, and risk assessment.
 
-**Beneficio clave:** Tareas que normalmente requerirían días de trabajo manual se organizan y ejecutan de forma estructurada. El Orchestrator actúa como un tech lead virtual que coordina el trabajo.
+**Key benefit:** The 256K-token context window of `ornith:9b` allows analyzing large projects without losing context — something that models with smaller context cannot do.
 
-**Modelos usados:** `ornith:9b` en todos los modos
+**Models used:** `gemma4:e2b` (Ask), `ornith:9b` (Architect)
+
+---
+
+## Case 7: Orchestrating complex multi-mode tasks
+
+**Scenario:** A developer needs to migrate a monolithic application to microservices. The task involves code analysis, architecture design, implementing multiple services, and updating documentation.
+
+**Actors:** Orchestrator mode → Architect → Code → Code → Code
+
+**Steps:**
+
+1. **Orchestration:** The developer describes the complete task to Orchestrator mode. Trinit decomposes it into subtasks and delegates them:
+   - Subtask 1 → Architect: "Analyze the monolith and design the microservices architecture"
+   - Subtask 2 → Code: "Implement the users service"
+   - Subtask 3 → Code: "Implement the orders service"
+   - Subtask 4 → Code: "Implement the API Gateway"
+
+2. **Conceptual parallel execution:** Each subtask runs in its own context with the appropriate mode. The Orchestrator receives the results and coordinates the next step.
+
+3. **Synthesis:** On completing all subtasks, the Orchestrator provides a summary of what was implemented and the next steps.
+
+**Key benefit:** Tasks that would normally require days of manual work are organized and executed in a structured way. The Orchestrator acts as a virtual tech lead coordinating the work.
+
+**Models used:** `ornith:9b` in all modes

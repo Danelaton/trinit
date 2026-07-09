@@ -1,214 +1,214 @@
-# Trinit — Los Modelos
+# Trinit — The Models
 
-> Versión: v0.1.0 · Fecha: 2026-07-04  
-> Fuente: `models.yaml` (fuente de verdad), `dev/docs/models/ornith.md`, `dev/docs/models/gemma4.md`, `dev/docs/models/glm-ocr.md`
+> Version: v0.1.0 · Date: 2026-07-04  
+> Source: `models.yaml` (source of truth), `dev/docs/models/ornith.md`, `dev/docs/models/gemma4.md`, `dev/docs/models/glm-ocr.md`
 
 ---
 
-## 1. Resumen de modelos
+## 1. Model overview
 
-Trinit incluye 4 modelos open-source preconfigurados, seleccionados para cubrir los casos de uso de desarrollo de software con hardware de consumo:
+Trinit includes 4 preconfigured open-source models, selected to cover software development use cases on consumer hardware:
 
-| Modelo | Referencia Ollama | Tamaño | Contexto | Entrada | Rol en Trinit |
+| Model | Ollama reference | Size | Context | Input | Role in Trinit |
 |---|---|---|---|---|---|
-| **ornith** | `ornith:9b` | 5.6 GB | 256.000 tokens | Texto | Coding agentico (architect, code, debug, orchestrator) |
-| **glm-ocr** | `glm-ocr:latest` | 2.2 GB | 128.000 tokens | Texto + Imagen | OCR multimodal (modo ocr) |
-| **gemma4 E2B** | `gemma4:e2b` | 7.2 GB | 128.000 tokens | Texto + Imagen | Chat y razonamiento ligero (modo ask) |
-| **gemma4 E4B** | `gemma4:e4b` | 9.6 GB | 128.000 tokens | Texto + Imagen | Chat y razonamiento de mayor calidad (fallback) |
+| **ornith** | `ornith:9b` | 5.6 GB | 256,000 tokens | Text | Agentic coding (architect, code, debug, orchestrator) |
+| **glm-ocr** | `glm-ocr:latest` | 2.2 GB | 128,000 tokens | Text + Image | Multimodal OCR (ocr mode) |
+| **gemma4 E2B** | `gemma4:e2b` | 7.2 GB | 128,000 tokens | Text + Image | Lightweight chat and reasoning (ask mode) |
+| **gemma4 E4B** | `gemma4:e4b` | 9.6 GB | 128,000 tokens | Text + Image | Higher-quality chat and reasoning (fallback) |
 
-**Tamaño total en disco:** ~24.5 GB (todos los modelos instalados)
+**Total disk size:** ~24.5 GB (all models installed)
 
 ---
 
-## 2. Descripción detallada de cada modelo
+## 2. Detailed description of each model
 
-### 2.1 ornith:9b — Coding agentico
+### 2.1 ornith:9b — Agentic coding
 
-| Atributo | Valor |
+| Attribute | Value |
 |---|---|
-| Parámetros | 9B |
-| Tamaño en disco | 5.6 GB |
-| Ventana de contexto | 256.000 tokens |
-| Entrada | Solo texto |
-| Licencia | MIT |
-| Especialidad | Coding agentico con RL self-improvement |
+| Parameters | 9B |
+| Disk size | 5.6 GB |
+| Context window | 256,000 tokens |
+| Input | Text only |
+| License | MIT |
+| Specialty | Agentic coding with RL self-improvement |
 
-**Descripción:** Ornith es un modelo de 9B parámetros entrenado específicamente para tareas de desarrollo de software con técnicas de Reinforcement Learning (RL) para auto-mejora. Su ventana de contexto de 256K tokens es la más grande del conjunto, lo que le permite mantener el contexto de proyectos grandes sin perder información.
+**Description:** Ornith is a 9B-parameter model trained specifically for software development tasks using Reinforcement Learning (RL) techniques for self-improvement. Its 256K-token context window is the largest in the set, allowing it to maintain context on large projects without losing information.
 
-**Por qué este modelo:** Es el modelo principal de Trinit para todas las tareas de coding. Su entrenamiento con RL lo hace especialmente bueno en seguir instrucciones complejas, usar herramientas de forma encadenada (tool use), y mantener coherencia en tareas multi-paso — exactamente lo que requieren los modos Architect, Code, Debug y Orchestrator.
+**Why this model:** It is Trinit's primary model for all coding tasks. Its RL training makes it especially good at following complex instructions, using tools in a chained fashion (tool use), and maintaining coherence across multi-step tasks — exactly what the Architect, Code, Debug, and Orchestrator modes require.
 
-**Fortalezas:**
-- Seguimiento de instrucciones complejas y multi-paso
-- Tool use encadenado (read → edit → command → verify)
-- Contexto largo (256K) para proyectos grandes
-- Razonamiento sobre código en múltiples archivos simultáneamente
+**Strengths:**
+- Following complex, multi-step instructions
+- Chained tool use (read → edit → command → verify)
+- Long context (256K) for large projects
+- Reasoning across code in multiple files simultaneously
 
-**Modos que lo usan:** `architect`, `orchestrator`, `code`, `debug`
+**Modes that use it:** `architect`, `orchestrator`, `code`, `debug`
 
 ---
 
-### 2.2 glm-ocr:latest — OCR multimodal
+### 2.2 glm-ocr:latest — Multimodal OCR
 
-| Atributo | Valor |
+| Attribute | Value |
 |---|---|
-| Parámetros | 0.9B |
-| Tamaño en disco | 2.2 GB |
-| Ventana de contexto | 128.000 tokens |
-| Entrada | Texto + Imagen |
-| Especialidad | OCR de documentos, tablas y figuras |
-| Benchmark | #1 en OmniDocBench |
+| Parameters | 0.9B |
+| Disk size | 2.2 GB |
+| Context window | 128,000 tokens |
+| Input | Text + Image |
+| Specialty | OCR of documents, tables, and figures |
+| Benchmark | #1 on OmniDocBench |
 
-**Descripción:** GLM-OCR es un modelo multimodal de solo 0.9B parámetros especializado en extracción de texto de imágenes. A pesar de su pequeño tamaño, lidera el benchmark OmniDocBench para OCR de documentos. Puede procesar imágenes de documentos, capturas de pantalla, tablas, figuras y texto manuscrito.
+**Description:** GLM-OCR is a multimodal model of only 0.9B parameters specialized in extracting text from images. Despite its small size, it leads the OmniDocBench benchmark for document OCR. It can process images of documents, screenshots, tables, figures, and handwritten text.
 
-**Por qué este modelo:** Es el modelo más pequeño del conjunto (2.2 GB) pero el más especializado. Para OCR, un modelo pequeño y especializado supera a modelos grandes generalistas. Su capacidad de procesar imágenes lo hace único en el conjunto — ningún otro modelo de Trinit acepta entrada de imagen.
+**Why this model:** It is the smallest model in the set (2.2 GB) but the most specialized. For OCR, a small, specialized model outperforms large generalist models. Its ability to process images makes it unique in the set — no other Trinit model accepts image input.
 
-**Fortalezas:**
-- Extracción precisa de texto de documentos escaneados
-- Reconocimiento de tablas y estructuras complejas
-- Procesamiento de figuras y diagramas
-- Texto manuscrito y documentos de baja calidad
-- Salida estructurada en Markdown/JSON
+**Strengths:**
+- Accurate text extraction from scanned documents
+- Recognition of tables and complex structures
+- Processing of figures and diagrams
+- Handwritten text and low-quality documents
+- Structured output in Markdown/JSON
 
-**Modos que lo usan:** `ocr`
+**Modes that use it:** `ocr`
 
 ---
 
-### 2.3 gemma4:e2b — Chat y razonamiento ligero
+### 2.3 gemma4:e2b — Lightweight chat and reasoning
 
-| Atributo | Valor |
+| Attribute | Value |
 |---|---|
-| Parámetros | ~2B efectivos (edge-optimized) |
-| Tamaño en disco | 7.2 GB |
-| Ventana de contexto | 128.000 tokens |
-| Entrada | Texto + Imagen |
-| Desarrollador | Google DeepMind |
-| Familia | Gemma 4 (edge) |
+| Parameters | ~2B effective (edge-optimized) |
+| Disk size | 7.2 GB |
+| Context window | 128,000 tokens |
+| Input | Text + Image |
+| Developer | Google DeepMind |
+| Family | Gemma 4 (edge) |
 
-**Descripción:** Gemma 4 Edge 2B es la variante más ligera de la familia Gemma 4 de Google DeepMind, optimizada para ejecución en dispositivos edge (CPU/GPU de consumo). Soporta entrada multimodal (texto e imagen) con una ventana de contexto de 128K tokens.
+**Description:** Gemma 4 Edge 2B is the lightest variant of Google DeepMind's Gemma 4 family, optimized for execution on edge devices (consumer CPU/GPU). It supports multimodal input (text and image) with a 128K-token context window.
 
-**Por qué este modelo:** Se usa en el modo `ask` porque las preguntas y explicaciones no requieren la capacidad de razonamiento agentico de ornith. Gemma 4 E2B ofrece respuestas de calidad con menor consumo de recursos, lo que lo hace ideal para consultas rápidas.
+**Why this model:** It is used in `ask` mode because questions and explanations do not require the agentic reasoning capability of ornith. Gemma 4 E2B delivers quality responses with lower resource consumption, making it ideal for quick queries.
 
-**Fortalezas:**
-- Respuestas conversacionales de alta calidad
-- Análisis de imágenes y capturas de pantalla
-- Explicaciones técnicas claras
-- Menor consumo de RAM/VRAM que modelos más grandes
+**Strengths:**
+- High-quality conversational responses
+- Image and screenshot analysis
+- Clear technical explanations
+- Lower RAM/VRAM consumption than larger models
 
-**Modos que lo usan:** `ask`
+**Modes that use it:** `ask`
 
 ---
 
-### 2.4 gemma4:e4b — Chat y razonamiento de mayor calidad
+### 2.4 gemma4:e4b — Higher-quality chat and reasoning
 
-| Atributo | Valor |
+| Attribute | Value |
 |---|---|
-| Parámetros | ~4B efectivos (edge-optimized) |
-| Tamaño en disco | 9.6 GB |
-| Ventana de contexto | 128.000 tokens |
-| Entrada | Texto + Imagen |
-| Desarrollador | Google DeepMind |
-| Familia | Gemma 4 (edge) |
+| Parameters | ~4B effective (edge-optimized) |
+| Disk size | 9.6 GB |
+| Context window | 128,000 tokens |
+| Input | Text + Image |
+| Developer | Google DeepMind |
+| Family | Gemma 4 (edge) |
 
-**Descripción:** Gemma 4 Edge 4B es la variante de mayor calidad de la familia edge de Gemma 4. Ofrece mejor razonamiento y comprensión que E2B a costa de mayor consumo de recursos.
+**Description:** Gemma 4 Edge 4B is the highest-quality variant of the Gemma 4 edge family. It offers better reasoning and comprehension than E2B at the cost of higher resource consumption.
 
-**Por qué este modelo:** Incluido como alternativa de mayor calidad para usuarios con hardware más potente. En la configuración por defecto de Trinit, E2B se usa en el modo `ask`, pero E4B está disponible para usuarios que prefieran mayor calidad en las respuestas conversacionales.
+**Why this model:** Included as a higher-quality alternative for users with more powerful hardware. In Trinit's default configuration, E2B is used in `ask` mode, but E4B is available for users who prefer higher quality in conversational responses.
 
-**Fortalezas:**
-- Mayor calidad de razonamiento que E2B
-- Análisis más profundo de imágenes
-- Mejor comprensión de contextos complejos
+**Strengths:**
+- Higher reasoning quality than E2B
+- Deeper image analysis
+- Better comprehension of complex contexts
 
-**Modos que lo usan:** Disponible como alternativa manual; no asignado por defecto a ningún modo en `LOCAL_MODE_BINDINGS`
+**Modes that use it:** Available as a manual alternative; not assigned by default to any mode in `LOCAL_MODE_BINDINGS`
 
 ---
 
-## 3. Requisitos de hardware
+## 3. Hardware requirements
 
-### 3.1 Por modelo individual
+### 3.1 Per individual model
 
-| Modelo | RAM mínima | RAM recomendada | VRAM (GPU) | CPU-only |
+| Model | Minimum RAM | Recommended RAM | VRAM (GPU) | CPU-only |
 |---|---|---|---|---|
-| `glm-ocr:latest` (2.2 GB) | 4 GB | 6 GB | 3 GB | Sí (lento) |
-| `ornith:9b` (5.6 GB) | 8 GB | 12 GB | 6 GB | Sí (lento) |
-| `gemma4:e2b` (7.2 GB) | 10 GB | 16 GB | 8 GB | Sí (lento) |
-| `gemma4:e4b` (9.6 GB) | 12 GB | 20 GB | 10 GB | Sí (muy lento) |
+| `glm-ocr:latest` (2.2 GB) | 4 GB | 6 GB | 3 GB | Yes (slow) |
+| `ornith:9b` (5.6 GB) | 8 GB | 12 GB | 6 GB | Yes (slow) |
+| `gemma4:e2b` (7.2 GB) | 10 GB | 16 GB | 8 GB | Yes (slow) |
+| `gemma4:e4b` (9.6 GB) | 12 GB | 20 GB | 10 GB | Yes (very slow) |
 
-> **Nota:** Los valores de RAM incluyen el sistema operativo y VS Code. Los valores de VRAM son para ejecución completa en GPU (más rápida). Ollama gestiona automáticamente la distribución entre RAM y VRAM disponibles.
+> **Note:** RAM values include the operating system and VS Code. VRAM values are for full GPU execution (faster). Ollama automatically manages the distribution between available RAM and VRAM.
 
-### 3.2 Combinaciones típicas de uso
+### 3.2 Typical usage combinations
 
-#### Configuración mínima (solo OCR + Ask)
-- **Modelos:** `glm-ocr:latest` + `gemma4:e2b`
+#### Minimum configuration (OCR + Ask only)
+- **Models:** `glm-ocr:latest` + `gemma4:e2b`
 - **RAM:** 16 GB
-- **VRAM:** 8 GB (o CPU-only con paciencia)
-- **Disco:** ~9.4 GB
-- **Caso de uso:** Digitalización de documentos y consultas técnicas
+- **VRAM:** 8 GB (or CPU-only with patience)
+- **Disk:** ~9.4 GB
+- **Use case:** Document digitization and technical queries
 
-#### Configuración estándar (Full Local completo)
-- **Modelos:** Los 4 modelos
-- **RAM:** 16 GB (mínimo), 32 GB (recomendado)
-- **VRAM:** 8 GB (mínimo), 16 GB (recomendado)
-- **Disco:** ~24.5 GB
-- **Caso de uso:** Desarrollo completo con todos los modos
+#### Standard configuration (full Full Local)
+- **Models:** All 4 models
+- **RAM:** 16 GB (minimum), 32 GB (recommended)
+- **VRAM:** 8 GB (minimum), 16 GB (recommended)
+- **Disk:** ~24.5 GB
+- **Use case:** Full development with all modes
 
-#### Configuración óptima (máximo rendimiento)
-- **RAM:** 32 GB o más
-- **VRAM:** 16 GB o más (NVIDIA RTX 3080/4070 o superior)
-- **Disco:** SSD NVMe (para carga rápida de modelos)
-- **Caso de uso:** Equipos de desarrollo, uso intensivo
+#### Optimal configuration (maximum performance)
+- **RAM:** 32 GB or more
+- **VRAM:** 16 GB or more (NVIDIA RTX 3080/4070 or higher)
+- **Disk:** NVMe SSD (for fast model loading)
+- **Use case:** Development teams, intensive use
 
-### 3.3 Notas sobre CPU vs. GPU
+### 3.3 Notes on CPU vs. GPU
 
-Ollama puede correr modelos en CPU pura, pero la velocidad de generación es significativamente menor:
-- **Con GPU:** 20-60 tokens/segundo (dependiendo del modelo y GPU)
-- **Sin GPU (CPU):** 2-8 tokens/segundo
+Ollama can run models on pure CPU, but generation speed is significantly lower:
+- **With GPU:** 20–60 tokens/second (depending on the model and GPU)
+- **Without GPU (CPU):** 2–8 tokens/second
 
-Para uso productivo, se recomienda al menos una GPU con 8 GB de VRAM. Los modelos de Trinit están seleccionados para ser viables en GPUs de consumo (RTX 3060, RX 6700, etc.).
-
----
-
-## 4. Por qué estos modelos
-
-La selección de modelos responde a tres criterios:
-
-1. **Especialización por tarea:** Cada modelo está elegido para su caso de uso específico, no como un modelo generalista. ornith para coding agentico, glm-ocr para visión, gemma4 para conversación.
-
-2. **Viabilidad en hardware de consumo:** El modelo más grande (gemma4:e4b, 9.6 GB) cabe en una GPU de gama media-alta. El conjunto completo (24.5 GB) cabe en un sistema con 32 GB de RAM.
-
-3. **Licencias open-source:** Todos los modelos tienen licencias permisivas (MIT, Apache 2.0, o equivalentes) que permiten uso comercial sin restricciones.
+For productive use, a GPU with at least 8 GB of VRAM is recommended. Trinit's models are selected to be viable on consumer GPUs (RTX 3060, RX 6700, etc.).
 
 ---
 
-## 5. Gestión de modelos
+## 4. Why these models
 
-### Instalación
+The model selection is driven by three criteria:
 
-Los modelos se instalan automáticamente durante el setup. El instalador lee `models.yaml` y ejecuta `ollama pull` para cada modelo no instalado:
+1. **Task specialization:** Each model is chosen for its specific use case, not as a generalist model. Ornith for agentic coding, glm-ocr for vision, gemma4 for conversation.
+
+2. **Viability on consumer hardware:** The largest model (gemma4:e4b, 9.6 GB) fits on a mid-to-high-tier GPU. The complete set (24.5 GB) fits on a system with 32 GB of RAM.
+
+3. **Open-source licenses:** All models have permissive licenses (MIT, Apache 2.0, or equivalents) that allow commercial use without restrictions.
+
+---
+
+## 5. Model management
+
+### Installation
+
+Models are installed automatically during setup. The installer reads `models.yaml` and runs `ollama pull` for each model not installed:
 
 ```bash
-# Instalación automática (vía installer)
+# Automatic installation (via installer)
 ollama pull glm-ocr:latest   # 2.2 GB
 ollama pull gemma4:e2b       # 7.2 GB
 ollama pull gemma4:e4b       # 9.6 GB
 ollama pull ornith:9b        # 5.6 GB
 ```
 
-### Skip inteligente
+### Smart skip
 
-Si un modelo ya está instalado, el instalador lo detecta y lo omite:
+If a model is already installed, the installer detects it and skips it:
 
 ```
 ✅ glm-ocr:latest already installed
 📥 Pulling ornith:9b...
 ```
 
-### Modelos adicionales
+### Additional models
 
-Cualquier modelo disponible en Ollama puede añadirse manualmente:
+Any model available in Ollama can be added manually:
 
 ```bash
 ollama pull llama3.2:3b
 ollama pull qwen2.5-coder:7b
 ```
 
-Una vez instalado, el modelo aparece en el selector de configuración API de Trinit y puede asignarse a cualquier modo en modo Custom.
+Once installed, the model appears in Trinit's API configuration selector and can be assigned to any mode in Custom mode.

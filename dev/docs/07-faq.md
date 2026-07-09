@@ -1,209 +1,209 @@
-# Trinit — FAQ Técnica y de Producto
+# Trinit — Technical and Product FAQ
 
-> Versión: v0.1.0 · Fecha: 2026-07-04
+> Version: v0.1.0 · Date: 2026-07-04
 
 ---
 
-## Preguntas generales
+## General questions
 
-### ¿Qué es Trinit exactamente?
+### What exactly is Trinit?
 
-Trinit es una extensión para Visual Studio Code que añade un equipo de agentes de IA especializados que corren completamente en tu máquina. No es un plugin de autocompletado — es un asistente conversacional completo que puede leer tu código, escribir archivos, ejecutar comandos, y coordinar tareas complejas, todo sin enviar nada a internet.
+Trinit is a Visual Studio Code extension that adds a team of specialized AI agents that run entirely on your machine. It is not an autocomplete plugin — it is a full conversational assistant that can read your code, write files, execute commands, and coordinate complex tasks, all without sending anything to the internet.
 
-### ¿Es gratis?
+### Is it free?
 
-Sí, completamente gratis. No hay planes de pago, no hay límites de uso, no hay tokens que comprar. El único costo es el hardware donde corre (que ya tienes).
+Yes, completely free. There are no paid plans, no usage limits, no tokens to buy. The only cost is the hardware it runs on (which you already have).
 
-### ¿Necesito crear una cuenta?
+### Do I need to create an account?
 
-No. Trinit no tiene sistema de cuentas. No hay login, no hay OAuth, no hay email que verificar. Instalas y usas.
+No. Trinit has no account system. There is no login, no OAuth, no email to verify. You install and use it.
 
-### ¿Cuál es la diferencia con GitHub Copilot?
+### What is the difference from GitHub Copilot?
 
 | | Trinit | GitHub Copilot |
 |---|---|---|
-| Login | No | Sí (cuenta GitHub) |
-| Datos en la nube | Nunca | Sí |
-| Funciona offline | Sí | No |
-| Costo | $0 | $10-$39/mes |
-| Agentes especializados | 6 modos | No |
-| OCR local | Sí | No |
+| Login | No | Yes (GitHub account) |
+| Cloud data | Never | Yes |
+| Works offline | Yes | No |
+| Cost | $0 | $10–$39/month |
+| Specialized agents | 6 modes | No |
+| Local OCR | Yes | No |
 
-Copilot es principalmente autocompletado de código en el editor. Trinit es un sistema de agentes conversacionales que puede planificar, implementar, debuggear y coordinar tareas complejas.
+Copilot is primarily in-editor code autocomplete. Trinit is a conversational agent system that can plan, implement, debug, and coordinate complex tasks.
 
-### ¿Cuál es la diferencia con Cursor?
+### What is the difference from Cursor?
 
-Cursor es un editor completo (fork de VS Code) con IA integrada que requiere cuenta y envía código a sus servidores. Trinit es una extensión para VS Code existente que corre todo localmente. Si ya usas VS Code, Trinit no requiere cambiar de editor.
+Cursor is a complete editor (a fork of VS Code) with built-in AI that requires an account and sends code to its servers. Trinit is an extension for your existing VS Code that runs everything locally. If you already use VS Code, Trinit requires no editor change.
 
-### ¿Cuál es la diferencia con Roo Code?
+### What is the difference from Roo Code?
 
-Trinit es un fork de Roo Code con tres diferencias principales:
-1. **Sin login:** Roo Code tiene un sistema de autenticación con su gateway cloud. Trinit lo elimina completamente.
-2. **Ollama por defecto:** Roo Code requiere configurar un proveedor. Trinit viene preconfigurado con Ollama y 4 modelos locales.
-3. **Teams y OCR:** Trinit añade el sistema de Teams y el modo OCR especializado con `glm-ocr`.
+Trinit is a fork of Roo Code with three main differences:
+1. **No login:** Roo Code has an authentication system with its cloud gateway. Trinit removes it completely.
+2. **Ollama by default:** Roo Code requires configuring a provider. Trinit comes preconfigured with Ollama and 4 local models.
+3. **Teams and OCR:** Trinit adds the Teams system and the specialized OCR mode with `glm-ocr`.
 
 ---
 
-## Preguntas técnicas
+## Technical questions
 
-### ¿Necesito GPU?
+### Do I need a GPU?
 
-No es estrictamente necesario, pero sí recomendado. Sin GPU, los modelos corren en CPU y la velocidad de generación es de 2-8 tokens/segundo (lento pero funcional). Con una GPU de 8 GB VRAM, la velocidad sube a 20-60 tokens/segundo.
+Not strictly, but it is recommended. Without a GPU, models run on CPU and generation speed is 2–8 tokens/second (slow but functional). With an 8 GB VRAM GPU, speed rises to 20–60 tokens/second.
 
-**Recomendación mínima para uso productivo:** GPU con 8 GB VRAM (NVIDIA RTX 3060, AMD RX 6700, o equivalente).
+**Minimum recommendation for productive use:** GPU with 8 GB VRAM (NVIDIA RTX 3060, AMD RX 6700, or equivalent).
 
-### ¿Funciona completamente offline?
+### Does it work fully offline?
 
-Sí, una vez instalado. La instalación inicial requiere internet para descargar los modelos (~24.5 GB en total). Después, Trinit funciona sin ninguna conexión a internet.
+Yes, once installed. The initial installation requires internet to download the models (~24.5 GB total). After that, Trinit works with no internet connection at all.
 
-### ¿Mis datos salen de mi PC?
+### Does my data leave my PC?
 
-No. Nunca. Todo el procesamiento ocurre en `http://localhost:11434` (Ollama). No hay telemetría activa, no hay llamadas a APIs externas durante el uso normal. Puedes verificarlo con cualquier monitor de red.
+No. Never. All processing happens on `http://localhost:11434` (Ollama). There is no active telemetry, no calls to external APIs during normal use. You can verify this with any network monitor.
 
-**Técnicamente:** El código fuente de Trinit es open-source y auditable. La única comunicación de red que ocurre es entre la extensión VS Code y el daemon Ollama en localhost.
+**Technically:** Trinit's source code is open-source and auditable. The only network communication that occurs is between the VS Code extension and the Ollama daemon on localhost.
 
-### ¿Cuánto espacio en disco necesito?
+### How much disk space do I need?
 
-Los 4 modelos preconfigurados ocupan ~24.5 GB:
+The 4 preconfigured models take up ~24.5 GB:
 - `glm-ocr:latest`: 2.2 GB
 - `ornith:9b`: 5.6 GB
 - `gemma4:e2b`: 7.2 GB
 - `gemma4:e4b`: 9.6 GB
 
-Si el espacio es limitado, puedes instalar solo los modelos que necesitas. El mínimo funcional es `glm-ocr:latest` + `ornith:9b` (~7.8 GB).
+If space is limited, you can install only the models you need. The functional minimum is `glm-ocr:latest` + `ornith:9b` (~7.8 GB).
 
-### ¿Cuánta RAM necesito?
+### How much RAM do I need?
 
-**Mínimo:** 16 GB RAM (para correr un modelo a la vez con el sistema operativo y VS Code)  
-**Recomendado:** 32 GB RAM (para mayor comodidad y modelos más grandes)
+**Minimum:** 16 GB RAM (to run one model at a time with the operating system and VS Code)  
+**Recommended:** 32 GB RAM (for greater comfort and larger models)
 
-Ollama gestiona automáticamente la distribución entre RAM y VRAM disponibles.
+Ollama automatically manages the distribution between available RAM and VRAM.
 
-### ¿Puedo usar mis propios modelos?
+### Can I use my own models?
 
-Sí. Cualquier modelo disponible en Ollama puede usarse con Trinit. Instala el modelo con `ollama pull <modelo>` y aparecerá en el selector de configuración API. Puedes asignarlo a cualquier modo en modo Custom.
+Yes. Any model available in Ollama can be used with Trinit. Install the model with `ollama pull <model>` and it will appear in the API configuration selector. You can assign it to any mode in Custom mode.
 
 ```bash
-# Ejemplos de modelos adicionales
+# Examples of additional models
 ollama pull llama3.2:3b
 ollama pull qwen2.5-coder:7b
 ollama pull deepseek-coder-v2:16b
 ```
 
-### ¿Puedo usar proveedores externos como OpenAI o Anthropic?
+### Can I use external providers like OpenAI or Anthropic?
 
-Sí. Trinit preserva intacto el sistema de proveedores de Roo Code. Puedes configurar OpenAI, Anthropic, OpenRouter, AWS Bedrock, Google Vertex, y cualquier otro proveedor compatible. En modo Custom, puedes asignar esos proveedores a modos específicos.
+Yes. Trinit preserves Roo Code's provider system intact. You can configure OpenAI, Anthropic, OpenRouter, AWS Bedrock, Google Vertex, and any other compatible provider. In Custom mode, you can assign those providers to specific modes.
 
-El modo Full Local (por defecto) usa exclusivamente Ollama. Cambiar a Custom es una decisión consciente del usuario.
+Full Local mode (default) uses Ollama exclusively. Switching to Custom is a conscious user choice.
 
-### ¿Qué es Ollama y por qué lo necesito?
+### What is Ollama and why do I need it?
 
-Ollama es el runtime de modelos de lenguaje locales más popular del ecosistema open-source. Gestiona la descarga, almacenamiento y ejecución de modelos LLM en tu máquina, exponiendo una API compatible con OpenAI en `http://localhost:11434`.
+Ollama is the most popular local language model runtime in the open-source ecosystem. It manages the download, storage, and execution of LLM models on your machine, exposing an OpenAI-compatible API at `http://localhost:11434`.
 
-Trinit usa Ollama como su motor de inferencia local. El instalador de Trinit detecta y opcionalmente instala Ollama automáticamente.
+Trinit uses Ollama as its local inference engine. The Trinit installer detects and optionally installs Ollama automatically.
 
-### ¿Funciona en Windows, macOS y Linux?
+### Does it work on Windows, macOS, and Linux?
 
-Sí, en las tres plataformas. El instalador tiene versiones específicas para cada una:
+Yes, on all three platforms. The installer has specific versions for each:
 - **Windows:** `install.ps1` (PowerShell)
 - **macOS/Linux:** `install.sh` (bash)
 
-### ¿Qué versión de VS Code necesito?
+### What version of VS Code do I need?
 
-Trinit requiere VS Code. La versión mínima compatible no está especificada explícitamente en v0.1.0, pero se recomienda usar una versión reciente (1.85+).
-
----
-
-## Preguntas sobre modelos y modos
-
-### ¿Por qué hay 6 modos diferentes?
-
-Cada modo está optimizado para un tipo de tarea:
-- **Architect:** Planificación y diseño (no puede modificar código, solo `.md`)
-- **Orchestrator:** Coordinación de tareas complejas multi-paso
-- **Code:** Implementación (acceso completo a archivos y terminal)
-- **Debug:** Diagnóstico sistemático (siempre pide confirmación antes de modificar)
-- **Ask:** Consultas y explicaciones (solo lectura, nunca modifica nada)
-- **OCR:** Extracción de texto de imágenes (usa modelo multimodal especializado)
-
-### ¿Por qué el modo Ask usa un modelo diferente?
-
-El modo Ask usa `gemma4:e2b` en lugar de `ornith:9b` porque las preguntas y explicaciones no requieren la capacidad de razonamiento agentico de ornith. Gemma 4 E2B es más ligero y suficientemente capaz para respuestas conversacionales, lo que reduce el consumo de recursos.
-
-### ¿Puedo cambiar qué modelo usa cada modo?
-
-En modo Full Local (por defecto), los modelos están vinculados y no se pueden cambiar desde la UI (el selector aparece bloqueado). Esto garantiza que siempre uses el modelo optimizado para cada tarea.
-
-En modo Custom, puedes desbloquear cualquier modo y asignarle cualquier modelo o proveedor disponible.
-
-### ¿Qué es el modo Full Local vs. Custom?
-
-Hay un **toggle global** en la vista de modos (`ModesView.tsx`) que aplica un preset completo:
-
-- **Full Local (por defecto):** Llama a `applyFullLocalPreset()` — bloquea todos los modos y resuelve cada modelo desde la tabla `LOCAL_MODE_BINDINGS`. Los selectores de configuración API aparecen deshabilitados en la UI.
-- **Custom:** Llama a `applyCustomPreset()` — desbloquea `architect` y `orchestrator` por defecto, dejando el resto en local. El usuario puede desbloquear modos adicionales individualmente y asignarles cualquier modelo o proveedor (OpenAI, Anthropic, etc.).
-
-### ¿Qué son los Teams?
-
-Un Team es un conjunto curado de modos con sus vinculaciones de modelo. Instalar un Team activa todos sus modos y configura los modelos automáticamente. El "Trinit Core Team" incluye los 6 modos predefinidos con sus modelos locales.
-
-En el futuro, habrá Teams especializados (Frontend Team, Data Science Team, etc.) disponibles en el marketplace.
-
-### ¿Qué son los MCPs?
-
-MCP (Model Context Protocol) son servidores que extienden las capacidades del agente con herramientas adicionales. Trinit incluye 5 MCPs predefinidos:
-- `filesystem`: acceso al sistema de archivos
-- `fetch`: peticiones HTTP
-- `git`: operaciones Git
-- `memory`: memoria persistente entre sesiones
-- `sequential-thinking`: razonamiento estructurado
-
-Estos se configuran automáticamente en la primera activación.
+Trinit requires VS Code. The minimum compatible version is not explicitly specified in v0.1.0, but using a recent version (1.85+) is recommended.
 
 ---
 
-## Preguntas de privacidad y seguridad
+## Questions about models and modes
 
-### ¿Trinit envía telemetría?
+### Why are there 6 different modes?
 
-No. La telemetría de Roo Code (PostHog) está desactivada en Trinit. No se envían datos de uso a ningún servidor externo.
+Each mode is optimized for a type of task:
+- **Architect:** Planning and design (cannot modify code, only `.md`)
+- **Orchestrator:** Coordination of complex multi-step tasks
+- **Code:** Implementation (full access to files and terminal)
+- **Debug:** Systematic diagnosis (always asks for confirmation before modifying)
+- **Ask:** Queries and explanations (read-only, never modifies anything)
+- **OCR:** Text extraction from images (uses a specialized multimodal model)
 
-### ¿El código que escribo en el chat se guarda en algún servidor?
+### Why does Ask mode use a different model?
 
-No. El historial de conversaciones se guarda localmente en el `globalStorage` de VS Code (en tu máquina). Nunca sale de tu sistema.
+Ask mode uses `gemma4:e2b` instead of `ornith:9b` because questions and explanations do not require ornith's agentic reasoning capability. Gemma 4 E2B is lighter and sufficiently capable for conversational responses, which reduces resource consumption.
 
-### ¿Puedo usar Trinit con código bajo NDA?
+### Can I change which model each mode uses?
 
-Sí. Dado que ningún dato sale de tu máquina, no hay riesgo de violación de NDA. El código que compartes con Trinit solo lo ve el modelo local corriendo en tu hardware.
+In Full Local mode (default), models are bound and cannot be changed from the UI (the selector appears locked). This ensures you always use the model optimized for each task.
 
-### ¿Es Trinit adecuado para entornos HIPAA/GDPR?
+In Custom mode, you can unlock any mode and assign it any available model or provider.
 
-Técnicamente sí — Trinit no transmite datos a terceros. Sin embargo, el cumplimiento normativo depende de muchos factores más allá de la herramienta en sí. Consulta con tu equipo de compliance para una evaluación completa.
+### What is Full Local vs. Custom mode?
+
+There is a **global toggle** in the modes view (`ModesView.tsx`) that applies a complete preset:
+
+- **Full Local (default):** Calls `applyFullLocalPreset()` — locks all modes and resolves each model from the `LOCAL_MODE_BINDINGS` table. API configuration selectors appear disabled in the UI.
+- **Custom:** Calls `applyCustomPreset()` — unlocks `architect` and `orchestrator` by default, leaving the rest on local. The user can unlock additional modes individually and assign them any model or provider (OpenAI, Anthropic, etc.).
+
+### What are Teams?
+
+A Team is a curated set of modes along with their model bindings. Installing a Team activates all its modes and configures the models automatically. The "Trinit Core Team" includes the 6 predefined modes with their local models.
+
+In the future, there will be specialized Teams (Frontend Team, Data Science Team, etc.) available in the marketplace.
+
+### What are MCPs?
+
+MCP (Model Context Protocol) servers extend the agent's capabilities with additional tools. Trinit includes 5 predefined MCPs:
+- `filesystem`: filesystem access
+- `fetch`: HTTP requests
+- `git`: Git operations
+- `memory`: persistent memory across sessions
+- `sequential-thinking`: structured reasoning
+
+These are configured automatically on first activation.
 
 ---
 
-## Preguntas de instalación
+## Privacy and security questions
 
-### ¿Qué pasa si ya tengo Ollama instalado?
+### Does Trinit send telemetry?
 
-El instalador lo detecta, muestra la versión, y pregunta si quieres actualizarlo (default: No). Si no actualizas, continúa con la versión existente.
+No. Roo Code's telemetry (PostHog) is disabled in Trinit. No usage data is sent to any external server.
 
-### ¿Qué pasa si ya tengo algunos modelos instalados?
+### Is the code I write in chat saved on any server?
 
-El instalador verifica qué modelos están instalados y solo descarga los que faltan. Los modelos existentes no se tocan.
+No. Conversation history is saved locally in VS Code's `globalStorage` (on your machine). It never leaves your system.
 
-### ¿Puedo instalar Trinit sin internet?
+### Can I use Trinit with code under NDA?
 
-La instalación inicial requiere internet para descargar los modelos y la extensión. Para entornos air-gapped, necesitarías:
-1. Descargar los modelos en una máquina con internet y transferirlos
-2. Descargar `trinit.vsix` de GitHub Releases y instalarlo manualmente con `code --install-extension trinit.vsix`
+Yes. Since no data leaves your machine, there is no risk of NDA violation. The code you share with Trinit is only seen by the local model running on your hardware.
 
-Esta funcionalidad está en el roadmap para versiones futuras.
+### Is Trinit suitable for HIPAA/GDPR environments?
 
-### ¿Cómo actualizo Trinit?
+Technically yes — Trinit transmits no data to third parties. However, regulatory compliance depends on many factors beyond the tool itself. Consult your compliance team for a full assessment.
 
-Actualmente, la actualización es manual:
-1. Descargar la nueva versión de `trinit.vsix` desde GitHub Releases
-2. Ejecutar `code --install-extension trinit.vsix`
+---
 
-En versiones futuras, se añadirá un mecanismo de actualización automática.
+## Installation questions
+
+### What if I already have Ollama installed?
+
+The installer detects it, shows the version, and asks if you want to update it (default: No). If you don't update, it continues with the existing version.
+
+### What if I already have some models installed?
+
+The installer checks which models are installed and only downloads the missing ones. Existing models are not touched.
+
+### Can I install Trinit without internet?
+
+The initial installation requires internet to download the models and the extension. For air-gapped environments, you would need to:
+1. Download the models on a machine with internet and transfer them
+2. Download `trinit.vsix` from GitHub Releases and install it manually with `code --install-extension trinit.vsix`
+
+This functionality is on the roadmap for future versions.
+
+### How do I update Trinit?
+
+Currently, updating is manual:
+1. Download the new version of `trinit.vsix` from GitHub Releases
+2. Run `code --install-extension trinit.vsix`
+
+In future versions, an automatic update mechanism will be added.

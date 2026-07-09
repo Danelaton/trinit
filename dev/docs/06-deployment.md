@@ -1,213 +1,213 @@
-# Trinit — Proyecciones de Despliegue
+# Trinit — Deployment Scenarios
 
-> Versión: v0.1.0 · Fecha: 2026-07-04
+> Version: v0.1.0 · Date: 2026-07-04
 
 ---
 
-## 1. Escenarios de despliegue
+## 1. Deployment scenarios
 
-### 1.1 Desarrollador individual
+### 1.1 Individual developer
 
-**Perfil:** Freelancer, desarrollador independiente, o empleado que quiere asistencia de IA sin comprometer la privacidad de su código.
+**Profile:** Freelancer, independent developer, or employee who wants AI assistance without compromising the privacy of their code.
 
-**Requisitos:**
-- Laptop o desktop con 16 GB RAM (mínimo), 32 GB recomendado
-- GPU con 8 GB VRAM (recomendado; funciona sin GPU pero más lento)
-- ~25 GB de espacio en disco
-- VS Code instalado
-- Conexión a internet solo para la instalación inicial
+**Requirements:**
+- Laptop or desktop with 16 GB RAM (minimum), 32 GB recommended
+- GPU with 8 GB VRAM (recommended; works without GPU but slower)
+- ~25 GB of disk space
+- VS Code installed
+- Internet connection only for the initial installation
 
-**Instalación:**
+**Installation:**
 ```bash
-# Un comando, ~30 minutos (descarga de modelos)
+# One command, ~30 minutes (model download)
 curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
 ```
 
-**Configuración recomendada:** Full Local (por defecto) — sin configuración adicional.
+**Recommended configuration:** Full Local (default) — no additional configuration.
 
-**Costo:** $0. Sin suscripciones, sin límites de uso, sin sorpresas.
+**Cost:** $0. No subscriptions, no usage limits, no surprises.
 
-**Casos de uso principales:**
-- Desarrollo de proyectos personales con código propietario
-- Freelancing con clientes que tienen NDAs
-- Aprendizaje y experimentación sin límites de tokens
+**Main use cases:**
+- Personal projects with proprietary code
+- Freelancing with clients under NDAs
+- Learning and experimentation with no token limits
 
 ---
 
-### 1.2 Equipo pequeño (2-10 personas)
+### 1.2 Small team (2–10 people)
 
-**Perfil:** Startup, agencia de desarrollo, o equipo interno de una empresa mediana.
+**Profile:** Startup, development agency, or internal team at a midsize company.
 
-**Requisitos por máquina:**
-- Mismos requisitos que el desarrollador individual
-- Cada desarrollador instala Trinit en su propia máquina (no hay servidor compartido)
+**Requirements per machine:**
+- Same requirements as the individual developer
+- Each developer installs Trinit on their own machine (no shared server)
 
-**Instalación en equipo:**
+**Team installation:**
 ```bash
-# Script de onboarding automatizable (modo no-interactivo)
+# Automatable onboarding script (non-interactive mode)
 TRINIT_YES=1 curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
 ```
 
-**Configuración recomendada:**
-1. Instalar el "Trinit Core Team" desde el marketplace en todos los equipos
-2. Crear un `.roomodes` compartido en el repositorio del proyecto con modos específicos del proyecto
-3. Documentar en el README del proyecto cómo instalar Trinit
+**Recommended configuration:**
+1. Install the "Trinit Core Team" from the marketplace on all machines
+2. Create a shared `.roomodes` in the project repository with project-specific modes
+3. Document how to install Trinit in the project README
 
-**Ventajas del modelo distribuido (cada dev tiene su instancia):**
-- Sin punto único de fallo
-- Sin latencia de red interna
-- Sin costos de infraestructura compartida
-- Cada desarrollador puede personalizar su configuración sin afectar a otros
+**Advantages of the distributed model (each dev has their own instance):**
+- No single point of failure
+- No internal network latency
+- No shared infrastructure costs
+- Each developer can customize their configuration without affecting others
 
-**Costo:** $0 por persona. El único costo es el hardware (que ya tienen).
+**Cost:** $0 per person. The only cost is hardware (which they already have).
 
 ---
 
-### 1.3 Empresa (compliance/privacidad)
+### 1.3 Enterprise (compliance/privacy)
 
-**Perfil:** Empresa en sector regulado (salud, banca, legal, defensa, gobierno) donde el código o los datos no pueden salir de la infraestructura interna.
+**Profile:** Company in a regulated sector (healthcare, banking, legal, defense, government) where code or data cannot leave the internal infrastructure.
 
-**Requisitos:**
-- Política de IT que permita instalar Ollama y VS Code
-- Acceso a internet para la instalación inicial (o mirror interno de los modelos)
-- Máquinas de desarrollo con 16-32 GB RAM
+**Requirements:**
+- IT policy that allows installing Ollama and VS Code
+- Internet access for the initial installation (or an internal mirror of the models)
+- Development machines with 16–32 GB RAM
 
-**Modelo de despliegue recomendado:**
+**Recommended deployment model:**
 
-**Opción A: Instalación distribuida (recomendada)**
-Cada desarrollador instala Trinit en su máquina. El departamento de IT puede automatizar la instalación con herramientas de gestión de endpoints (Ansible, Puppet, SCCM):
+**Option A: Distributed installation (recommended)**
+Each developer installs Trinit on their machine. The IT department can automate installation with endpoint management tools (Ansible, Puppet, SCCM):
 
 ```yaml
-# Ejemplo Ansible
+# Ansible example
 - name: Install Trinit
   shell: |
     TRINIT_YES=1 curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
   become: yes
 ```
 
-**Opción B: Servidor Ollama compartido (avanzado)**
-Para equipos grandes, un servidor Ollama centralizado con GPU potente puede servir a múltiples desarrolladores. Cada desarrollador configura `ollamaBaseUrl` en Trinit para apuntar al servidor interno:
+**Option B: Shared Ollama server (advanced)**
+For large teams, a centralized Ollama server with a powerful GPU can serve multiple developers. Each developer configures `ollamaBaseUrl` in Trinit to point to the internal server:
 
 ```
 http://ollama-server.internal:11434
 ```
 
-Esto requiere:
-- Servidor con GPU de alta gama (NVIDIA A100, RTX 4090, etc.)
-- Red interna de baja latencia
-- Gestión del servidor Ollama
+This requires:
+- A server with a high-end GPU (NVIDIA A100, RTX 4090, etc.)
+- A low-latency internal network
+- Ollama server management
 
-**Argumentos de compliance:**
-- **GDPR/HIPAA:** Los datos nunca salen de la infraestructura interna — verificable con monitoreo de red
-- **SOC 2:** Sin dependencia de servicios externos para la funcionalidad principal
-- **ISO 27001:** Control total sobre el procesamiento de datos
-- **Auditoría:** El código fuente de Trinit es open-source y auditable
+**Compliance arguments:**
+- **GDPR/HIPAA:** Data never leaves the internal infrastructure — verifiable with network monitoring
+- **SOC 2:** No dependency on external services for core functionality
+- **ISO 27001:** Full control over data processing
+- **Audit:** Trinit's source code is open-source and auditable
 
-**Costo:** Solo hardware. Sin licencias de software, sin costos por usuario, sin contratos con proveedores de IA.
+**Cost:** Hardware only. No software licenses, no per-user costs, no contracts with AI vendors.
 
 ---
 
-### 1.4 Aula / Educación
+### 1.4 Classroom / Education
 
-**Perfil:** Bootcamp, universidad, curso de programación, o taller de desarrollo.
+**Profile:** Bootcamp, university, programming course, or development workshop.
 
-**Requisitos:**
-- Computadoras de los estudiantes con 16 GB RAM (o laboratorio con máquinas adecuadas)
-- Conexión a internet para la instalación inicial
+**Requirements:**
+- Student computers with 16 GB RAM (or a lab with suitable machines)
+- Internet connection for the initial installation
 
-**Modelo de despliegue:**
+**Deployment model:**
 
-**Para laboratorios con máquinas compartidas:**
+**For labs with shared machines:**
 ```bash
-# Instalación una vez por máquina
+# Install once per machine
 TRINIT_YES=1 curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
 ```
 
-**Para estudiantes con sus propias laptops:**
-Proporcionar el one-liner en el material del curso. La instalación tarda ~30 minutos y no requiere intervención del instructor.
+**For students with their own laptops:**
+Provide the one-liner in the course materials. Installation takes ~30 minutes and requires no instructor intervention.
 
-**Ventajas para educación:**
-- **Sin cuentas:** Los estudiantes no necesitan crear cuentas en ningún servicio
-- **Sin límites:** No hay límites de tokens ni de uso — los estudiantes pueden experimentar libremente
-- **Sin costos:** Gratis para todos los estudiantes
-- **Privacidad:** El código de los ejercicios no sale de la máquina del estudiante
-- **Reproducible:** Todos los estudiantes tienen exactamente el mismo entorno
+**Advantages for education:**
+- **No accounts:** Students don't need to create accounts on any service
+- **No limits:** No token or usage limits — students can experiment freely
+- **No cost:** Free for all students
+- **Privacy:** Exercise code never leaves the student's machine
+- **Reproducible:** All students have exactly the same environment
 
-**Casos de uso educativos:**
-- Asistencia en ejercicios de programación sin dar las respuestas directamente (modo Ask)
-- Debugging guiado de código de estudiantes (modo Debug)
-- Revisión de código con explicaciones (modo Ask)
-- Proyectos finales con asistencia de IA
+**Educational use cases:**
+- Assistance with programming exercises without giving the answers directly (Ask mode)
+- Guided debugging of student code (Debug mode)
+- Code review with explanations (Ask mode)
+- Final projects with AI assistance
 
 ---
 
-## 2. Roadmap sugerido
+## 2. Suggested roadmap
 
-### v0.1.x — Estabilización (actual)
-- [x] Extensión VS Code funcional con 6 modos
-- [x] Instalador one-liner para Windows, macOS y Linux
-- [x] 4 modelos preconfigurados
-- [x] Teams marketplace con Trinit Core Team
-- [x] 5 MCPs predefinidos
-- [x] Documentación técnica completa (`dev/docs/`)
-- [ ] Tests E2E actualizados con branding Trinit
+### v0.1.x — Stabilization (current)
+- [x] Functional VS Code extension with 6 modes
+- [x] One-liner installer for Windows, macOS, and Linux
+- [x] 4 preconfigured models
+- [x] Teams marketplace with Trinit Core Team
+- [x] 5 predefined MCPs
+- [x] Complete technical documentation (`dev/docs/`)
+- [ ] E2E tests updated with Trinit branding
 
-### v0.2.x — Marketplace público
-- [ ] Catálogo de Teams de la comunidad (más allá del Core Team)
-- [ ] Sistema de contribución de Teams (PR a `teams.yml`)
-- [ ] Teams especializados: Frontend Team, Data Science Team, DevOps Team
-- [ ] Más modelos en `models.yaml` (Qwen, Llama, Mistral, etc.)
+### v0.2.x — Public marketplace
+- [ ] Community Teams catalog (beyond the Core Team)
+- [ ] Team contribution system (PRs to `teams.yml`)
+- [ ] Specialized teams: Frontend Team, Data Science Team, DevOps Team
+- [ ] More models in `models.yaml` (Qwen, Llama, Mistral, etc.)
 
-### v0.3.x — Experiencia de equipo
-- [ ] Configuración de Trinit compartida via `.trinit/` en el repositorio
-- [ ] Teams versionados (equipos con versiones específicas de modelos)
-- [ ] Soporte para servidor Ollama compartido con autenticación
-- [ ] CLI mejorado con comandos de gestión de equipo
+### v0.3.x — Team experience
+- [ ] Shared Trinit configuration via `.trinit/` in the repository
+- [ ] Versioned teams (teams with specific model versions)
+- [ ] Support for shared Ollama server with authentication
+- [ ] Improved CLI with team management commands
 
 ### v1.0.x — Enterprise
-- [ ] Soporte para modelos privados (fine-tuned en datos de la empresa)
-- [ ] Integración con sistemas de gestión de identidad internos
-- [ ] Dashboard de uso (local, sin telemetría externa)
-- [ ] Soporte para air-gapped environments (instalación sin internet)
+- [ ] Support for private models (fine-tuned on company data)
+- [ ] Integration with internal identity management systems
+- [ ] Usage dashboard (local, no external telemetry)
+- [ ] Support for air-gapped environments (installation without internet)
 
 ---
 
-## 3. Comparativa de escenarios
+## 3. Scenario comparison
 
-| Escenario | Nº usuarios | Hardware por máquina | Costo mensual | Privacidad | Complejidad setup |
+| Scenario | # users | Hardware per machine | Monthly cost | Privacy | Setup complexity |
 |---|---|---|---|---|---|
-| Dev individual | 1 | 16 GB RAM, GPU 8 GB | $0 | Total | Muy baja (1 comando) |
-| Equipo pequeño | 2-10 | 16 GB RAM, GPU 8 GB | $0 | Total | Baja (1 comando por máquina) |
-| Empresa (distribuido) | 10-100 | 16-32 GB RAM, GPU | $0 | Total | Media (automatizable) |
-| Empresa (servidor compartido) | 10-100 | Servidor GPU potente | $0 (+ hardware) | Total | Alta (gestión de servidor) |
-| Aula | 10-30 | 16 GB RAM | $0 | Total | Baja (1 comando por máquina) |
+| Individual dev | 1 | 16 GB RAM, 8 GB GPU | $0 | Total | Very low (1 command) |
+| Small team | 2–10 | 16 GB RAM, 8 GB GPU | $0 | Total | Low (1 command per machine) |
+| Enterprise (distributed) | 10–100 | 16–32 GB RAM, GPU | $0 | Total | Medium (automatable) |
+| Enterprise (shared server) | 10–100 | Powerful GPU server | $0 (+ hardware) | Total | High (server management) |
+| Classroom | 10–30 | 16 GB RAM | $0 | Total | Low (1 command per machine) |
 
 ---
 
-## 4. Consideraciones de escalabilidad
+## 4. Scalability considerations
 
-### Modelo distribuido (recomendado para la mayoría)
+### Distributed model (recommended for most cases)
 
-Cada desarrollador tiene su propia instancia de Ollama. Ventajas:
-- Escala linealmente — añadir un desarrollador = añadir una máquina
-- Sin contención de recursos
-- Sin punto único de fallo
-- Sin latencia de red
+Each developer has their own Ollama instance. Advantages:
+- Scales linearly — adding a developer = adding a machine
+- No resource contention
+- No single point of failure
+- No network latency
 
-### Modelo centralizado (para equipos grandes con GPU potente)
+### Centralized model (for large teams with powerful GPUs)
 
-Un servidor Ollama sirve a múltiples clientes. Consideraciones:
-- La GPU del servidor debe poder manejar múltiples peticiones concurrentes
-- Ollama soporta múltiples peticiones pero las procesa secuencialmente por defecto
-- Para alta concurrencia, considerar múltiples instancias de Ollama con un load balancer
-- La latencia de red interna debe ser baja (<10ms) para buena experiencia
+A single Ollama server serves multiple clients. Considerations:
+- The server's GPU must handle multiple concurrent requests
+- Ollama supports multiple requests but processes them sequentially by default
+- For high concurrency, consider multiple Ollama instances with a load balancer
+- Internal network latency must be low (<10ms) for a good experience
 
-### Estimación de capacidad (servidor compartido)
+### Capacity estimate (shared server)
 
-| GPU del servidor | Usuarios concurrentes estimados | Tokens/segundo por usuario |
+| Server GPU | Estimated concurrent users | Tokens/second per user |
 |---|---|---|
-| RTX 4090 (24 GB VRAM) | 2-4 | 15-30 |
-| A100 (80 GB VRAM) | 8-16 | 20-40 |
-| 2x A100 | 16-32 | 20-40 |
+| RTX 4090 (24 GB VRAM) | 2–4 | 15–30 |
+| A100 (80 GB VRAM) | 8–16 | 20–40 |
+| 2x A100 | 16–32 | 20–40 |
 
-> **Nota:** Estos son estimados aproximados. La concurrencia real depende del tamaño del contexto y el modelo usado.
+> **Note:** These are approximate estimates. Actual concurrency depends on context size and the model used.
