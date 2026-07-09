@@ -3,16 +3,14 @@
 # Run: curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
 #
 # Interactive menu: when run WITHOUT skip flags and WITHOUT --yes, the installer
-# shows an arrow-key menu (Up/Down to move, Enter to select):
-#   1. Trinit VS Code Extension
-#   2. Ollama + AI Models
-#   3. Trinit Extension + Ollama + AI Models (full)   <- default
-# The menu reads keystrokes directly from /dev/tty (not stdin), because under
-# `curl | sh` stdin is the piped script and cannot be used for interactive
-# input. If /dev/tty is unavailable (CI, container, non-interactive terminal),
-# the installer falls back to a typed numeric menu (1/2/3 + Enter); if that
-# also cannot read input, it falls back to non-interactive full install
-# (option 3).
+# shows a simple numeric menu (type 1/2/3 + Enter):
+#   [1] Trinit VS Code Extension
+#   [2] Ollama + AI Models
+#   [3] Trinit Extension + Ollama + AI Models (full)   <- default (just Enter)
+# The menu uses a plain `read` of a number, which works both locally and under
+# `curl | sh` (a simple numeric read works fine on a piped stdin / terminal).
+# Only if there is no controlling terminal at all (CI, container, no /dev/tty
+# and stdin not a TTY) does it fall back to non-interactive full install (3).
 #
 # Non-interactive mode: pass --yes (or set TRINIT_YES=1) to skip the menu
 # entirely and assume option 3 (full install), e.g.:
@@ -48,9 +46,10 @@ if [ "${TRINIT_YES:-0}" = "1" ]; then
     NON_INTERACTIVE=1
 fi
 # Under `curl | sh`, stdin is the piped script (not a TTY). That alone does NOT
-# mean we are non-interactive: the menu reads keystrokes from /dev/tty, which is
-# the user's real terminal. We only force non-interactive mode when there is no
-# controlling terminal at all (no /dev/tty), e.g. in CI/containers.
+# mean we are non-interactive: the numeric menu reads from /dev/tty (the user's
+# real terminal) when stdin is the pipe, or from stdin when it is a TTY. We only
+# force non-interactive mode when there is no controlling terminal at all
+# (stdin not a TTY AND /dev/tty not readable), e.g. in CI/containers.
 if [ ! -t 0 ] && [ ! -r /dev/tty ]; then
     NON_INTERACTIVE=1
 fi
@@ -82,97 +81,11 @@ read_yes_no() {
 }
 
 # show_install_menu -> echoes the chosen option number (1, 2, or 3).
-# Tries the arrow-key UI via /dev/tty first; falls back to a typed numeric menu
-# if /dev/tty is unavailable or read fails; finally falls back to 3 (full).
+# Prints a numeric menu and reads a number (1/2/3) + Enter. Empty Enter = 3
+# (default full). Re-prompts on invalid input. Reads from /dev/tty when stdin is
+# not a TTY (e.g. `curl | sh`), otherwise from stdin. Falls back to 3 if read
+# fails entirely (no controlling terminal).
 show_install_menu() {
-    local options=(
-        "Trinit VS Code Extension"
-        "Ollama + AI Models"
-        "Trinit Extension + Ollama + AI Models (full)"
-    )
-    local selected=2  # 0-based; default = option 3 (full)
-    local n=${#options[@]}
-    local i redraw=1
-
-    # Try to open /dev/tty for interactive keystroke reading. Under `curl | sh`
-    # stdin is the piped script, so we MUST read from /dev/tty. If /dev/tty is
-    # not available (CI, container, no controlling terminal), fall back to the
-    # typed numeric menu.
-    if [ ! -r /dev/tty ] || [ ! -w /dev/tty ]; then
-        echo 3
-        return
-    fi
-
-    # Open /dev/tty on fd 3 so we don't disturb stdin (which may be the script).
-    exec 3</dev/tty 4>/dev/tty 2>/dev/tty || {
-        echo 3
-        return
-    }
-
-    # Hide the cursor and disable line echo for a cleaner menu.
-    printf '\033[?25l' >&4
-    # Ensure cursor is restored on exit (normal + show cursor).
-    trap 'printf "\033[?25h\033[0m" >&4' RETURN
-
-    while true; do
-        if [ "$redraw" = "1" ]; then
-            # Move cursor up n+3 lines and clear each, so we repaint in place.
-            # (n options + header lines). Using \033[2K clears the whole line.
-            for ((i=0; i<n+3; i++)); do printf '\033[1A\033[2K' >&4; done
-            printf "Select installation profile (Up/Down to move, Enter to select):\n" >&4
-            printf "\n" >&4
-            for ((i=0; i<n; i++)); do
-                if [ "$i" = "$selected" ]; then
-                    printf "  \033[32m> %s\033[0m\n" "${options[$i]}" >&4
-                else
-                    printf "    %s\n" "${options[$i]}" >&4
-                fi
-            done
-            printf "\n" >&4
-            redraw=0
-        fi
-
-        # Read one byte from /dev/tty. -r raw, -s silent, -n1 one char, no IFS.
-        local key=""
-        key=$(dd bs=1 count=1 2>/dev/null <&3 | tr -d '\0')
-        if [ -z "$key" ]; then
-            # read failed (EOF on /dev/tty) -> fall back to default
-            printf '\033[?25h\033[0m' >&4
-            exec 3<&- 4>&-
-            echo 3
-            return
-        fi
-
-        # ESC sequence for arrow keys: ESC [ A/B/C/D
-        if [ "$key" = "$(printf '\033')" ]; then
-            # Read the rest of the escape sequence ([ then letter). Use dd with
-            # a tiny timeout via read where possible; fall back to dd.
-            local seq=""
-            seq=$(dd bs=1 count=2 2>/dev/null <&3 | tr -d '\0')
-            case "$seq" in
-                "[A") selected=$(( (selected - 1 + n) % n )); redraw=1 ;;
-                "[B") selected=$(( (selected + 1) % n )); redraw=1 ;;
-                # Ignore [C (right) and [D (left) and other sequences.
-            esac
-            continue
-        fi
-
-        # Enter: CR (\r, 0x0D) or LF (\n, 0x0A)
-        case "$key" in
-            "$(printf '\r')"|"$(printf '\n')")
-                printf '\033[?25h\033[0m' >&4
-                exec 3<&- 4>&-
-                echo $((selected + 1))
-                return
-                ;;
-        esac
-    done
-}
-
-# typed_menu -> echoes the chosen option number (1, 2, or 3) via a plain
-# number + Enter prompt read from /dev/tty. Used as a fallback when arrow-key
-# reading is not possible. Falls back to 3 on read failure.
-typed_menu() {
     local options=(
         "Trinit VS Code Extension"
         "Ollama + AI Models"
@@ -180,22 +93,46 @@ typed_menu() {
     )
     local n=${#options[@]}
     local i
-    echo "Select installation profile (type 1-$n and press Enter, default 3):" >&2
+
+    echo "Select installation profile:" >&2
     for ((i=0; i<n; i++)); do
-        echo "  $((i+1)). ${options[$i]}" >&2
+        echo "  [$((i+1))] ${options[$i]}" >&2
     done
-    printf "Choice [1-3]: " >&2
-    local answer=""
-    if [ -r /dev/tty ]; then
-        answer=$(read -r line < /dev/tty && printf '%s' "$line" || printf '')
+    echo "" >&2
+
+    # Decide where to read from: if stdin is a TTY, read from it; otherwise
+    # (e.g. `curl | sh` where stdin is the piped script) read from /dev/tty.
+    local read_cmd=(read -r)
+    local read_src=""
+    if [ ! -t 0 ] && [ -r /dev/tty ]; then
+        read_src="/dev/tty"
     fi
-    case "$answer" in
-        1) echo 1 ;;
-        2) echo 2 ;;
-        3) echo 3 ;;
-        "") echo 3 ;;  # empty -> default full
-        *) echo 3 ;;   # invalid -> default full
-    esac
+
+    while true; do
+        printf "Select option [1-3] (default 3): " >&2
+        local answer=""
+        if [ -n "$read_src" ]; then
+            answer=$( "${read_cmd[@]}" line < "$read_src" 2>/dev/null && printf '%s' "$line" || printf '' )
+        else
+            answer=$( "${read_cmd[@]}" line 2>/dev/null && printf '%s' "$line" || printf '' )
+        fi
+
+        # read failure (EOF / no terminal) -> fall back to default
+        if [ -z "$answer" ] && [ ! -t 0 ] && [ ! -r /dev/tty ]; then
+            echo 3
+            return
+        fi
+
+        case "$answer" in
+            1) echo 1; return ;;
+            2) echo 2; return ;;
+            3) echo 3; return ;;
+            "") echo 3; return ;;  # empty Enter -> default full
+            *)
+                echo "Invalid option '$answer'. Please enter 1, 2, or 3 (or just press Enter for 3)." >&2
+                ;;
+        esac
+    done
 }
 
 echo -e "${CYAN}${BOLD}"
@@ -215,10 +152,6 @@ DO_EXTENSION=1
 # --yes / TRINIT_YES=1 => skip menu, assume option 3 (full).
 if [ "$SKIP_OLLAMA" = "0" ] && [ "$SKIP_MODELS" = "0" ] && [ "$NON_INTERACTIVE" = "0" ]; then
     MENU_CHOICE=$(show_install_menu)
-    # If the arrow-key menu returned empty or failed, try the typed fallback.
-    if [ -z "$MENU_CHOICE" ]; then
-        MENU_CHOICE=$(typed_menu)
-    fi
     case "$MENU_CHOICE" in
         1) DO_OLLAMA=0; DO_MODELS=0; DO_EXTENSION=1 ;;
         2) DO_OLLAMA=1; DO_MODELS=1; DO_EXTENSION=0 ;;

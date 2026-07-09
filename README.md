@@ -223,14 +223,15 @@ Or download directly from the [Releases page](https://github.com/Danelaton/trini
 
 One command. ~30 minutes on a 100 Mbps connection. No account, no login, no configuration prompts. For non-interactive automation (Ansible, SCCM, MDM), prefix with `TRINIT_YES=1` (bash) or `$env:TRINIT_YES = "1"` (PowerShell).
 
-**Interactive install menu** — when you run the installer directly in a real terminal **without** any skip/yes flags, it shows an arrow-key menu so you can pick exactly what to install (Up/Down to move, Enter to select):
+**Interactive install menu** — when you run the installer directly in a real terminal **without** any skip/yes flags, it shows a simple numeric menu so you can pick exactly what to install (type 1/2/3 + Enter):
 
 ```
-Select installation profile (Up/Down to move, Enter to select):
+Select installation profile:
+  [1] Trinit VS Code Extension
+  [2] Ollama + AI Models
+  [3] Trinit Extension + Ollama + AI Models (full)
 
-  > Trinit VS Code Extension
-    Ollama + AI Models
-    Trinit Extension + Ollama + AI Models (full)
+Select option [1-3] (default 3):
 ```
 
 | Option | Installs |
@@ -239,12 +240,8 @@ Select installation profile (Up/Down to move, Enter to select):
 | 2. Ollama + AI Models | Steps 1 + 2 (Ollama + models), no extension. |
 | 3. Trinit Extension + Ollama + AI Models (full) | All three steps. **Default** — just press Enter. |
 
-- **Windows:** the menu uses `$host.UI.RawUI.ReadKey()`. It only appears when a real console is attached. Under `irm | iex` stdin is redirected, so the installer falls back to the default (option 3, full install) and prints how to get the menu. To use the menu on Windows, download the script first:
-  ```powershell
-  irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 -OutFile install.ps1
-  .\install.ps1
-  ```
-- **macOS / Linux:** the menu reads keystrokes directly from `/dev/tty` (not stdin), so it works even under `curl | sh`. If `/dev/tty` is unavailable (CI, container, no controlling terminal), it falls back to a typed numeric menu (1/2/3 + Enter), and if that also fails, to non-interactive full install (option 3).
+- **Windows:** the menu uses `Read-Host`, which reads from the real console even under `irm | iex` (stdin redirected), so you can pick an option in remote one-liner installs too. Invalid input re-prompts; empty Enter selects option 3. Only if the environment is truly non-interactive (no `$host.UI.RawUI`, or `Read-Host` throws) does it fall back to option 3.
+- **macOS / Linux:** the menu uses a plain `read` of a number. It reads from `/dev/tty` when stdin is the piped script (under `curl | sh`), otherwise from stdin, so it works in both local and remote one-liner installs. If there is no controlling terminal at all (CI, container), it falls back to non-interactive full install (option 3).
 
 **Skip Ollama and/or models** — if you already have Ollama + models set up, or only want the VS Code extension, the skip flags bypass the menu entirely (for scripting/CI):
 

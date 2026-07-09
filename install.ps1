@@ -2,16 +2,14 @@
 # Run: irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex
 #
 # Interactive menu: when run WITHOUT skip flags and WITHOUT -Yes, the installer
-# shows an arrow-key menu (Up/Down to move, Enter to select):
-#   1. Trinit VS Code Extension
-#   2. Ollama + AI Models
-#   3. Trinit Extension + Ollama + AI Models (full)   <- default
-# The menu uses $host.UI.RawUI.ReadKey() and only appears when a real interactive
-# console is attached. Under `irm | iex` stdin is redirected
-# ([Console]::IsInputRedirected = True), so ReadKey cannot reliably read
-# keystrokes; in that case the installer falls back to non-interactive full
-# install (option 3) and prints how to get the interactive menu (download the
-# script first, then run .\install.ps1).
+# shows a simple numeric menu (type 1/2/3 + Enter):
+#   [1] Trinit VS Code Extension
+#   [2] Ollama + AI Models
+#   [3] Trinit Extension + Ollama + AI Models (full)   <- default (just Enter)
+# The menu uses Read-Host, which works reliably even under `irm | iex` (stdin
+# redirected), so the user can pick an option in remote one-liner installs too.
+# Only if the environment is truly non-interactive (no $host.UI.RawUI, or
+# Read-Host throws) does it fall back to option 3 (full install).
 #
 # Non-interactive mode: pass -Yes (or set $env:TRINIT_YES = "1") to skip the
 # menu entirely and assume option 3 (full install), e.g.:
@@ -41,81 +39,60 @@ Write-Host ""
 $ErrorActionPreference = "Stop"
 
 # -- Non-interactive detection --
-# stdin is redirected under `irm | iex` (and in CI/automation). In that case we
-# cannot show the arrow-key menu (ReadKey reads the console input buffer, which
-# is not available when input is redirected), so we fall back to option 3.
-$StdinRedirected = [Console]::IsInputRedirected
-$NonInteractive = $Yes -or ($env:TRINIT_YES -eq "1") -or $StdinRedirected
+# -Yes / TRINIT_YES=1 explicitly force non-interactive mode (skip menu, option 3).
+# We do NOT treat redirected stdin as non-interactive anymore: the numeric menu
+# uses Read-Host, which reads from the real console even under `irm | iex`, so
+# the user can choose even in remote one-liner installs.
+$NonInteractive = $Yes -or ($env:TRINIT_YES -eq "1")
 
-# -- Interactive arrow-key menu --
-# Returns the 1-based index of the chosen option. Falls back to the default
-# (option 3, full install) if the console cannot read keystrokes.
+# -- Interactive numeric menu --
+# Returns the chosen option number (1, 2, or 3). Prints the menu, asks the user
+# to type 1/2/3 + Enter (empty Enter = 3, the default), and re-prompts on any
+# invalid input. If the environment is truly non-interactive (no $host.UI.RawUI,
+# or Read-Host throws), it falls back to option 3 with an explanatory message.
 function Show-InstallMenu {
     $options = @(
         "Trinit VS Code Extension",
         "Ollama + AI Models",
         "Trinit Extension + Ollama + AI Models (full)"
     )
-    $selected = 2  # 0-based; default = option 3 (full)
-    $redraw = $true
 
-    # Probe whether ReadKey is usable. Under `irm | iex` stdin is redirected and
-    # ReadKey either throws or blocks forever, so we bail out to the default.
-    if ($StdinRedirected) {
-        Write-Host "Interactive menu is not available in this console (stdin redirected," -ForegroundColor Yellow
-        Write-Host "e.g. via irm | iex). Defaulting to full install (option 3)." -ForegroundColor Yellow
-        Write-Host "To use the arrow-key menu, download the script and run it directly:" -ForegroundColor Yellow
-        Write-Host "  irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 -OutFile install.ps1" -ForegroundColor Cyan
-        Write-Host "  .\install.ps1" -ForegroundColor Cyan
+    # Probe interactivity: if there is no RawUI (headless host, restricted
+    # runspace) we cannot read console input at all -> fall back to default.
+    if ($null -eq $host.UI -or $null -eq $host.UI.RawUI) {
+        Write-Host "Interactive menu is not available in this environment (no console UI)." -ForegroundColor Yellow
+        Write-Host "Defaulting to full install (option 3)." -ForegroundColor Yellow
         Write-Host ""
         return 3
     }
 
-    try {
-        # Flush any buffered keystrokes so we don't pick up stale input.
-        while ($host.UI.RawUI.KeyAvailable) {
-            $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | Out-Null
-        }
-    } catch {
-        Write-Host "Interactive menu is not available in this console. Defaulting to full install (option 3)." -ForegroundColor Yellow
-        return 3
+    Write-Host ""
+    Write-Host "Select installation profile:" -ForegroundColor Cyan
+    for ($i = 0; $i -lt $options.Count; $i++) {
+        Write-Host ("  [" + ($i + 1) + "] " + $options[$i]) -ForegroundColor Gray
     }
+    Write-Host ""
 
     while ($true) {
-        if ($redraw) {
-            Write-Host ""
-            Write-Host "Select installation profile (Up/Down to move, Enter to select):" -ForegroundColor Cyan
-            Write-Host ""
-            for ($i = 0; $i -lt $options.Count; $i++) {
-                $label = $options[$i]
-                if ($i -eq $selected) {
-                    Write-Host ("  > " + $label) -ForegroundColor Green
-                } else {
-                    Write-Host ("    " + $label) -ForegroundColor Gray
-                }
-            }
-            Write-Host ""
-            $redraw = $false
-        }
-
+        $answer = $null
         try {
-            $key = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $answer = Read-Host "Select option [1-3] (default 3)"
         } catch {
-            Write-Host "Console input lost. Defaulting to full install (option 3)." -ForegroundColor Yellow
+            Write-Host "Could not read console input. Defaulting to full install (option 3)." -ForegroundColor Yellow
             return 3
         }
 
-        $code = $key.VirtualKeyCode
-        $chars = $key.Character
-        # 38 = UpArrow, 40 = DownArrow, 13 = Enter (CR)
-        if ($code -eq 38) {
-            $selected = ($selected - 1 + $options.Count) % $options.Count
-            $redraw = $true
-        } elseif ($code -eq 40) {
-            $selected = ($selected + 1) % $options.Count
-            $redraw = $true
-        } elseif ($code -eq 13 -or $chars -eq "`r" -or $chars -eq "`n") {
-            return ($selected + 1)
+        $trimmed = "$answer".Trim()
+        if ([string]::IsNullOrWhiteSpace($trimmed)) {
+            return 3  # empty Enter -> default full
+        }
+        switch ($trimmed) {
+            "1" { return 1 }
+            "2" { return 2 }
+            "3" { return 3 }
+            default {
+                Write-Host "Invalid option '$trimmed'. Please enter 1, 2, or 3 (or just press Enter for 3)." -ForegroundColor Yellow
+            }
         }
     }
 }
