@@ -135,11 +135,30 @@ fi
 
 echo -e "${YELLOW}[2/3] Pulling models...${NC}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-MANIFEST_PATH="$SCRIPT_DIR/models.yaml"
+# Resolve models.yaml path (works in BOTH local and remote pipe mode).
+# When run via `curl | sh`, BASH_SOURCE is empty (no physical script file),
+# so we cannot rely on the script's directory. Instead:
+#   - If a local models.yaml sits next to this script (local execution), use it.
+#   - Otherwise (remote pipe execution), download it from the raw GitHub URL.
+MANIFEST_RAW_URL="https://raw.githubusercontent.com/Danelaton/trinit/main/models.yaml"
+resolve_manifest_path() {
+    local script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd)"
+    if [ -n "$script_dir" ] && [ -f "$script_dir/models.yaml" ]; then
+        echo "$script_dir/models.yaml"
+        return
+    fi
+    local tmp="/tmp/trinit-models.yaml"
+    if curl -fsSL "$MANIFEST_RAW_URL" -o "$tmp" 2>/dev/null && [ -f "$tmp" ]; then
+        echo "$tmp"
+        return
+    fi
+    echo ""
+}
+MANIFEST_PATH="$(resolve_manifest_path)"
 
 MODELS=()
-if [ -f "$MANIFEST_PATH" ]; then
+if [ -n "$MANIFEST_PATH" ] && [ -f "$MANIFEST_PATH" ]; then
     while IFS= read -r ref; do
         [ -n "$ref" ] && MODELS+=("$ref")
     done < <(grep -E '^\s*ollama_ref:' "$MANIFEST_PATH" | sed -E 's/^\s*ollama_ref:\s*//')

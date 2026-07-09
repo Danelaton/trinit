@@ -1,4 +1,4 @@
-﻿# Trinit One-Liner Installer — Windows
+# Trinit One-Liner Installer -- Windows
 # Run: irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex
 #
 # Non-interactive mode: pass -Yes (or set $env:TRINIT_YES = "1") to assume defaults
@@ -12,15 +12,15 @@ param(
     [switch]$Yes
 )
 
-Write-Host "╔══════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║      T R I N I T  Setup       ║" -ForegroundColor Cyan
-Write-Host "║   Local LLMs + AI Agent Teams   ║" -ForegroundColor Cyan
-Write-Host "╚══════════════════════════════════╝" -ForegroundColor Cyan
+Write-Host "...................................." -ForegroundColor Cyan
+Write-Host "      T R I N I T  Setup            " -ForegroundColor Cyan
+Write-Host "   Local LLMs + AI Agent Teams      " -ForegroundColor Cyan
+Write-Host "...................................." -ForegroundColor Cyan
 Write-Host ""
 
 $ErrorActionPreference = "Stop"
 
-# ── Non-interactive detection ──────────────────────────────
+# -- Non-interactive detection --
 # If stdin isn't a real console (e.g. piped via `irm | iex`), never block on Read-Host.
 $NonInteractive = $Yes -or ($env:TRINIT_YES -eq "1") -or ([Console]::IsInputRedirected)
 
@@ -41,7 +41,28 @@ function Read-YesNo {
     return $answer -match '^(y|yes)$'
 }
 
-# ── Step 1: Detect / install / update Ollama ───────────────
+# -- Resolve models.yaml path (works in BOTH local and remote pipe mode) --
+# When run via `irm | iex`, $PSScriptRoot is empty (no physical script file),
+# so we cannot use Join-Path $PSScriptRoot "models.yaml". Instead:
+#   - If a local models.yaml sits next to this script (local execution), use it.
+#   - Otherwise (remote pipe execution), download it from the raw GitHub URL.
+$ManifestRawUrl = "https://raw.githubusercontent.com/Danelaton/trinit/main/models.yaml"
+function Resolve-ManifestPath {
+    if (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+        $local = Join-Path $PSScriptRoot "models.yaml"
+        if (Test-Path $local) { return $local }
+    }
+    $tmp = Join-Path $env:TEMP "trinit-models.yaml"
+    try {
+        Invoke-WebRequest -Uri $ManifestRawUrl -OutFile $tmp -UseBasicParsing
+        if (Test-Path $tmp) { return $tmp }
+    } catch {
+        Write-Host "       Could not download models.yaml from remote -- will use default model list" -ForegroundColor Yellow
+    }
+    return $null
+}
+
+# -- Step 1: Detect / install / update Ollama --
 
 Write-Host "[1/3] Checking for Ollama..." -ForegroundColor Yellow
 
@@ -109,7 +130,7 @@ function Test-OllamaRunning {
 }
 
 if (-not (Test-OllamaRunning)) {
-    Write-Host "       Ollama installed but not running — starting it..." -ForegroundColor Yellow
+    Write-Host "       Ollama installed but not running -- starting it..." -ForegroundColor Yellow
     try {
         Start-Process "ollama" -ArgumentList "serve" -WindowStyle Hidden
     } catch {
@@ -123,19 +144,19 @@ if (-not (Test-OllamaRunning)) {
     if (Test-OllamaRunning) {
         Write-Host "       Ollama is running" -ForegroundColor Green
     } else {
-        Write-Host "       Could not confirm Ollama is running — continuing anyway" -ForegroundColor Yellow
+        Write-Host "       Could not confirm Ollama is running -- continuing anyway" -ForegroundColor Yellow
     }
 } else {
     Write-Host "       Ollama is running" -ForegroundColor Green
 }
 
-# ── Step 2: Pull models (read list from models.yaml) ───────
+# -- Step 2: Pull models (read list from models.yaml) --
 
 Write-Host "[2/3] Pulling models..." -ForegroundColor Yellow
 
-$manifestPath = Join-Path $PSScriptRoot "models.yaml"
+$manifestPath = Resolve-ManifestPath
 $models = @()
-if (Test-Path $manifestPath) {
+if ($manifestPath -and (Test-Path $manifestPath)) {
     $manifestContent = Get-Content $manifestPath -Raw
     $modelMatches = [regex]::Matches($manifestContent, 'ollama_ref:\s*(\S+)')
     foreach ($m in $modelMatches) {
@@ -144,7 +165,7 @@ if (Test-Path $manifestPath) {
 }
 
 if ($models.Count -eq 0) {
-    Write-Host "       Could not read models.yaml — falling back to default model list" -ForegroundColor Yellow
+    Write-Host "       Could not read models.yaml -- falling back to default model list" -ForegroundColor Yellow
     $models = @("glm-ocr:latest", "gemma4:e2b", "gemma4:e4b", "ornith:9b")
 }
 
@@ -168,7 +189,7 @@ foreach ($model in $models) {
     Write-Host "       $model ready" -ForegroundColor Green
 }
 
-# ── Step 3: Install VS Code extension ──────────────────────
+# -- Step 3: Install VS Code extension --
 
 Write-Host "[3/3] Installing Trinit VS Code extension..." -ForegroundColor Yellow
 $vsixUrl = "https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
@@ -178,7 +199,7 @@ code --install-extension $vsixPath
 Remove-Item $vsixPath
 
 Write-Host ""
-Write-Host "╔══════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║   Trinit setup complete!         ║" -ForegroundColor Green
-Write-Host "║   Open VS Code → Trinit sidebar  ║" -ForegroundColor Green
-Write-Host "╚══════════════════════════════════╝" -ForegroundColor Green
+Write-Host "...................................." -ForegroundColor Green
+Write-Host "   Trinit setup complete!           " -ForegroundColor Green
+Write-Host "   Open VS Code -> Trinit sidebar   " -ForegroundColor Green
+Write-Host "...................................." -ForegroundColor Green
