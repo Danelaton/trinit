@@ -475,7 +475,19 @@ if (-not $DoExtension) {
 Write-Host "[3/3] Installing Trinit VS Code extension..." -ForegroundColor Yellow
 $vsixUrl = "https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
 $vsixPath = "$env:TEMP\trinit.vsix"
+
+# Remove any previously downloaded .vsix so curl/Invoke-WebRequest writes a fresh copy
+# rather than silently appending or reusing a stale cached file.
+Remove-Item -Force -ErrorAction SilentlyContinue $vsixPath
+
 Invoke-WebRequest -Uri $vsixUrl -OutFile $vsixPath
+
+# Uninstall any previous version of the extension to ensure no stale cached
+# code or state survives across updates. Without this, `code --install-extension`
+# may leave old files in place, and VSCode can load the stale version.
+$extensionId = "DanElaton.trinit"
+$codeArgs = @("--uninstall-extension", $extensionId)
+& code @codeArgs 2>$null
 # `code` is a shim that runs VS Code's bundled Node (ELECTRON_RUN_AS_NODE=1)
 # executing its own cli.js. That internal Node code uses the legacy url.parse()
 # API and emits `[DEP0169] DeprecationWarning: url.parse()`. This is NOT from

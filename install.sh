@@ -302,6 +302,11 @@ else
 printf '%b\n' "${YELLOW}[3/3] Installing Trinit VS Code extension...${NC}"
 VSIX_URL="https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
 VSIX_PATH="/tmp/trinit.vsix"
+
+# Remove any previously downloaded .vsix so curl writes a fresh copy
+# rather than silently reusing a stale cached file.
+rm -f "$VSIX_PATH"
+
 curl -fsSL "$VSIX_URL" -o "$VSIX_PATH"
 
 # Resolve the `code` CLI. On macOS, VS Code does NOT add `code` to the shell
@@ -363,6 +368,11 @@ fi
 if [ "$CODE_BIN" != "code" ]; then
     printf '%b\n' "${CYAN}       Using VS Code CLI at: $CODE_BIN${NC}"
 fi
+
+# Uninstall any previous version of the extension to ensure no stale cached
+# code or state survives across updates. Without this, `code --install-extension`
+# may leave old files in place, and VSCode can load the stale version.
+"$CODE_BIN" --uninstall-extension "DanElaton.trinit" 2>/dev/null || true
 
 # `code` is a shim that runs VS Code's bundled Node executing its own cli.js.
 # That internal Node code uses the legacy url.parse() API and emits
