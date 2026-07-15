@@ -303,6 +303,67 @@ printf '%b\n' "${YELLOW}[3/3] Installing Trinit VS Code extension...${NC}"
 VSIX_URL="https://github.com/Danelaton/trinit/releases/latest/download/trinit.vsix"
 VSIX_PATH="/tmp/trinit.vsix"
 curl -fsSL "$VSIX_URL" -o "$VSIX_PATH"
+
+# Resolve the `code` CLI. On macOS, VS Code does NOT add `code` to the shell
+# PATH automatically — the user must enable it from VS Code (Cmd+Shift+P →
+# "Shell Command: Install 'code' command in PATH"). The binary still lives at
+# a well-known path inside the .app bundle, so we look for it there as a
+# fallback. On Linux we also check common install locations.
+# POSIX: no arrays. Use a newline-delimited candidate list and a while loop.
+CODE_BIN=""
+if command -v code >/dev/null 2>&1; then
+    CODE_BIN="code"
+else
+    CANDIDATES=""
+    case "$(uname -s)" in
+        Darwin)
+            CANDIDATES="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code
+$HOME/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code
+/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code-insiders
+$HOME/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code-insiders"
+            ;;
+        *)
+            CANDIDATES="/usr/share/code/bin/code
+/snap/bin/code
+/usr/bin/code
+/usr/local/bin/code
+$HOME/.local/share/code/bin/code"
+            ;;
+    esac
+    printf '%s\n' "$CANDIDATES" | while IFS= read -r cand; do
+        [ -z "$cand" ] && continue
+        if [ -x "$cand" ]; then
+            # Found a usable binary outside PATH; use its full path directly.
+            printf '%s' "$cand" > /tmp/.trinit_code_bin
+            break
+        fi
+    done
+    # Read result from subshell (POSIX: no var leaking out of the while pipe).
+    if [ -f /tmp/.trinit_code_bin ]; then
+        CODE_BIN="$(cat /tmp/.trinit_code_bin)"
+        rm -f /tmp/.trinit_code_bin
+    fi
+fi
+
+if [ -z "$CODE_BIN" ]; then
+    # Not found anywhere. Print a clear, actionable message instead of letting
+    # the shell emit a raw "command not found" stack trace.
+    printf '%b\n' "${RED}⚠️  No se pudo encontrar el comando \"code\" de VS Code.${NC}"
+    printf '%b\n' "${YELLOW}Para instalarlo manualmente:${NC}"
+    printf '%b\n' "${YELLOW}  1. Abre VS Code${NC}"
+    printf '%b\n' "${YELLOW}  2. Presiona Cmd+Shift+P (Mac) o Ctrl+Shift+P (Windows/Linux)${NC}"
+    printf '%b\n' "${YELLOW}  3. Busca y ejecuta: \"Shell Command: Install code command in PATH\"${NC}"
+    printf '%b\n' "${YELLOW}  4. Luego instala la extension con:${NC}"
+    printf '%b\n' "${YELLOW}     code --install-extension $VSIX_URL${NC}"
+    printf '%b\n' "${YELLOW}     (o si ya descargaste el vsix: code --install-extension $VSIX_PATH)${NC}"
+    rm -f "$VSIX_PATH"
+    exit 1
+fi
+
+if [ "$CODE_BIN" != "code" ]; then
+    printf '%b\n' "${CYAN}       Using VS Code CLI at: $CODE_BIN${NC}"
+fi
+
 # `code` is a shim that runs VS Code's bundled Node executing its own cli.js.
 # That internal Node code uses the legacy url.parse() API and emits
 # `[DEP0169] DeprecationWarning: url.parse()`. This is NOT from Trinit code
@@ -317,7 +378,7 @@ else
     NODE_OPTIONS="--no-deprecation"
 fi
 export NODE_OPTIONS
-code --install-extension "$VSIX_PATH" || {
+"$CODE_BIN" --install-extension "$VSIX_PATH" || {
     NODE_OPTIONS="$PREV_NODE_OPTIONS"; export NODE_OPTIONS; rm -f "$VSIX_PATH"; exit 1
 }
 NODE_OPTIONS="$PREV_NODE_OPTIONS"
