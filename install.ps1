@@ -157,6 +157,106 @@ function Resolve-ManifestPath {
     return $null
 }
 
+# -- Helpers for Step 1 --
+
+# Ollama's Windows installer (Inno Setup, run via winget OR via ollama.com's
+# install.ps1) is a large download and can take several minutes. It normally
+# produces little visible output, so without feedback the user may think the
+# installer has frozen. We stream the child process output line-by-line to the
+# console so progress is visible in real time.
+#
+# After a successful install/upgrade, the Ollama installer launches the
+# "ollama app.exe" tray app automatically, which on some systems pops up a
+# window. That unexpected window confuses users into thinking the installer
+# stalled. We close that auto-launched app after the upgrade so the Trinit
+# installer stays in control of what is on screen.
+function Stop-OllamaProcesses {
+    $procs = Get-Process -Name "ollama","ollama app" -ErrorAction SilentlyContinue
+    if (-not $procs) { return $false }
+    Write-Host "       Closing the running Ollama app (it will restart after the update)..." -ForegroundColor Yellow
+    foreach ($p in $procs) {
+        try { Stop-Process -Id $p.Id -Force -ErrorAction Stop } catch {}
+    }
+    Start-Sleep -Seconds 2
+    return $true
+}
+
+# Close any "ollama app.exe" window that the installer auto-launched at the end
+# of an upgrade. We only close the GUI tray app, NOT the headless ollama.exe
+# server (which Step 1 below explicitly starts if needed). This prevents the
+# confusing extra window without breaking the running server.
+function Close-OllamaTrayApp {
+    $tray = Get-Process -Name "ollama app" -ErrorAction SilentlyContinue
+    if ($tray) {
+        foreach ($p in $tray) {
+            try { Stop-Process -Id $p.Id -Force -ErrorAction Stop } catch {}
+        }
+        Start-Sleep -Seconds 1
+    }
+}
+
+# Run a command and stream its stdout to the console line-by-line so the user
+# sees live progress instead of a silent hang. Returns a hashtable with
+# ExitCode, Output and Error. Compatible with Windows PowerShell 5.1 (the
+# default `powershell.exe` used by `irm | iex` on Windows).
+function Invoke-StreamingCommand {
+    param(
+        [string]$FilePath,
+        [string[]]$Arguments
+    )
+    # Build a single argument string, quoting each token that contains spaces.
+    $argString = ($Arguments | ForEach-Object {
+        if ($_ -match '\s') { "`"$_`"" } else { "$_" }
+    }) -join ' '
+
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $FilePath
+    $psi.Arguments = $argString
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+    $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+    $psi.StandardErrorEncoding = [System.Text.Encoding]::UTF8
+
+    $proc = New-Object System.Diagnostics.Process
+    $proc.StartInfo = $psi
+    [void]$proc.Start()
+
+    # Read stderr on a background thread so it cannot deadlock against stdout.
+    $errTask = $proc.StandardError.ReadToEndAsync()
+
+    # Stream stdout line-by-line to the console. winget writes its progress and
+    # status messages to stdout, so this is what the user sees in real time.
+    $outBuilder = New-Object System.Text.StringBuilder
+    while (-not $proc.StandardOutput.EndOfStream) {
+        $line = $proc.StandardOutput.ReadLine()
+        if ($line) {
+            Write-Host "         $line" -ForegroundColor DarkGray
+            [void]$outBuilder.AppendLine($line)
+        }
+    }
+    $proc.WaitForExit()
+
+    $errOutput = ""
+    try { $errOutput = $errTask.Result } catch {}
+    $exit = $proc.ExitCode
+    try { $proc.Close() } catch {}
+
+    return @{ ExitCode = $exit; Output = $outBuilder.ToString(); Error = "$errOutput" }
+}
+
+# Run the official Ollama installer (ollama.com/install.ps1) with streaming
+# output. ollama's install.ps1 uses $ProgressPreference="SilentlyContinue" and
+# /VERYSILENT, so it emits very little; we still surface whatever it prints.
+function Invoke-OllamaOfficialInstaller {
+    Write-Host "       Downloading and running the official Ollama installer..." -ForegroundColor Yellow
+    Write-Host "       (this downloads ~500MB+ and may take several minutes -- please wait)" -ForegroundColor DarkGray
+    # We invoke the remote script in the current scope so its Write-Host output
+    # streams directly to our console. Errors propagate as exceptions.
+    & ([scriptblock]::Create((Invoke-WebRequest -Uri "https://ollama.com/install.ps1" -UseBasicParsing).Content))
+}
+
 # -- Step 1: Detect / install / update Ollama --
 
 if (-not $DoOllama) {
@@ -187,41 +287,71 @@ if ($ollamaCmd) {
     $doUpdate = Read-YesNo -Prompt "       Update Ollama?" -DefaultYes $false
     if ($doUpdate) {
         Write-Host "       Updating Ollama..." -ForegroundColor Yellow
+        Write-Host "       NOTE: this can take several minutes (large download). Please do NOT close this window." -ForegroundColor Cyan
+        Write-Host "       Output from the updater will appear below as it progresses:" -ForegroundColor DarkGray
+
+        # Close any running Ollama app/server so the installer can replace the
+        # binaries cleanly. The installer would otherwise either prompt or wait.
+        $null = Stop-OllamaProcesses
+
         $wingetCmd = Get-Command winget -ErrorAction SilentlyContinue
+        $updateDone = $false
         if ($wingetCmd) {
             # winget emits localized UI text based on the OS display language
             # (e.g. Spanish on a Spanish Windows), and its --locale flag only
             # affects the Winget settings UI / BCP47 parsing -- it does NOT
-            # force English output. To keep the installer log consistently in
-            # English, we capture winget's native output and emit our own
-            # messages based on the exit code.
-            $wingetExit = 0
-            try {
-                $wingetOutput = & winget upgrade --id Ollama.Ollama --silent --accept-package-agreements --accept-source-agreements 2>&1 |
-                    Out-String
-                $wingetExit = $LASTEXITCODE
-            } catch {
-                $wingetExit = $LASTEXITCODE
-            }
-            if ($wingetExit -eq 0) {
-                # winget returns 0 both when it upgraded and when no update was
-                # available; distinguish by checking if "No update" style text
-                # appears in any language. Heuristic: if the output contains no
-                # version arrow / "installed" marker, treat as already current.
-                $looksLikeNoUpdate = $wingetOutput -match '(No update|no hay versiones|ya est|already)'
+            # force English output. We stream winget's native output verbatim
+            # so the user sees live progress, then interpret the exit code.
+            #
+            # --disable-interactivity prevents winget from ever prompting on
+            # stdin (which would freeze the `irm | iex` pipe).
+            $wingetArgs = @('upgrade','--id','Ollama.Ollama','--silent','--disable-interactivity','--accept-package-agreements','--accept-source-agreements')
+            $result = Invoke-StreamingCommand -FilePath $wingetCmd.Source -Arguments $wingetArgs
+            $wingetExit = $result.ExitCode
+            $wingetOutput = $result.Output + "`n" + $result.Error
+
+            # winget exit codes:
+            #   0                         -> upgraded (or already current, older winget)
+            #   -1978335189 (0x8A150011)  -> APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
+            #                               "no update available" -- NOT an error
+            #   other non-zero           -> real failure, fall back
+            $noUpdateExitCode = -1978335189
+            if ($wingetExit -eq 0 -or $wingetExit -eq $noUpdateExitCode) {
+                # Distinguish "already up to date" from "actually upgraded"
+                # by scanning winget's localized output for no-update markers.
+                $looksLikeNoUpdate = ($wingetExit -eq $noUpdateExitCode) -or
+                    ($wingetOutput -match '(No update|no hay versiones|ya est|already|ninguna actualizaci)')
                 if ($looksLikeNoUpdate) {
                     Write-Host "       Ollama already up to date" -ForegroundColor Green
                 } else {
                     Write-Host "       Ollama updated" -ForegroundColor Green
                 }
+                $updateDone = $true
             } else {
                 Write-Host "       winget upgrade did not complete (exit $wingetExit), falling back to official installer..." -ForegroundColor Yellow
-                irm https://ollama.com/install.ps1 | iex
-                Write-Host "       Ollama updated" -ForegroundColor Green
             }
         } else {
-            irm https://ollama.com/install.ps1 | iex
-            Write-Host "       Ollama updated" -ForegroundColor Green
+            Write-Host "       winget not available -- using official installer..." -ForegroundColor Yellow
+        }
+
+        if (-not $updateDone) {
+            # Fallback: official ollama.com/install.ps1 (also Inno Setup /VERYSILENT).
+            try {
+                Invoke-OllamaOfficialInstaller
+                Write-Host "       Ollama updated" -ForegroundColor Green
+                $updateDone = $true
+            } catch {
+                Write-Host "       Ollama update failed: $($_.Exception.Message)" -ForegroundColor Red
+                Write-Host "       You can download the latest installer manually from https://ollama.com/download." -ForegroundColor Yellow
+            }
+        }
+
+        # The Ollama installer auto-launches the tray app ("ollama app.exe")
+        # at the end of a successful install/upgrade, which pops up a window
+        # and confuses users. Close that auto-launched window; Step 1 below
+        # will start the headless server if it is not already running.
+        if ($updateDone) {
+            Close-OllamaTrayApp
         }
     } else {
         Write-Host "       Skipping update, continuing with existing install" -ForegroundColor Green
@@ -230,8 +360,20 @@ if ($ollamaCmd) {
     $doInstall = Read-YesNo -Prompt "       Ollama is required for Trinit's local mode. Install it now?" -DefaultYes $true
     if ($doInstall) {
         Write-Host "       Installing Ollama..." -ForegroundColor Yellow
-        irm https://ollama.com/install.ps1 | iex
-        Write-Host "       Ollama installed" -ForegroundColor Green
+        Write-Host "       NOTE: this can take several minutes (large download). Please do NOT close this window." -ForegroundColor Cyan
+        Write-Host "       Output from the installer will appear below as it progresses:" -ForegroundColor DarkGray
+        # Fresh install: Ollama is not present, so no running processes to stop.
+        try {
+            Invoke-OllamaOfficialInstaller
+            Write-Host "       Ollama installed" -ForegroundColor Green
+            # Same auto-launch behavior on fresh install -- close the tray window.
+            Close-OllamaTrayApp
+        } catch {
+            Write-Host "       Ollama install failed: $($_.Exception.Message)" -ForegroundColor Red
+            Write-Host "       Please download the installer manually from https://ollama.com/download," -ForegroundColor Yellow
+            Write-Host "       run it, then re-run this Trinit installer." -ForegroundColor Yellow
+            exit 1
+        }
     } else {
         Write-Host ""
         Write-Host "Trinit local mode requires Ollama to run local models." -ForegroundColor Red
@@ -270,6 +412,15 @@ if (-not (Test-OllamaRunning)) {
     }
 } else {
     Write-Host "       Ollama is running" -ForegroundColor Green
+}
+
+# After a fresh install/upgrade, the Ollama directory may not yet be in THIS
+# process's PATH (the official installer updates the user/system PATH, but that
+# only takes effect for NEW processes). Add the default install location
+# explicitly so `ollama` resolves in Steps 1/2 even in the current session.
+$ollamaInstallDir = Join-Path $env:LOCALAPPDATA "Programs\Ollama"
+if ((Test-Path $ollamaInstallDir) -and (($env:PATH -split ';') -notcontains $ollamaInstallDir)) {
+    $env:PATH = "$ollamaInstallDir;$env:PATH"
 }
 } # end if ($DoOllama)
 
