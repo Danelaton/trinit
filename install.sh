@@ -185,7 +185,7 @@ if command -v ollama >/dev/null 2>&1; then
     if [ "$DO_UPDATE" = "y" ]; then
         printf '%b\n' "${YELLOW}       Updating Ollama...${NC}"
         if [ "$(uname -s)" = "Darwin" ] && command -v brew >/dev/null 2>&1; then
-            brew upgrade ollama || curl -fsSL https://ollama.com/install.sh | sh
+            LANG=C LC_ALL=C brew upgrade ollama || curl -fsSL https://ollama.com/install.sh | sh
         else
             curl -fsSL https://ollama.com/install.sh | sh
         fi
@@ -348,14 +348,14 @@ fi
 if [ -z "$CODE_BIN" ]; then
     # Not found anywhere. Print a clear, actionable message instead of letting
     # the shell emit a raw "command not found" stack trace.
-    printf '%b\n' "${RED}⚠️  No se pudo encontrar el comando \"code\" de VS Code.${NC}"
-    printf '%b\n' "${YELLOW}Para instalarlo manualmente:${NC}"
-    printf '%b\n' "${YELLOW}  1. Abre VS Code${NC}"
-    printf '%b\n' "${YELLOW}  2. Presiona Cmd+Shift+P (Mac) o Ctrl+Shift+P (Windows/Linux)${NC}"
-    printf '%b\n' "${YELLOW}  3. Busca y ejecuta: \"Shell Command: Install code command in PATH\"${NC}"
-    printf '%b\n' "${YELLOW}  4. Luego instala la extension con:${NC}"
+    printf '%b\n' "${RED}⚠️  Could not find the VS Code \"code\" command.${NC}"
+    printf '%b\n' "${YELLOW}To install it manually:${NC}"
+    printf '%b\n' "${YELLOW}  1. Open VS Code${NC}"
+    printf '%b\n' "${YELLOW}  2. Press Cmd+Shift+P (Mac) or Ctrl+Shift+P (Windows/Linux)${NC}"
+    printf '%b\n' "${YELLOW}  3. Search for and run: \"Shell Command: Install code command in PATH\"${NC}"
+    printf '%b\n' "${YELLOW}  4. Then install the extension with:${NC}"
     printf '%b\n' "${YELLOW}     code --install-extension $VSIX_URL${NC}"
-    printf '%b\n' "${YELLOW}     (o si ya descargaste el vsix: code --install-extension $VSIX_PATH)${NC}"
+    printf '%b\n' "${YELLOW}     (or if you already downloaded the vsix: code --install-extension $VSIX_PATH)${NC}"
     rm -f "$VSIX_PATH"
     exit 1
 fi
