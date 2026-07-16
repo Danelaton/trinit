@@ -99,7 +99,17 @@ clean_uninstall() {
 
     if [ "$NON_INTERACTIVE" = "0" ]; then
         printf "Type 'yes' to confirm: "
-        read -r confirm || confirm=""
+        if [ -t 0 ]; then
+            read -r confirm || confirm=""
+        elif [ -r /dev/tty ]; then
+            confirm=$(read -r line 2>/dev/null < /dev/tty && printf '%s' "$line" || printf '')
+        else
+            printf '%b\n' "${RED}Cannot read confirmation: no terminal available.${NC}"
+            printf '%b\n' "${YELLOW}To run clean uninstall non-interactively, use one of:${NC}"
+            printf '%b\n' "${YELLOW}  TRINIT_CLEAN_UNINSTALL=1 curl -fsSL .../install.sh | sh${NC}"
+            printf '%b\n' "${YELLOW}  curl -fsSL .../install.sh -o install.sh && sh install.sh --clean-uninstall --yes${NC}"
+            exit 1
+        fi
         if [ "$confirm" != "yes" ]; then
             printf '%b\n' "${YELLOW}Clean uninstall cancelled.${NC}"
             exit 0
@@ -237,7 +247,13 @@ read_yes_no() {
         return
     fi
     printf "%s %s " "$prompt" "$suffix" >&2
-    read -r answer || answer=""
+    if [ -t 0 ]; then
+        read -r answer || answer=""
+    elif [ -r /dev/tty ]; then
+        answer=$(read -r line 2>/dev/null < /dev/tty && printf '%s' "$line" || printf '')
+    else
+        answer=""
+    fi
     if [ -z "$answer" ]; then
         echo "$default"
         return
@@ -273,7 +289,7 @@ show_install_menu() {
         printf "Select option [1-4] (default 3): " >&2
         answer=""
         if [ -n "$read_src" ]; then
-            answer=$(read -r line < "$read_src" 2>/dev/null && printf '%s' "$line" || printf '')
+            answer=$(read -r line 2>/dev/null < "$read_src" && printf '%s' "$line" || printf '')
         else
             answer=$(read -r line 2>/dev/null && printf '%s' "$line" || printf '')
         fi
