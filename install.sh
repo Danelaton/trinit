@@ -30,6 +30,13 @@
 #   curl -fsSL .../install.sh | sh -s -- --skip-ollama   # still pulls models
 #   curl -fsSL .../install.sh | sh -s -- --skip-models   # still installs/updates Ollama
 #   curl -fsSL .../install.sh | sh -s -- --skip-ollama --skip-models  # extension only
+#
+# Clean uninstall:
+#   curl -fsSL .../install.sh | sh -s -- --clean-uninstall
+# Or via environment variable (works with the one-liner pipe):
+#   TRINIT_CLEAN_UNINSTALL=1 curl -fsSL .../install.sh | sh
+# Removes the extension, all globalStorage data, and attempts to clean
+# Keychain/credential entries. Prompts for confirmation unless --yes is passed.
 
 set -e
 
@@ -43,15 +50,20 @@ NC='\033[0m'
 NON_INTERACTIVE=0
 SKIP_OLLAMA=0
 SKIP_MODELS=0
+CLEAN_UNINSTALL=0
 for arg in "$@"; do
     case "$arg" in
         --yes|-y) NON_INTERACTIVE=1 ;;
         --skip-ollama) SKIP_OLLAMA=1 ;;
         --skip-models) SKIP_MODELS=1 ;;
+        --clean-uninstall) CLEAN_UNINSTALL=1 ;;
     esac
 done
 if [ "${TRINIT_YES:-0}" = "1" ]; then
     NON_INTERACTIVE=1
+fi
+if [ "${TRINIT_CLEAN_UNINSTALL:-0}" = "1" ]; then
+    CLEAN_UNINSTALL=1
 fi
 # Under `curl | sh`, stdin is the piped script (not a TTY). That alone does NOT
 # mean we are non-interactive: the numeric menu reads from /dev/tty (the user's
@@ -61,6 +73,146 @@ fi
 if [ ! -t 0 ] && [ ! -r /dev/tty ]; then
     NON_INTERACTIVE=1
 fi
+
+# ── Clean Uninstall ──────────────────────────────────────────
+# When --clean-uninstall is passed, this script does a destructive removal of
+# ALL Trinit data (extension, globalStorage, credential entries).
+# Ollama and its models are NEVER touched.
+if [ "$CLEAN_UNINSTALL" = "1" ]; then
+    printf '%b\n' "${RED}${BOLD}"
+    echo "╔══════════════════════════════════╗"
+    echo "║   T R I N I T  Clean Uninstall  ║"
+    echo "╚══════════════════════════════════╝"
+    printf '%b\n' "${NC}"
+
+    printf '%b\n' "${YELLOW}WARNING: This will permanently delete ALL Trinit data:${NC}"
+    printf '%b\n' "${YELLOW}  - VS Code extension (DanElaton.trinit)${NC}"
+    printf '%b\n' "${YELLOW}  - Extension globalStorage (settings, task history, custom modes)${NC}"
+    printf '%b\n' "${YELLOW}  - Extension globalState and secrets (API keys, provider profiles)${NC}"
+    printf '%b\n' "${YELLOW}  - MCP OAuth credentials${NC}"
+    printf '%b\n' "${YELLOW}  - Cloud authentication${NC}"
+    echo ""
+    printf '%b\n' "${GREEN}Ollama and its models will NOT be touched.${NC}"
+    echo ""
+
+    if [ "$NON_INTERACTIVE" = "0" ]; then
+        printf "Type 'yes' to confirm: "
+        read -r confirm || confirm=""
+        if [ "$confirm" != "yes" ]; then
+            printf '%b\n' "${YELLOW}Clean uninstall cancelled.${NC}"
+            exit 0
+        fi
+    else
+        printf '%b\n' "${YELLOW}Non-interactive mode: skipping confirmation.${NC}"
+    fi
+
+    EXTENSION_ID="DanElaton.trinit"
+
+    # Resolve the `code` CLI (same logic as the install step)
+    CODE_BIN=""
+    if command -v code >/dev/null 2>&1; then
+        CODE_BIN="code"
+    else
+        CANDIDATES=""
+        case "$(uname -s)" in
+            Darwin)
+                CANDIDATES="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code
+$HOME/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code
+/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code-insiders
+$HOME/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code-insiders
+/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
+                ;;
+            *)
+                CANDIDATES="/usr/share/code/bin/code
+/snap/bin/code
+/usr/bin/code
+/usr/local/bin/code
+$HOME/.local/share/code/bin/code"
+                ;;
+        esac
+        printf '%s\n' "$CANDIDATES" | while IFS= read -r cand; do
+            [ -z "$cand" ] && continue
+            if [ -x "$cand" ]; then
+                printf '%s' "$cand" > /tmp/.trinit_code_bin
+                break
+            fi
+        done
+        if [ -f /tmp/.trinit_code_bin ]; then
+            CODE_BIN="$(cat /tmp/.trinit_code_bin)"
+            rm -f /tmp/.trinit_code_bin
+        fi
+    fi
+
+    # 1. Uninstall the VS Code extension
+    printf '%b\n' "${YELLOW}[1/3] Uninstalling Trinit extension...${NC}"
+    if [ -n "$CODE_BIN" ]; then
+        "$CODE_BIN" --uninstall-extension "$EXTENSION_ID" 2>/dev/null || true
+        printf '%b\n' "${GREEN}       Extension uninstalled (or was not installed).${NC}"
+    else
+        printf '%b\n' "${YELLOW}       'code' command not found in PATH. Skipping extension uninstall.${NC}"
+        printf '%b\n' "${YELLOW}       Manually uninstall from VS Code: Extensions -> Trinit -> Uninstall${NC}"
+    fi
+
+    # 2. Delete globalStorage directories
+    printf '%b\n' "${YELLOW}[2/3] Removing Trinit globalStorage data...${NC}"
+    GLOBAL_STORAGE_PATHS=""
+    case "$(uname -s)" in
+        Darwin)
+            GLOBAL_STORAGE_PATHS="$HOME/Library/Application Support/Code/User/globalStorage/danelaton.trinit
+$HOME/Library/Application Support/Code - Insiders/User/globalStorage/danelaton.trinit
+$HOME/Library/Application Support/Cursor/User/globalStorage/danelaton.trinit"
+            ;;
+        *)
+            GLOBAL_STORAGE_PATHS="$HOME/.config/Code/User/globalStorage/danelaton.trinit
+$HOME/.config/Code - Insiders/User/globalStorage/danelaton.trinit
+$HOME/.config/Cursor/User/globalStorage/danelaton.trinit"
+            ;;
+    esac
+    printf '%s\n' "$GLOBAL_STORAGE_PATHS" | while IFS= read -r p; do
+        [ -z "$p" ] && continue
+        if [ -d "$p" ]; then
+            rm -rf "$p"
+            printf '%b\n' "${GREEN}       Removed: $p${NC}"
+        fi
+    done
+
+    # 3. Clean macOS Keychain entries (best-effort)
+    printf '%b\n' "${YELLOW}[3/3] Cleaning credential entries...${NC}"
+    printf '%b\n' "${YELLOW}       (best-effort: entries may remain if not found)${NC}"
+
+    # macOS Keychain
+    if [ "$(uname -s)" = "Darwin" ]; then
+        KEYCHAIN_TARGETS="vscode-extension://danelaton.trinit
+vscode-adapter://danelaton.trinit"
+        printf '%s\n' "$KEYCHAIN_TARGETS" | while IFS= read -r target; do
+            [ -z "$target" ] && continue
+            security delete-generic-password -s "$target" 2>/dev/null && \
+                printf '%b\n' "${GREEN}       Removed Keychain entry: $target${NC}" || true
+        done
+    fi
+
+    # Linux: try deleting from libsecret via secret-tool if available
+    if [ "$(uname -s)" != "Darwin" ]; then
+        if command -v secret-tool >/dev/null 2>&1; then
+            printf '%b\n' "${YELLOW}       Attempting libsecret cleanup...${NC}"
+            secret-tool clear xdg:schema "vscode-extension://danelaton.trinit" 2>/dev/null || true
+        fi
+    fi
+
+    echo ""
+    printf '%b\n' "${GREEN}${BOLD}"
+    echo "╔══════════════════════════════════╗"
+    echo "║   Clean uninstall complete!      ║"
+    echo "╚══════════════════════════════════╝"
+    printf '%b\n' "${NC}"
+    echo ""
+    printf '%b\n' "${YELLOW}Note: If you want to also remove the ~/.roo/ and ~/.agents/ directories,${NC}"
+    printf '%b\n' "${YELLOW}delete them manually:${NC}"
+    printf '%b\n' "${YELLOW}  rm -rf ~/.roo${NC}"
+    printf '%b\n' "${YELLOW}  rm -rf ~/.agents${NC}"
+    exit 0
+fi
+# ── End Clean Uninstall ──────────────────────────────────────
 
 # read_yes_no PROMPT DEFAULT("y"|"n") -> echoes "y" or "n"
 read_yes_no() {

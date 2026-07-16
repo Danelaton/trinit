@@ -262,6 +262,31 @@ curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | 
 
 When both skip flags are set, the installer jumps straight to Step 3 (extension only) and prints which steps were skipped. `-Yes` / `--yes` (or `TRINIT_YES=1`) skips the menu and assumes option 3 (full install).
 
+**Clean uninstall** — remove ALL Trinit data (extension, globalStorage, credentials) while preserving Ollama and its models:
+
+```powershell
+# Windows — download the script first, then run with -CleanUninstall:
+irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 -OutFile install.ps1
+.\install.ps1 -CleanUninstall
+
+# Or via environment variable (works with the one-liner pipe):
+$env:TRINIT_CLEAN_UNINSTALL = "1"; irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex
+```
+
+```bash
+# macOS / Linux — pass --clean-uninstall through `sh -s --`:
+curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh -s -- --clean-uninstall
+
+# Or via environment variable (works with the one-liner pipe):
+TRINIT_CLEAN_UNINSTALL=1 curl -fsSL https://raw.githubusercontent.com/Danelaton/trinit/main/install.sh | sh
+```
+
+The clean uninstall does **not** touch Ollama or its models. It removes:
+- The VS Code extension
+- Extension globalStorage (settings, task history, custom modes)
+- Extension globalState and secrets (API keys, provider profiles)
+- Credential manager entries (Windows Credential Manager / macOS Keychain / Linux libsecret)
+
 **Requirements:** VS Code on PATH · ~25 GB free disk · 16 GB RAM minimum (32 GB recommended) · a GPU with 8 GB VRAM is recommended but not required (CPU-only runs at 2–8 tok/s).
 
 ---

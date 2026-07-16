@@ -23,11 +23,19 @@
 #   .\install.ps1 -SkipOllama            # still pulls models
 #   .\install.ps1 -SkipModels            # still installs/updates Ollama
 #   .\install.ps1 -SkipOllama -SkipModels  # extension only
+#
+# Clean uninstall:
+#   .\install.ps1 -CleanUninstall
+# Or via environment variable (works with the one-liner pipe):
+#   $env:TRINIT_CLEAN_UNINSTALL = "1"; irm .../install.ps1 | iex
+# Removes the extension, all globalStorage data, and attempts to clean
+# credential manager entries. Prompts for confirmation unless -Yes is passed.
 
 param(
     [switch]$Yes,
     [switch]$SkipOllama,
-    [switch]$SkipModels
+    [switch]$SkipModels,
+    [switch]$CleanUninstall
 )
 
 Write-Host "...................................." -ForegroundColor Cyan
@@ -44,6 +52,99 @@ $ErrorActionPreference = "Stop"
 # uses Read-Host, which reads from the real console even under `irm | iex`, so
 # the user can choose even in remote one-liner installs.
 $NonInteractive = $Yes -or ($env:TRINIT_YES -eq "1")
+$CleanUninstall = $CleanUninstall -or ($env:TRINIT_CLEAN_UNINSTALL -eq "1")
+
+# ── Clean Uninstall ──────────────────────────────────────────
+# When -CleanUninstall is passed, this script does a destructive removal of
+# ALL Trinit data (extension, globalStorage, credential manager entries).
+# Ollama and its models are NEVER touched.
+if ($CleanUninstall) {
+    Write-Host "...................................." -ForegroundColor Red
+    Write-Host "   T R I N I T  Clean Uninstall     " -ForegroundColor Red
+    Write-Host "...................................." -ForegroundColor Red
+    Write-Host ""
+    Write-Host "WARNING: This will permanently delete ALL Trinit data:" -ForegroundColor Yellow
+    Write-Host "  - VS Code extension (DanElaton.trinit)" -ForegroundColor Yellow
+    Write-Host "  - Extension globalStorage (settings, task history, custom modes)" -ForegroundColor Yellow
+    Write-Host "  - Extension globalState and secrets (API keys, provider profiles)" -ForegroundColor Yellow
+    Write-Host "  - MCP OAuth credentials" -ForegroundColor Yellow
+    Write-Host "  - Cloud authentication" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "Ollama and its models will NOT be touched." -ForegroundColor Green
+    Write-Host ""
+
+    if (-not $NonInteractive) {
+        $confirm = Read-Host "Type 'yes' to confirm: "
+        if ($confirm -ne "yes") {
+            Write-Host "Clean uninstall cancelled." -ForegroundColor Yellow
+            exit 0
+        }
+    } else {
+        Write-Host "Non-interactive mode: skipping confirmation." -ForegroundColor Yellow
+    }
+
+    $extensionId = "DanElaton.trinit"
+
+    # 1. Uninstall the VS Code extension
+    Write-Host "[1/3] Uninstalling Trinit extension..." -ForegroundColor Yellow
+    $codeBin = Get-Command code -ErrorAction SilentlyContinue
+    if ($codeBin) {
+        & code --uninstall-extension $extensionId 2>$null
+        Write-Host "       Extension uninstalled (or was not installed)." -ForegroundColor Green
+    } else {
+        Write-Host "       'code' command not found in PATH. Skipping extension uninstall." -ForegroundColor Yellow
+        Write-Host "       Manually uninstall from VS Code: Extensions -> Trinit -> Uninstall" -ForegroundColor Yellow
+    }
+
+    # 2. Delete globalStorage directory
+    Write-Host "[2/3] Removing Trinit globalStorage data..." -ForegroundColor Yellow
+    $globalStoragePaths = @(
+        "$env:APPDATA\Code\User\globalStorage\danelaton.trinit",
+        "$env:APPDATA\Code - Insiders\User\globalStorage\danelaton.trinit",
+        "$env:APPDATA\Cursor\User\globalStorage\danelaton.trinit",
+        "$env:LOCALAPPDATA\Programs\Microsoft VS Code\resources\app\extensions\danelaton.trinit"
+    )
+    foreach ($p in $globalStoragePaths) {
+        if (Test-Path $p) {
+            Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $p
+            Write-Host "       Removed: $p" -ForegroundColor Green
+        }
+    }
+
+    # 3. Attempt to clean credential manager entries (best-effort)
+    Write-Host "[3/3] Cleaning credential manager entries..." -ForegroundColor Yellow
+    Write-Host "       (best-effort: entries may remain if not found)" -ForegroundColor DarkGray
+
+    $credTargets = @(
+        "vscode-extension://danelaton.trinit",
+        "vscode-adapter://danelaton.trinit",
+        "vscode-extension-danelaton.trinit"
+    )
+
+    foreach ($target in $credTargets) {
+        try {
+            $existing = cmdkey /list 2>$null | Select-String -Pattern $target -SimpleMatch -ErrorAction SilentlyContinue
+            if ($existing) {
+                cmdkey /delete:$target 2>$null
+                Write-Host "       Removed credential: $target" -ForegroundColor Green
+            }
+        } catch {
+            # cmdkey may error if the target does not exist
+        }
+    }
+
+    Write-Host ""
+    Write-Host "...................................." -ForegroundColor Green
+    Write-Host "   Clean uninstall complete!        " -ForegroundColor Green
+    Write-Host "...................................." -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Note: If you want to also remove the ~/.roo/ and ~/.agents/ directories," -ForegroundColor Yellow
+    Write-Host "delete them manually:" -ForegroundColor Yellow
+    Write-Host "  Remove-Item -Recurse -Force ~/.roo" -ForegroundColor Yellow
+    Write-Host "  Remove-Item -Recurse -Force ~/.agents" -ForegroundColor Yellow
+    exit 0
+}
+# ── End Clean Uninstall ──────────────────────────────────────
 
 # -- Interactive numeric menu --
 # Returns the chosen option number (1, 2, or 3). Prints the menu, asks the user
