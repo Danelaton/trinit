@@ -11,10 +11,11 @@
 # positional parameters instead of arrays.
 #
 # Interactive menu: when run WITHOUT skip flags and WITHOUT --yes, the installer
-# shows a simple numeric menu (type 1/2/3 + Enter):
+# shows a simple numeric menu (type 1/2/3/4 + Enter):
 #   [1] Trinit VS Code Extension
 #   [2] Ollama + AI Models
 #   [3] Trinit Extension + Ollama + AI Models (full)   <- default (just Enter)
+#   [4] Clean Uninstall (remove all Trinit data)
 # The menu uses a plain `read` of a number, which works both locally and under
 # `curl | sh` (a simple numeric read works fine on a piped stdin / terminal).
 # Only if there is no controlling terminal at all (CI, container, no /dev/tty
@@ -74,11 +75,12 @@ if [ ! -t 0 ] && [ ! -r /dev/tty ]; then
     NON_INTERACTIVE=1
 fi
 
-# ── Clean Uninstall ──────────────────────────────────────────
-# When --clean-uninstall is passed, this script does a destructive removal of
-# ALL Trinit data (extension, globalStorage, credential entries).
-# Ollama and its models are NEVER touched.
-if [ "$CLEAN_UNINSTALL" = "1" ]; then
+# ── Clean Uninstall (function) ───────────────────────────────
+# When --clean-uninstall is passed (or the user picks option 4 from the menu),
+# this performs a destructive removal of ALL Trinit data (extension,
+# globalStorage, credential entries). Ollama and its models are NEVER touched.
+# The function asks for confirmation unless NON_INTERACTIVE is set.
+clean_uninstall() {
     printf '%b\n' "${RED}${BOLD}"
     echo "╔══════════════════════════════════╗"
     echo "║   T R I N I T  Clean Uninstall  ║"
@@ -211,6 +213,12 @@ vscode-adapter://danelaton.trinit"
     printf '%b\n' "${YELLOW}  rm -rf ~/.roo${NC}"
     printf '%b\n' "${YELLOW}  rm -rf ~/.agents${NC}"
     exit 0
+}
+
+# When --clean-uninstall is passed as a flag (or TRINIT_CLEAN_UNINSTALL env var),
+# execute clean uninstall directly without showing the menu.
+if [ "$CLEAN_UNINSTALL" = "1" ]; then
+    clean_uninstall
 fi
 # ── End Clean Uninstall ──────────────────────────────────────
 
@@ -240,8 +248,8 @@ read_yes_no() {
     esac
 }
 
-# show_install_menu -> echoes the chosen option number (1, 2, or 3).
-# Prints a numeric menu and reads a number (1/2/3) + Enter. Empty Enter = 3
+# show_install_menu -> echoes the chosen option number (1, 2, 3, or 4).
+# Prints a numeric menu and reads a number (1/2/3/4) + Enter. Empty Enter = 3
 # (default full). Re-prompts on invalid input. Reads from /dev/tty when stdin is
 # not a TTY (e.g. `curl | sh`), otherwise from stdin. Falls back to 3 if read
 # fails entirely (no controlling terminal).
@@ -251,6 +259,7 @@ show_install_menu() {
     echo "  [1] Trinit VS Code Extension" >&2
     echo "  [2] Ollama + AI Models" >&2
     echo "  [3] Trinit Extension + Ollama + AI Models (full)" >&2
+    printf '%b\n' "${RED}  [4] Clean Uninstall (remove all Trinit data)${NC}" >&2
     echo "" >&2
 
     # Decide where to read from: if stdin is a TTY, read from it; otherwise
@@ -261,7 +270,7 @@ show_install_menu() {
     fi
 
     while true; do
-        printf "Select option [1-3] (default 3): " >&2
+        printf "Select option [1-4] (default 3): " >&2
         answer=""
         if [ -n "$read_src" ]; then
             answer=$(read -r line < "$read_src" 2>/dev/null && printf '%s' "$line" || printf '')
@@ -279,9 +288,10 @@ show_install_menu() {
             1) echo 1; return ;;
             2) echo 2; return ;;
             3) echo 3; return ;;
+            4) echo 4; return ;;
             "") echo 3; return ;;  # empty Enter -> default full
             *)
-                echo "Invalid option '$answer'. Please enter 1, 2, or 3 (or just press Enter for 3)." >&2
+                echo "Invalid option '$answer'. Please enter 1, 2, 3, or 4 (or just press Enter for 3)." >&2
                 ;;
         esac
     done
@@ -307,6 +317,7 @@ if [ "$SKIP_OLLAMA" = "0" ] && [ "$SKIP_MODELS" = "0" ] && [ "$NON_INTERACTIVE" 
     case "$MENU_CHOICE" in
         1) DO_OLLAMA=0; DO_MODELS=0; DO_EXTENSION=1 ;;
         2) DO_OLLAMA=1; DO_MODELS=1; DO_EXTENSION=0 ;;
+        4) clean_uninstall ;;
         *) DO_OLLAMA=1; DO_MODELS=1; DO_EXTENSION=1 ;;
     esac
     printf '%b\n' "${CYAN}Selected: option ${MENU_CHOICE}${NC}"

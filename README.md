@@ -221,24 +221,28 @@ Or download directly from the [Releases page](https://github.com/Danelaton/trini
 2. **Models** — pulls the 4 preconfigured models (~24.5 GB total), skipping any already installed.
 3. **Extension** — downloads `trinit.vsix` from the latest release and runs `code --install-extension`.
 
+The interactive menu also includes a **Clean Uninstall** option (4) to remove all Trinit data while preserving Ollama and its models.
+
 One command. ~30 minutes on a 100 Mbps connection. No account, no login, no configuration prompts. For non-interactive automation (Ansible, SCCM, MDM), prefix with `TRINIT_YES=1` (bash) or `$env:TRINIT_YES = "1"` (PowerShell).
 
-**Interactive install menu** — when you run the installer directly in a real terminal **without** any skip/yes flags, it shows a simple numeric menu so you can pick exactly what to install (type 1/2/3 + Enter):
+**Interactive install menu** — when you run the installer directly in a real terminal **without** any skip/yes flags, it shows a simple numeric menu so you can pick exactly what to install (type 1/2/3/4 + Enter):
 
 ```
 Select installation profile:
   [1] Trinit VS Code Extension
   [2] Ollama + AI Models
   [3] Trinit Extension + Ollama + AI Models (full)
+  [4] Clean Uninstall (remove all Trinit data)
 
-Select option [1-3] (default 3):
+Select option [1-4] (default 3):
 ```
 
-| Option | Installs |
+| Option | What it does |
 |---|---|
 | 1. Trinit VS Code Extension | Step 3 only (extension). Use when Ollama + models are already set up. |
 | 2. Ollama + AI Models | Steps 1 + 2 (Ollama + models), no extension. |
 | 3. Trinit Extension + Ollama + AI Models (full) | All three steps. **Default** — just press Enter. |
+| 4. Clean Uninstall (remove all Trinit data) | Removes the extension, all globalStorage, secrets, and credentials. **Does NOT touch Ollama or its models.** Asks for confirmation before proceeding. |
 
 - **Windows:** the menu uses `Read-Host`, which reads from the real console even under `irm | iex` (stdin redirected), so you can pick an option in remote one-liner installs too. Invalid input re-prompts; empty Enter selects option 3. Only if the environment is truly non-interactive (no `$host.UI.RawUI`, or `Read-Host` throws) does it fall back to option 3.
 - **macOS / Linux:** the menu uses a plain `read` of a number. It reads from `/dev/tty` when stdin is the piped script (under `curl | sh`), otherwise from stdin, so it works in both local and remote one-liner installs. If there is no controlling terminal at all (CI, container), it falls back to non-interactive full install (option 3).

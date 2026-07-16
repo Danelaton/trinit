@@ -2,10 +2,11 @@
 # Run: irm https://raw.githubusercontent.com/Danelaton/trinit/main/install.ps1 | iex
 #
 # Interactive menu: when run WITHOUT skip flags and WITHOUT -Yes, the installer
-# shows a simple numeric menu (type 1/2/3 + Enter):
+# shows a simple numeric menu (type 1/2/3/4 + Enter):
 #   [1] Trinit VS Code Extension
 #   [2] Ollama + AI Models
 #   [3] Trinit Extension + Ollama + AI Models (full)   <- default (just Enter)
+#   [4] Clean Uninstall (remove all Trinit data)
 # The menu uses Read-Host, which works reliably even under `irm | iex` (stdin
 # redirected), so the user can pick an option in remote one-liner installs too.
 # Only if the environment is truly non-interactive (no $host.UI.RawUI, or
@@ -54,11 +55,12 @@ $ErrorActionPreference = "Stop"
 $NonInteractive = $Yes -or ($env:TRINIT_YES -eq "1")
 $CleanUninstall = $CleanUninstall -or ($env:TRINIT_CLEAN_UNINSTALL -eq "1")
 
-# ── Clean Uninstall ──────────────────────────────────────────
-# When -CleanUninstall is passed, this script does a destructive removal of
-# ALL Trinit data (extension, globalStorage, credential manager entries).
-# Ollama and its models are NEVER touched.
-if ($CleanUninstall) {
+# ── Clean Uninstall (function) ───────────────────────────────
+# When -CleanUninstall is passed (or the user picks option 4 from the menu),
+# this performs a destructive removal of ALL Trinit data (extension,
+# globalStorage, credential manager entries). Ollama and its models are NEVER
+# touched. The function asks for confirmation unless $NonInteractive is set.
+function Invoke-CleanUninstall {
     Write-Host "...................................." -ForegroundColor Red
     Write-Host "   T R I N I T  Clean Uninstall     " -ForegroundColor Red
     Write-Host "...................................." -ForegroundColor Red
@@ -144,18 +146,25 @@ if ($CleanUninstall) {
     Write-Host "  Remove-Item -Recurse -Force ~/.agents" -ForegroundColor Yellow
     exit 0
 }
+
+# When -CleanUninstall is passed as a flag (or TRINIT_CLEAN_UNINSTALL env var),
+# execute clean uninstall directly without showing the menu.
+if ($CleanUninstall) {
+    Invoke-CleanUninstall
+}
 # ── End Clean Uninstall ──────────────────────────────────────
 
 # -- Interactive numeric menu --
-# Returns the chosen option number (1, 2, or 3). Prints the menu, asks the user
-# to type 1/2/3 + Enter (empty Enter = 3, the default), and re-prompts on any
+# Returns the chosen option number (1, 2, 3, or 4). Prints the menu, asks the user
+# to type 1/2/3/4 + Enter (empty Enter = 3, the default), and re-prompts on any
 # invalid input. If the environment is truly non-interactive (no $host.UI.RawUI,
 # or Read-Host throws), it falls back to option 3 with an explanatory message.
 function Show-InstallMenu {
     $options = @(
         "Trinit VS Code Extension",
         "Ollama + AI Models",
-        "Trinit Extension + Ollama + AI Models (full)"
+        "Trinit Extension + Ollama + AI Models (full)",
+        "Clean Uninstall (remove all Trinit data)"
     )
 
     # Probe interactivity: if there is no RawUI (headless host, restricted
@@ -170,14 +179,15 @@ function Show-InstallMenu {
     Write-Host ""
     Write-Host "Select installation profile:" -ForegroundColor Cyan
     for ($i = 0; $i -lt $options.Count; $i++) {
-        Write-Host ("  [" + ($i + 1) + "] " + $options[$i]) -ForegroundColor Gray
+        $color = if ($i -eq 3) { "Red" } else { "Gray" }
+        Write-Host ("  [" + ($i + 1) + "] " + $options[$i]) -ForegroundColor $color
     }
     Write-Host ""
 
     while ($true) {
         $answer = $null
         try {
-            $answer = Read-Host "Select option [1-3] (default 3)"
+            $answer = Read-Host "Select option [1-4] (default 3)"
         } catch {
             Write-Host "Could not read console input. Defaulting to full install (option 3)." -ForegroundColor Yellow
             return 3
@@ -191,8 +201,9 @@ function Show-InstallMenu {
             "1" { return 1 }
             "2" { return 2 }
             "3" { return 3 }
+            "4" { return 4 }
             default {
-                Write-Host "Invalid option '$trimmed'. Please enter 1, 2, or 3 (or just press Enter for 3)." -ForegroundColor Yellow
+                Write-Host "Invalid option '$trimmed'. Please enter 1, 2, 3, or 4 (or just press Enter for 3)." -ForegroundColor Yellow
             }
         }
     }
@@ -212,6 +223,7 @@ if (-not $SkipOllama -and -not $SkipModels -and -not $NonInteractive) {
         1 { $DoOllama = $false; $DoModels = $false; $DoExtension = $true }
         2 { $DoOllama = $true;  $DoModels = $true;  $DoExtension = $false }
         3 { $DoOllama = $true;  $DoModels = $true;  $DoExtension = $true }
+        4 { Invoke-CleanUninstall }
     }
     Write-Host ("Selected: option " + $choice) -ForegroundColor Cyan
     Write-Host ""
